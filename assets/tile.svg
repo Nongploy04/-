@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 1200" width="100%" height="100%">
+  <defs>
+    <!-- Gradient for one wave: shadow -> peak -> shadow -->
+    <linearGradient id="gradientWave" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#858585" />
+      <stop offset="25%" stop-color="#E0E0E0" /> <!-- Peak at 25% -->
+      <stop offset="50%" stop-color="#858585" />
+      <stop offset="75%" stop-color="#4A4A4A" /> <!-- Trough at 75% -->
+      <stop offset="100%" stop-color="#858585" />
+    </linearGradient>
+
+    <!-- Repeating pattern of the wave (5 waves across 500px width = 100px each) -->
+    <pattern id="patternWave" width="100" height="1200" patternUnits="userSpaceOnUse">
+      <rect width="100" height="1200" fill="url(#gradientWave)" />
+    </pattern>
+  </defs>
+
+  <!-- Wavy top and bottom profile -->
+  <path 
+    d="M 0,20 
+       Q 25,-10 50,20 T 100,20 
+       T 150,20 T 200,20 
+       T 250,20 T 300,20 
+       T 350,20 T 400,20 
+       T 450,20 T 500,20 
+       L 500,1180 
+       Q 475,1210 450,1180 T 400,1180 
+       T 350,1180 T 300,1180 
+       T 250,1180 T 200,1180 
+       T 150,1180 T 100,1180 
+       T 50,1180 T 0,1180 
+       Z" 
+    fill="url(#patternWave)" 
+    stroke="#525252" stroke-width="2" />
+</svg>

@@ -460,20 +460,23 @@
       margin-top: 0;
     }
     .img-icon {
-      width: 1.6em;
+      width: auto;
       height: 1.6em;
-      object-fit: cover;
+      max-width: 1.6em;
+      object-fit: contain;
       display: inline-block;
       vertical-align: middle;
       border-radius: 4px;
       margin-top: -3px;
     }
     .result-icon .img-icon {
-      width: 42px;
-      height: 42px;
+      width: auto;
+      height: 60px;
+      max-width: 60px;
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
       margin-top: 0;
+      object-fit: cover;
     }
     .result-body { flex: 1; }
     .result-label {
@@ -615,7 +618,7 @@
     </button>
     <button id="tab-btn-tile" class="tab-btn tab-tile" role="tab" aria-selected="false"
             aria-controls="tab-tile" onclick="switchTab('tile')">
-      <span class="tab-icon"><img src="assets/tile.png" class="img-icon" alt="Tile"></span> ลอนคู่
+      <span class="tab-icon"><img src="assets/tile.svg" class="img-icon" alt="Tile"></span> ลอนคู่
     </button>
   </nav>
 </div>
@@ -648,14 +651,14 @@
         <div class="field">
           <label for="inputW">ความกว้าง</label>
           <div class="input-wrap">
-            <input id="inputW" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" />
+            <input id="inputW" onchange="if(this.value) calculateZinc()" onkeyup="if(event.key === 'Enter') calculateZinc()" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
             <span class="unit-badge" id="unitBadgeW">ม.</span>
           </div>
         </div>
         <div class="field">
           <label for="inputL">ความยาว</label>
           <div class="input-wrap">
-            <input id="inputL" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" />
+            <input id="inputL" onchange="if(this.value) calculateZinc()" onkeyup="if(event.key === 'Enter') calculateZinc()" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
             <span class="unit-badge" id="unitBadgeL">ม.</span>
           </div>
         </div>
@@ -697,14 +700,14 @@
         <div class="field">
           <label for="nSheetLen">ขนาดสังกะสี (ความยาว)</label>
           <div class="input-wrap">
-            <input id="nSheetLen" type="number" min="1" step="0.5" placeholder="กรอกความยาว..." value="12" inputmode="decimal" />
+            <input id="nSheetLen" onchange="if(this.value) calculateNail()" onkeyup="if(event.key === 'Enter') calculateNail()" type="number" min="1" step="0.5" placeholder="กรอกความยาว..." value="12" inputmode="decimal"  enterkeyhint="done"/>
             <span class="unit-badge" style="color:#f85149;">ฟุต</span>
           </div>
         </div>
         <div class="field">
           <label for="nSheetCount">จำนวนสังกะสี (แผ่น)</label>
           <div class="input-wrap">
-            <input id="nSheetCount" type="number" min="1" step="1" placeholder="0" inputmode="numeric" />
+            <input id="nSheetCount" onchange="if(this.value) calculateNail()" onkeyup="if(event.key === 'Enter') calculateNail()" type="number" min="1" step="1" placeholder="0" inputmode="numeric"  enterkeyhint="done"/>
             <span class="unit-badge" style="color:#f85149;">แผ่น</span>
           </div>
         </div>
@@ -881,14 +884,14 @@
       <div class="field">
         <label for="mInputW">ด้าน B — ความกว้างหลังคา</label>
         <div class="input-wrap">
-          <input id="mInputW" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" />
+          <input id="mInputW" onchange="if(this.value) calculateMetal()" onkeyup="if(event.key === 'Enter') calculateMetal()" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
           <span class="unit-badge teal-badge" id="mUnitBadgeW">ม.</span>
         </div>
       </div>
       <div class="field">
         <label for="mInputL">ด้าน A — ความยาวลาดหลังคา</label>
         <div class="input-wrap">
-          <input id="mInputL" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" />
+          <input id="mInputL" onchange="if(this.value) calculateMetal()" onkeyup="if(event.key === 'Enter') calculateMetal()" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
           <span class="unit-badge teal-badge" id="mUnitBadgeL">ม.</span>
         </div>
       </div>
@@ -1024,14 +1027,14 @@
       <div class="field">
         <label for="tInputW">ด้าน B — ความกว้างหลังคา</label>
         <div class="input-wrap">
-          <input id="tInputW" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" />
+          <input id="tInputW" onchange="if(this.value) calculateTile()" onkeyup="if(event.key === 'Enter') calculateTile()" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
           <span class="unit-badge red-badge" id="tUnitBadgeW">ม.</span>
         </div>
       </div>
       <div class="field">
         <label for="tInputL">ด้าน A — ความยาวลาดหลังคา</label>
         <div class="input-wrap">
-          <input id="tInputL" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" />
+          <input id="tInputL" onchange="if(this.value) calculateTile()" onkeyup="if(event.key === 'Enter') calculateTile()" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
           <span class="unit-badge red-badge" id="tUnitBadgeL">ม.</span>
         </div>
       </div>
@@ -1092,7 +1095,7 @@
 
       <!-- จำนวนแผ่น -->
       <div class="result-item">
-        <div class="result-icon"><img src="assets/tile.png" class="img-icon" alt="Tile"></div>
+        <div class="result-icon"><img src="assets/tile.svg" class="img-icon" alt="Tile"></div>
         <div class="result-body">
           <div class="result-label">จำนวนกระเบื้องลอนคู่</div>
           <div class="result-val val-red" id="tResSheetDetail">—</div>
