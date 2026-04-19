@@ -62,12 +62,14 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      line-height: 1.2;
+      line-height: 1.5;
+      padding-bottom: 4px;
     }
     header p {
       color: var(--text2);
       font-size: 1rem;
-      margin-top: 6px;
+      margin-top: 10px;
+      line-height: 1.6;
     }
 
     /* ─── Tab Navigation ─── */
@@ -148,6 +150,46 @@
       gap: 8px;
     }
     .card h2 span { font-size: 1.3em; }
+
+    /* ─── Zinc mode toggle row ─── */
+    .zinc-mode-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .zinc-mode-row .unit-toggle {
+      flex: 1;
+      margin-bottom: 0;
+    }
+    .nail-mode-btn {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface2);
+      color: var(--text2);
+      font-family: 'Sarabun', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.25s;
+    }
+    .nail-mode-btn:hover {
+      border-color: #f85149;
+      color: #f98080;
+      background: rgba(248,81,73,0.08);
+    }
+    .nail-mode-btn.active {
+      border-color: #f85149;
+      background: linear-gradient(135deg, #f85149, #e3b341);
+      color: #fff;
+      box-shadow: 0 2px 12px rgba(248,81,73,0.35);
+    }
 
     /* ─── Unit Toggle ─── */
     .unit-toggle {
@@ -471,11 +513,12 @@
 
     @media (max-width: 480px) {
       header h1 { font-size: 1.5rem; }
+      header p { font-size: 0.9rem; }
       .input-grid { grid-template-columns: 1fr; }
       .input-grid-3 { grid-template-columns: 1fr 1fr; }
       .summary-row-3 { grid-template-columns: 1fr 1fr; }
       .result-val { font-size: 1.4rem; }
-      .tab-btn { font-size: 0.9rem; padding: 10px 8px; }
+      .tab-btn { font-size: 0.82rem; padding: 8px 6px; }
     }
     @media (max-width: 360px) {
       .input-grid-3 { grid-template-columns: 1fr; }
@@ -497,12 +540,10 @@
     <button id="tab-btn-zinc" class="tab-btn active" role="tab" aria-selected="true"
             aria-controls="tab-zinc" onclick="switchTab('zinc')">
       <span class="tab-icon">🔩</span> สังกะสี
-      <span class="tab-badge">แท็บ 1</span>
     </button>
     <button id="tab-btn-metal" class="tab-btn tab-metal" role="tab" aria-selected="false"
             aria-controls="tab-metal" onclick="switchTab('metal')">
       <span class="tab-icon">🏗️</span> เมทัลชีท
-      <span class="tab-badge">แท็บ 2</span>
     </button>
   </nav>
 </div>
@@ -514,47 +555,112 @@
 
   <!-- Input Card -->
   <div class="card">
-    <h2><span>📐</span> ขนาดหลังคา</h2>
+    <h2 id="zincTitle"><span>📐</span> คำนวณสังกะสี / โครงหลังคา</h2>
 
-    <!-- Unit toggle -->
-    <div class="unit-toggle" role="group" aria-label="หน่วยวัด">
-      <button id="btnMeter" class="active" onclick="setUnit('m')">เมตร (m)</button>
-      <button id="btnFoot"            onclick="setUnit('ft')">ฟุต (ft)</button>
+    <!-- Unit toggle + nail mode button -->
+    <div class="zinc-mode-row">
+      <div class="unit-toggle" role="group" aria-label="หน่วยวัด">
+        <button id="btnMeter" class="active" onclick="setUnit('m')">เมตร (m)</button>
+        <button id="btnFoot"            onclick="setUnit('ft')">ฟุต (ft)</button>
+      </div>
+      <button id="nailModeBtn" class="nail-mode-btn" onclick="switchZincMode('nail')">
+        🔨 คำนวณตะปู
+      </button>
     </div>
 
-    <!-- Width / Length -->
-    <div class="input-grid">
-      <div class="field">
-        <label for="inputW">ความกว้าง</label>
-        <div class="input-wrap">
-          <input id="inputW" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" />
-          <span class="unit-badge" id="unitBadgeW">ม.</span>
+    <!-- Sub-panel: คำนวณหลังคา -->
+    <div id="zincModeRoof">
+
+      <!-- Width / Length -->
+      <div class="input-grid">
+        <div class="field">
+          <label for="inputW">ความกว้าง</label>
+          <div class="input-wrap">
+            <input id="inputW" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" />
+            <span class="unit-badge" id="unitBadgeW">ม.</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="inputL">ความยาว</label>
+          <div class="input-wrap">
+            <input id="inputL" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" />
+            <span class="unit-badge" id="unitBadgeL">ม.</span>
+          </div>
         </div>
       </div>
-      <div class="field">
-        <label for="inputL">ความยาว</label>
-        <div class="input-wrap">
-          <input id="inputL" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" />
-          <span class="unit-badge" id="unitBadgeL">ม.</span>
+
+      <!-- Auto-selected sheet banner -->
+      <div class="auto-sheet-banner" id="autoSheetBanner">
+        <span>🤖 ระบบเลือกแผ่นสังกะสี</span>
+        <span class="sheet-pill" id="autoSheetPill">— ฟุต</span>
+        <span id="autoSheetReason" style="color:var(--text2); font-weight:400;"></span>
+      </div>
+
+      <!-- Info -->
+      <div class="info-box">
+        💡 คำนวณโดยใช้แผ่นสังกะสีมาตรฐานกว้าง <strong>2.5 ฟุต</strong>
+        (ทับซ้อนด้านข้าง 0.5 ฟุต → ใช้งานได้จริง <strong>2 ฟุต/แผ่น</strong>)
+        และทับซ้อนต่อความยาว <strong>6 นิ้ว</strong>
+      </div>
+
+      <button id="calcBtn" class="calc-btn" onclick="calculateZinc()">⚡ คำนวณ</button>
+    </div>
+
+    <!-- Sub-panel: คำนวณตะปูจากแผ่น -->
+    <div id="zincModeNail" style="display:none;">
+      <div class="input-grid">
+        <div class="field">
+          <label for="nSheetLen">ขนาดสังกะสี (ความยาว)</label>
+          <div class="input-wrap">
+            <input id="nSheetLen" type="number" min="1" step="0.5" placeholder="กรอกความยาว..." value="12" inputmode="decimal" />
+            <span class="unit-badge" style="color:#f85149;">ฟุต</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="nSheetCount">จำนวนสังกะสี (แผ่น)</label>
+          <div class="input-wrap">
+            <input id="nSheetCount" type="number" min="1" step="1" placeholder="0" inputmode="numeric" />
+            <span class="unit-badge" style="color:#f85149;">แผ่น</span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Auto-selected sheet banner -->
-    <div class="auto-sheet-banner" id="autoSheetBanner">
-      <span>🤖 ระบบเลือกแผ่นสังกะสี</span>
-      <span class="sheet-pill" id="autoSheetPill">— ฟุต</span>
-      <span id="autoSheetReason" style="color:var(--text2); font-weight:400;"></span>
-    </div>
+      <div class="input-grid-3">
+        <div class="field">
+          <label for="nPurlinSpacing">ระยะแป</label>
+          <select id="nPurlinSpacing">
+            <option value="0.6">0.6 ม.</option>
+            <option value="0.9">0.9 ม.</option>
+            <option value="1.2" selected>1.2 ม.</option>
+            <option value="1.5">1.5 ม.</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="nNailPerPurlin">ตะปูต่อแถวแป</label>
+          <select id="nNailPerPurlin">
+            <option value="2">2 ตัว</option>
+            <option value="3" selected>3 ตัว</option>
+            <option value="4">4 ตัว</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="nNailSize">ขนาดตะปู</label>
+          <select id="nNailSize">
+            <option value="4" selected>1.5 นิ้ว (≈4 ก.)</option>
+            <option value="5">1.5 นิ้ว (≈5 ก.)</option>
+            <option value="6">2 นิ้ว (≈6 ก.)</option>
+            <option value="8">2 นิ้ว (≈8 ก.)</option>
+          </select>
+        </div>
+      </div>
 
-    <!-- Info -->
-    <div class="info-box">
-      💡 คำนวณโดยใช้แผ่นสังกะสีมาตรฐานกว้าง <strong>2.5 ฟุต</strong>
-      (ทับซ้อนด้านข้าง 0.5 ฟุต → ใช้งานได้จริง <strong>2 ฟุต/แผ่น</strong>)
-      และทับซ้อนต่อความยาว <strong>6 นิ้ว</strong>
-    </div>
+      <div class="info-box" style="background:rgba(248,81,73,0.07); border-color:rgba(248,81,73,0.25); color:#f98080;">
+        🔨 คำนวณตะปูเมื่อรู้ขนาดและจำนวนแผ่นแล้ว เช่น สังกะสี <strong>3 เมตร 6 แผ่น</strong><br>
+        แปต่อแผ่น = ceil(ความยาว ÷ ระยะแป) + 1 (รวมแปปลาย)
+      </div>
 
-    <button id="calcBtn" class="calc-btn" onclick="calculateZinc()">⚡ คำนวณ</button>
+      <button id="nCalcBtn" class="calc-btn" style="background:linear-gradient(135deg,#f85149,#e3b341); box-shadow:0 4px 20px rgba(248,81,73,0.35);" onclick="calculateNail()">🔨 คำนวณตะปู</button>
+    </div>
   </div>
 
   <!-- Result Card -->
@@ -607,6 +713,64 @@
 
     <hr class="divider" />
     <div id="resBreakdown" style="font-size:0.88rem; color:var(--text2); line-height:1.9;"></div>
+  </div>
+
+  <!-- Result Card — ตะปูจากแผ่น -->
+  <div class="card result-card" id="nResultCard">
+    <h2><span>📊</span> ผลการคำนวณตะปู</h2>
+
+    <!-- Summary 3 boxes -->
+    <div class="summary-row-3" style="margin-bottom:14px;">
+      <div class="summary-box">
+        <div class="s-val" style="color:#f85149;" id="nResTotal">—</div>
+        <div class="s-label">ตะปูรวม (ตัว)</div>
+      </div>
+      <div class="summary-box">
+        <div class="s-val" id="nResKid" style="color:var(--accent2);">—</div>
+        <div class="s-label">น้ำหนัก (ขีด)</div>
+      </div>
+      <div class="summary-box">
+        <div class="s-val" id="nResKg" style="color:var(--green);">—</div>
+        <div class="s-label">น้ำหนัก (กก.)</div>
+      </div>
+    </div>
+
+    <div class="result-items">
+
+      <!-- จำนวนตะปู -->
+      <div class="result-item">
+        <div class="result-icon">🔨</div>
+        <div class="result-body">
+          <div class="result-label">จำนวนตะปูรวมทั้งหมด</div>
+          <div class="result-val" style="color:#f85149;" id="nResTotalDetail">—</div>
+          <div class="result-sub" id="nResTotalSub">—</div>
+        </div>
+      </div>
+
+      <!-- น้ำหนัก -->
+      <div class="result-item">
+        <div class="result-icon">⚖️</div>
+        <div class="result-body">
+          <div class="result-label">น้ำหนักตะปูรวม</div>
+          <div class="result-val val-gold" id="nResWeightDetail">—</div>
+          <div class="result-sub" id="nResWeightSub">—</div>
+        </div>
+      </div>
+
+      <!-- รายละเอียดต่อแผ่น -->
+      <div class="result-item">
+        <div class="result-icon">📐</div>
+        <div class="result-body">
+          <div class="result-label">รายละเอียดต่อแผ่น</div>
+          <div class="result-val val-blue" id="nResPerSheet">—</div>
+          <div class="result-sub" id="nResPerSheetSub">—</div>
+        </div>
+      </div>
+
+    </div>
+
+    <hr class="divider" />
+    <div id="nResBreakdown" style="font-size:0.88rem; color:var(--text2); line-height:1.9;"></div>
   </div>
 
 </div><!-- /tab-zinc -->
@@ -805,6 +969,37 @@ function switchTab(tab) {
   document.getElementById('tab-' + tab).classList.add('active');
   document.getElementById('tab-btn-' + tab).classList.add('active');
   document.getElementById('tab-btn-' + tab).setAttribute('aria-selected', 'true');
+  // เมื่อสลับแท็บ ให้รีเซ็ตกลับโหมดปกติ
+  if (tab === 'zinc') switchZincMode('roof');
+}
+
+/* ═══════════════════════════════════════════
+   ZINC SUB-MODE (หลังคา / ตะปูจากแผ่น)
+═══════════════════════════════════════════ */
+let zincMode = 'roof';
+function switchZincMode(mode) {
+  zincMode = mode;
+  document.getElementById('zincModeRoof').style.display  = mode === 'roof' ? '' : 'none';
+  document.getElementById('zincModeNail').style.display  = mode === 'nail' ? '' : 'none';
+  // result cards
+  document.getElementById('resultCard').style.display    = 'none';
+  document.getElementById('nResultCard').style.display   = 'none';
+  
+  // จัดการปุ่มและชื่อหัวข้อ
+  const btn = document.getElementById('nailModeBtn');
+  const title = document.getElementById('zincTitle');
+  
+  if (mode === 'nail') {
+    btn.classList.add('active');
+    btn.innerHTML = '📐 คำนวณหลังคา';
+    title.innerHTML = '<span>🔨</span> คำนวณตะปูสังกะสี';
+    btn.onclick = () => switchZincMode('roof');
+  } else {
+    btn.classList.remove('active');
+    btn.innerHTML = '🔨 คำนวณตะปู';
+    title.innerHTML = '<span>📐</span> คำนวณสังกะสี / โครงหลังคา';
+    btn.onclick = () => switchZincMode('nail');
+  }
 }
 
 /* ═══════════════════════════════════════════
@@ -1064,11 +1259,79 @@ function showToast(msg, tab) {
   toast._timer = setTimeout(() => { toast.style.display = 'none'; }, 3000);
 }
 
+/* ═══════════════════════════════════════════
+   TAB 3 — ตะปูตอกสังกะสี (รู้จำนวนแผ่นแล้ว)
+═══════════════════════════════════════════ */
+function calculateNail() {
+  const sheetLen   = parseFloat(document.getElementById('nSheetLen').value);   // ฟุต
+  const sheetCount = parseInt(document.getElementById('nSheetCount').value);   // แผ่น
+
+  if (!sheetCount || sheetCount <= 0 || !sheetLen || sheetLen <= 0) {
+    shake(document.getElementById('nCalcBtn'));
+    showToast('กรุณากรอกขนาดและจำนวนสังกะสีให้ถูกต้อง', 'nail');
+    return;
+  }
+
+  const purlinSpacing  = parseFloat(document.getElementById('nPurlinSpacing').value); // ม.
+  const nailPerPurlin  = parseInt(document.getElementById('nNailPerPurlin').value);
+  const nailGram       = parseInt(document.getElementById('nNailSize').value);  // กรัม/ตัว
+
+  // ความยาวสังกะสีในเมตร
+  const sheetLenM = sheetLen * 0.3048;
+
+  // จำนวนแถวแป/แผ่น = ceil(ความยาวแผ่น / ระยะแป) + 1
+  const purlinsPerSheet = Math.ceil(sheetLenM / purlinSpacing) + 1;
+  const nailsPerSheet   = purlinsPerSheet * nailPerPurlin;
+  const totalNails      = sheetCount * nailsPerSheet;
+
+  // น้ำหนัก
+  const totalGrams = totalNails * nailGram;
+  const totalKid   = totalGrams / 100;
+  const totalKg    = totalGrams / 1000;
+
+  // — Summary —
+  document.getElementById('nResTotal').textContent = totalNails.toLocaleString() + ' ตัว';
+  document.getElementById('nResKid').textContent   = totalKid.toFixed(1) + ' ขีด';
+  document.getElementById('nResKg').textContent    = totalKg.toFixed(2) + ' กก.';
+
+  // — รายละเอียด —
+  document.getElementById('nResTotalDetail').innerHTML =
+    `${totalNails.toLocaleString()} ตัว <span class="chip" style="background:rgba(248,81,73,0.15);border-color:rgba(248,81,73,0.3);color:#f98080;">${sheetCount} แผ่น</span>`;
+  document.getElementById('nResTotalSub').textContent =
+    `${sheetCount} แผ่น × ${nailsPerSheet} ตัว/แผ่น`;
+
+  document.getElementById('nResWeightDetail').textContent =
+    `${totalKid.toFixed(1)} ขีด  (${totalKg.toFixed(2)} กก.)`;
+  document.getElementById('nResWeightSub').textContent =
+    `${totalNails.toLocaleString()} ตัว × ${nailGram} ก./ตัว = ${totalGrams.toLocaleString()} ก.`;
+
+  document.getElementById('nResPerSheet').textContent =
+    `${nailsPerSheet} ตัว / แผ่น`;
+  document.getElementById('nResPerSheetSub').textContent =
+    `${purlinsPerSheet} แถวแป × ${nailPerPurlin} ตัว/แถว  (สังกะสี ${sheetLen} ฟุต ≈ ${sheetLenM.toFixed(2)} ม., แป ทุก ${purlinSpacing} ม.)`;
+
+  document.getElementById('nResBreakdown').innerHTML = `
+    <strong style="color:var(--text)">รายละเอียดการคำนวณ</strong><br>
+    ขนาดสังกะสี: <strong style="color:#f98080;">${sheetLen} ฟุต</strong> ≈ ${sheetLenM.toFixed(2)} ม.<br>
+    จำนวนสังกะสี: <strong style="color:#f98080;">${sheetCount} แผ่น</strong><br>
+    ระยะแป: ${purlinSpacing} ม.<br>
+    จำนวนแถวแป/แผ่น: ceil(${sheetLenM.toFixed(2)} ÷ ${purlinSpacing}) + 1 = <strong style="color:var(--text)">${purlinsPerSheet} แถว</strong><br>
+    ตะปู/แผ่น: ${purlinsPerSheet} × ${nailPerPurlin} = <strong style="color:var(--text)">${nailsPerSheet} ตัว</strong><br>
+    ตะปูรวม: ${sheetCount} × ${nailsPerSheet} = <strong style="color:#f98080;">${totalNails.toLocaleString()} ตัว</strong><br>
+    น้ำหนัก: ${totalNails.toLocaleString()} × ${nailGram} ก. = <strong style="color:var(--accent2);">${totalGrams.toLocaleString()} ก. = ${totalKid.toFixed(1)} ขีด = ${totalKg.toFixed(2)} กก.</strong>
+  `;
+
+  showResult('nResultCard');
+}
+
 // Enter key
 document.addEventListener('keydown', e => {
   if (e.key === 'Enter') {
     const activeTab = document.querySelector('.tab-panel.active').id;
-    if (activeTab === 'tab-zinc')  calculateZinc();
+    if (activeTab === 'tab-zinc') {
+      if (zincMode === 'roof') calculateZinc();
+      else if (zincMode === 'nail') calculateNail();
+    }
     else if (activeTab === 'tab-metal') calculateMetal();
   }
 });
