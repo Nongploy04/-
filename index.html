@@ -651,14 +651,14 @@
         <div class="field">
           <label for="inputW">ความกว้าง</label>
           <div class="input-wrap">
-            <input id="inputW" onkeyup="if(event.key === 'Enter') calculateZinc()" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
+            <input id="inputW" onkeydown="if(event.key==='Enter'||event.keyCode===13){event.preventDefault();calculateZinc();}" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
             <span class="unit-badge" id="unitBadgeW">ม.</span>
           </div>
         </div>
         <div class="field">
           <label for="inputL">ความยาว</label>
           <div class="input-wrap">
-            <input id="inputL" onkeyup="if(event.key === 'Enter') calculateZinc()" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
+            <input id="inputL" onkeydown="if(event.key==='Enter'||event.keyCode===13){event.preventDefault();calculateZinc();}" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
             <span class="unit-badge" id="unitBadgeL">ม.</span>
           </div>
         </div>
@@ -700,14 +700,14 @@
         <div class="field">
           <label for="nSheetLen">ขนาดสังกะสี (ความยาว)</label>
           <div class="input-wrap">
-            <input id="nSheetLen" onkeyup="if(event.key === 'Enter') calculateNail()" type="number" min="1" step="0.5" placeholder="กรอกความยาว..." value="12" inputmode="decimal"  enterkeyhint="done"/>
+            <input id="nSheetLen" onkeydown="if(event.key==='Enter'||event.keyCode===13){event.preventDefault();calculateNail();}" type="number" min="1" step="0.5" placeholder="กรอกความยาว..." value="12" inputmode="decimal"  enterkeyhint="done"/>
             <span class="unit-badge" style="color:#f85149;">ฟุต</span>
           </div>
         </div>
         <div class="field">
           <label for="nSheetCount">จำนวนสังกะสี (แผ่น)</label>
           <div class="input-wrap">
-            <input id="nSheetCount" onkeyup="if(event.key === 'Enter') calculateNail()" type="number" min="1" step="1" placeholder="0" inputmode="numeric"  enterkeyhint="done"/>
+            <input id="nSheetCount" onkeydown="if(event.key==='Enter'||event.keyCode===13){event.preventDefault();calculateNail();}" type="number" min="1" step="1" placeholder="0" inputmode="numeric"  enterkeyhint="done"/>
             <span class="unit-badge" style="color:#f85149;">แผ่น</span>
           </div>
         </div>
@@ -897,14 +897,14 @@
       <div class="field">
         <label for="mInputW">ด้าน B — ความกว้างหลังคา</label>
         <div class="input-wrap">
-          <input id="mInputW" onkeyup="if(event.key === 'Enter') calculateMetal()" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
+          <input id="mInputW" onkeydown="if(event.key==='Enter'||event.keyCode===13){event.preventDefault();calculateMetal();}" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
           <span class="unit-badge teal-badge" id="mUnitBadgeW">ม.</span>
         </div>
       </div>
       <div class="field">
         <label for="mInputL">ด้าน A — ความยาวลาดหลังคา</label>
         <div class="input-wrap">
-          <input id="mInputL" onkeyup="if(event.key === 'Enter') calculateMetal()" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
+          <input id="mInputL" onkeydown="if(event.key==='Enter'||event.keyCode===13){event.preventDefault();calculateMetal();}" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
           <span class="unit-badge teal-badge" id="mUnitBadgeL">ม.</span>
         </div>
       </div>
@@ -1040,14 +1040,14 @@
       <div class="field">
         <label for="tInputW">ด้าน B — ความกว้างหลังคา</label>
         <div class="input-wrap">
-          <input id="tInputW" onkeyup="if(event.key === 'Enter') calculateTile()" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
+          <input id="tInputW" onkeydown="if(event.key==='Enter'||event.keyCode===13){event.preventDefault();calculateTile();}" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
           <span class="unit-badge red-badge" id="tUnitBadgeW">ม.</span>
         </div>
       </div>
       <div class="field">
         <label for="tInputL">ด้าน A — ความยาวลาดหลังคา</label>
         <div class="input-wrap">
-          <input id="tInputL" onkeyup="if(event.key === 'Enter') calculateTile()" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
+          <input id="tInputL" onkeydown="if(event.key==='Enter'||event.keyCode===13){event.preventDefault();calculateTile();}" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
           <span class="unit-badge red-badge" id="tUnitBadgeL">ม.</span>
         </div>
       </div>
