@@ -118,6 +118,11 @@
       background: linear-gradient(135deg, #39d0c8, #a371f7);
       box-shadow: 0 4px 18px rgba(57,208,200,0.4);
     }
+    .tab-btn.tab-tile.active {
+      background: linear-gradient(135deg, #f85149, #e3b341);
+      box-shadow: 0 4px 18px rgba(248,81,73,0.4);
+    }
+
     .tab-badge {
       background: rgba(255,255,255,0.2);
       border-radius: 20px;
@@ -222,6 +227,10 @@
       background: linear-gradient(135deg, #39d0c8, #a371f7);
       box-shadow: 0 2px 12px rgba(57,208,200,0.35);
     }
+    .unit-toggle.red button.active {
+      background: linear-gradient(135deg, #f85149, #e3b341);
+      box-shadow: 0 2px 12px rgba(248,81,73,0.35);
+    }
 
     /* ─── Input grid ─── */
     .input-grid {
@@ -273,6 +282,10 @@
       border-color: var(--teal);
       box-shadow: 0 0 0 3px rgba(57,208,200,0.15);
     }
+    .red-focus .field input:focus, .red-focus .field select:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(248,81,73,0.15);
+    }
     .field .unit-badge {
       position: absolute;
       right: 14px;
@@ -284,6 +297,7 @@
       pointer-events: none;
     }
     .teal-badge { color: var(--teal) !important; }
+    .red-badge { color: var(--red) !important; }
 
     /* ─── Auto-sheet banner ─── */
     .auto-sheet-banner {
@@ -321,6 +335,16 @@
       border-color: rgba(57,208,200,0.35);
       color: var(--teal);
     }
+    .auto-sheet-banner.red-banner {
+      background: rgba(248,81,73,0.08);
+      border-color: rgba(248,81,73,0.25);
+      color: var(--red);
+    }
+    .auto-sheet-banner.red-banner .sheet-pill {
+      background: rgba(248,81,73,0.18);
+      border-color: rgba(248,81,73,0.35);
+      color: var(--red);
+    }
 
     /* ─── Info box ─── */
     .info-box {
@@ -337,6 +361,11 @@
       background: rgba(57,208,200,0.06);
       border-color: rgba(57,208,200,0.2);
       color: var(--teal);
+    }
+    .info-box.red-info {
+      background: rgba(248,81,73,0.08);
+      border-color: rgba(248,81,73,0.2);
+      color: var(--red);
     }
 
     /* ─── Calculate button ─── */
@@ -360,6 +389,10 @@
     .calc-btn.teal-btn {
       background: linear-gradient(135deg, #39d0c8, #a371f7);
       box-shadow: 0 4px 20px rgba(57,208,200,0.35);
+    }
+    .calc-btn.red-btn {
+      background: linear-gradient(135deg, #f85149, #e3b341);
+      box-shadow: 0 4px 20px rgba(248,81,73,0.35);
     }
     .calc-btn::after {
       content: '';
@@ -407,8 +440,40 @@
     }
     .result-icon {
       font-size: 2rem;
+      width: 36px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       flex-shrink: 0;
       filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4));
+    }
+    .svg-icon {
+      width: 1.3em;
+      height: 1.3em;
+      display: inline-block;
+      vertical-align: middle;
+      margin-top: -3px;
+    }
+    .result-icon .svg-icon {
+      width: 100%;
+      height: 100%;
+      margin-top: 0;
+    }
+    .img-icon {
+      width: 1.6em;
+      height: 1.6em;
+      object-fit: cover;
+      display: inline-block;
+      vertical-align: middle;
+      border-radius: 4px;
+      margin-top: -3px;
+    }
+    .result-icon .img-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      margin-top: 0;
     }
     .result-body { flex: 1; }
     .result-label {
@@ -455,6 +520,7 @@
     .val-blue   { color: var(--blue); }
     .val-teal   { color: var(--teal); }
     .val-purple { color: var(--purple); }
+    .val-red    { color: var(--red); }
 
     /* ─── Summary row ─── */
     .summary-row {
@@ -518,7 +584,9 @@
       .input-grid-3 { grid-template-columns: 1fr 1fr; }
       .summary-row-3 { grid-template-columns: 1fr 1fr; }
       .result-val { font-size: 1.4rem; }
-      .tab-btn { font-size: 0.82rem; padding: 8px 6px; }
+      .tab-btn { font-size: 0.82rem; padding: 8px 6px; flex-direction: column; gap: 4px; }
+      .tab-btn .tab-icon { font-size: 1.1em; }
+      .tabs-nav { padding: 4px; gap: 2px; }
     }
     @media (max-width: 360px) {
       .input-grid-3 { grid-template-columns: 1fr; }
@@ -539,11 +607,15 @@
   <nav class="tabs-nav" role="tablist" aria-label="ประเภทหลังคา">
     <button id="tab-btn-zinc" class="tab-btn active" role="tab" aria-selected="true"
             aria-controls="tab-zinc" onclick="switchTab('zinc')">
-      <span class="tab-icon">🔩</span> สังกะสี
+      <span class="tab-icon"><img src="assets/zinc.png" class="img-icon" alt="Zinc"></span> สังกะสี
     </button>
     <button id="tab-btn-metal" class="tab-btn tab-metal" role="tab" aria-selected="false"
             aria-controls="tab-metal" onclick="switchTab('metal')">
-      <span class="tab-icon">🏗️</span> เมทัลชีท
+      <span class="tab-icon"><img src="assets/metal.png" class="img-icon" alt="Metal"></span> เมทัลชีท
+    </button>
+    <button id="tab-btn-tile" class="tab-btn tab-tile" role="tab" aria-selected="false"
+            aria-controls="tab-tile" onclick="switchTab('tile')">
+      <span class="tab-icon"><img src="assets/tile.png" class="img-icon" alt="Tile"></span> ลอนคู่
     </button>
   </nav>
 </div>
@@ -695,7 +767,7 @@
     <div class="result-items">
       <!-- Zinc feet -->
       <div class="result-item">
-        <div class="result-icon">📜</div>
+        <div class="result-icon"><img src="assets/zinc.png" class="img-icon" alt="Zinc"></div>
         <div class="result-body">
           <div class="result-label">ปริมาณสังกะสี (รวม)</div>
           <div class="result-val val-orange" id="resZincFt">—</div>
@@ -886,7 +958,7 @@
 
       <!-- จำนวนแผ่น -->
       <div class="result-item">
-        <div class="result-icon">🏗️</div>
+        <div class="result-icon"><img src="assets/metal.png" class="img-icon" alt="Metal"></div>
         <div class="result-body">
           <div class="result-label">จำนวนแผ่นเมทัลชีท</div>
           <div class="result-val val-teal" id="mResSheetDetail">—</div>
@@ -931,6 +1003,120 @@
   </div>
 
 </div><!-- /tab-metal -->
+
+<!-- ════════════════════════════════════════
+     TAB 3 — กระเบื้องลอนคู่
+════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-tile" role="tabpanel" aria-labelledby="tab-btn-tile">
+
+  <!-- Input Card -->
+  <div class="card red-focus">
+    <h2><span>📐</span> ขนาดหลังคากระเบื้องลอนคู่</h2>
+
+    <!-- Unit toggle -->
+    <div class="unit-toggle red" role="group" aria-label="หน่วยวัด">
+      <button id="tBtnMeter" class="active" onclick="setUnitTile('m')">เมตร (m)</button>
+      <button id="tBtnFoot"            onclick="setUnitTile('ft')">ฟุต (ft)</button>
+    </div>
+
+    <!-- ด้าน B / ด้าน A -->
+    <div class="input-grid">
+      <div class="field">
+        <label for="tInputW">ด้าน B — ความกว้างหลังคา</label>
+        <div class="input-wrap">
+          <input id="tInputW" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" />
+          <span class="unit-badge red-badge" id="tUnitBadgeW">ม.</span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="tInputL">ด้าน A — ความยาวลาดหลังคา</label>
+        <div class="input-wrap">
+          <input id="tInputL" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" />
+          <span class="unit-badge red-badge" id="tUnitBadgeL">ม.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Options row -->
+    <div class="input-grid-3">
+      <div class="field">
+        <label for="tSheetSize">ขนาดกระเบื้อง</label>
+        <select id="tSheetSize">
+          <option value="1.2" selected>50 x 120 ซม.</option>
+          <option value="1.5">50 x 150 ซม.</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="tHookPerSheet">การยึด (ตัว/แผ่น)</label>
+        <select id="tHookPerSheet">
+          <option value="2" selected>2 ตัว</option>
+          <option value="3">3 ตัว</option>
+        </select>
+      </div>
+      <div class="field" style="visibility:hidden;">
+        <!-- Placeholder -->
+      </div>
+    </div>
+
+    <!-- Info -->
+    <div class="info-box red-info">
+      💡 ลอนคู่กว้าง 50 ซม. (ซ้อนทับด้านข้างแล้วใช้ได้จริง <strong>40 ซม.</strong>)<br>
+      • รุ่น 120 ซม. ระยะแป 100 ซม. (ใช้งาน 1 เมตร)<br>
+      • รุ่น 150 ซม. ระยะแป 130 ซม. (ใช้งาน 1.3 เมตร)
+    </div>
+
+    <button id="tCalcBtn" class="calc-btn red-btn" onclick="calculateTile()">⚡ คำนวณกระเบื้องลอนคู่</button>
+  </div>
+
+  <!-- Result Card -->
+  <div class="card result-card" id="tResultCard">
+    <h2><span>📊</span> ผลการคำนวณกระเบื้องลอนคู่</h2>
+
+    <!-- Summary 3 boxes -->
+    <div class="summary-row-3" style="margin-bottom:14px;">
+      <div class="summary-box">
+        <div class="s-val" style="color:var(--red);" id="tResArea">—</div>
+        <div class="s-label">พื้นที่หลังคา (ตร.ม.)</div>
+      </div>
+      <div class="summary-box">
+        <div class="s-val" style="color:var(--red);" id="tResSheets">—</div>
+        <div class="s-label">จำนวนแผ่น</div>
+      </div>
+      <div class="summary-box">
+        <div class="s-val val-gold" id="tResHookBox">—</div>
+        <div class="s-label">จำนวนขอยึด</div>
+      </div>
+    </div>
+
+    <div class="result-items" style="margin-top:14px;">
+
+      <!-- จำนวนแผ่น -->
+      <div class="result-item">
+        <div class="result-icon"><img src="assets/tile.png" class="img-icon" alt="Tile"></div>
+        <div class="result-body">
+          <div class="result-label">จำนวนกระเบื้องลอนคู่</div>
+          <div class="result-val val-red" id="tResSheetDetail">—</div>
+          <div class="result-sub" id="tResSheetDesc">—</div>
+        </div>
+      </div>
+
+      <!-- ขอยึด -->
+      <div class="result-item">
+        <div class="result-icon">🪝</div>
+        <div class="result-body">
+          <div class="result-label">จำนวนขอยึดกระเบื้อง</div>
+          <div class="result-val val-gold" id="tResHookCount">—</div>
+          <div class="result-sub" id="tResHookSub">—</div>
+        </div>
+      </div>
+
+    </div>
+
+    <hr class="divider" />
+    <div id="tResBreakdown" style="font-size:0.88rem; color:var(--text2); line-height:1.9;"></div>
+  </div>
+
+</div><!-- /tab-tile -->
 
 
 <footer>ข้อมูลอ้างอิงมาตรฐานวัสดุหลังคาไทย — เพื่อประมาณการเท่านั้น ควรตรวจสอบกับผู้รับเหมาอีกครั้ง</footer>
@@ -1176,6 +1362,74 @@ function calculateMetal() {
 }
 
 /* ═══════════════════════════════════════════
+   TAB 3 — กระเบื้องลอนคู่
+═══════════════════════════════════════════ */
+let currentUnitTile = 'm';
+
+function setUnitTile(u) {
+  currentUnitTile = u;
+  document.getElementById('tBtnMeter').classList.toggle('active', u === 'm');
+  document.getElementById('tBtnFoot').classList.toggle('active', u === 'ft');
+  const badge = u === 'm' ? 'ม.' : 'ฟุต';
+  document.getElementById('tUnitBadgeW').textContent = badge;
+  document.getElementById('tUnitBadgeL').textContent = badge;
+}
+
+function calculateTile() {
+  const wRaw = parseFloat(document.getElementById('tInputW').value);
+  const lRaw = parseFloat(document.getElementById('tInputL').value);
+
+  if (!wRaw || !lRaw || wRaw <= 0 || lRaw <= 0) {
+    shake(document.getElementById('tCalcBtn'));
+    showToast('กรุณากรอกขนาดกว้างและยาวให้ถูกต้อง', 'tile');
+    return;
+  }
+
+  const FT_TO_M = 0.3048;
+  const wM = currentUnitTile === 'ft' ? wRaw * FT_TO_M : wRaw;
+  const lM = currentUnitTile === 'ft' ? lRaw * FT_TO_M : lRaw;
+  const areaM2 = wM * lM;
+
+  const sheetSize = document.getElementById('tSheetSize').value;
+  const hookPerSheet = parseInt(document.getElementById('tHookPerSheet').value);
+
+  const sheetEffW = 0.40;
+  const sheetEffL = sheetSize === "1.2" ? 1.00 : 1.30;
+
+  const cols = Math.ceil(wM / sheetEffW);
+  const rows = Math.ceil(lM / sheetEffL);
+  const totalSheets = cols * rows;
+  const totalHooks = totalSheets * hookPerSheet;
+
+  document.getElementById('tResArea').textContent = areaM2.toFixed(2) + ' ตร.ม.';
+  document.getElementById('tResSheets').textContent = totalSheets + ' แผ่น';
+  document.getElementById('tResHookBox').textContent = totalHooks.toLocaleString() + ' ตัว';
+
+  document.getElementById('tResSheetDetail').innerHTML =
+    `${totalSheets} แผ่น <span class="chip" style="background:rgba(248,81,73,0.15);border-color:rgba(248,81,73,0.3);color:var(--red);">50x${sheetSize === "1.2"?"120":"150"} ซม.</span>`;
+  document.getElementById('tResSheetDesc').textContent =
+    `กว้างใช้ ${cols} แผ่น × ลาดใช้ ${rows} แถว = ${totalSheets} แผ่น`;
+
+  document.getElementById('tResHookCount').innerHTML =
+    `${totalHooks.toLocaleString()} ตัว`;
+  document.getElementById('tResHookSub').textContent =
+    `กระเบื้อง ${totalSheets} แผ่น × ${hookPerSheet} ขอยึด/แผ่น`;
+
+  document.getElementById('tResBreakdown').innerHTML = `
+    <strong style="color:var(--text)">รายละเอียดการคำนวณกระเบื้องลอนคู่</strong><br>
+    ด้าน B (กว้าง): <strong style="color:var(--red)">${wM.toFixed(2)} ม.</strong><br>
+    ด้าน A (ยาวลาด): <strong style="color:var(--red)">${lM.toFixed(2)} ม.</strong><br>
+    ระยะซ้อนทับ: กว้างใช้งาน 0.4 ม., ยาวใช้งาน ${sheetEffL.toFixed(2)} ม.<br>
+    จำนวนตามความกว้าง: ${wM.toFixed(2)} ÷ 0.4 = ${(wM/0.4).toFixed(2)} → ปัดขึ้น ${cols} แผ่น<br>
+    จำนวนตามความลาด: ${lM.toFixed(2)} ÷ ${sheetEffL.toFixed(2)} = ${(lM/sheetEffL).toFixed(2)} → ปัดขึ้น ${rows} แถว<br>
+    รวมกระเบื้อง: ${cols} × ${rows} = <strong style="color:var(--red)">${totalSheets} แผ่น</strong><br>
+    ขอยึดกระเบื้อง: ${totalSheets} × ${hookPerSheet} = <strong style="color:var(--accent2)">${totalHooks.toLocaleString()} ตัว</strong>
+  `;
+
+  showResult('tResultCard');
+}
+
+/* ═══════════════════════════════════════════
    UTILITIES
 ═══════════════════════════════════════════ */
 function showResult(id) {
@@ -1293,6 +1547,7 @@ document.addEventListener('keydown', e => {
       else if (zincMode === 'nail') calculateNail();
     }
     else if (activeTab === 'tab-metal') calculateMetal();
+    else if (activeTab === 'tab-tile') calculateTile();
   }
 });
 </script>
