@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>คำนวณหลังคาสังกะสี | Zinc Roof Calculator</title>
-  <meta name="description" content="เครื่องมือคำนวณปริมาณสังกะสีและตะปูสำหรับหลังคา ใส่ขนาดกว้าง-ยาวแล้วรับผลทันที" />
+  <title>คำนวณหลังคา | Roof Material Calculator</title>
+  <meta name="description" content="เครื่องมือคำนวณวัสดุหลังคา สังกะสีและเมทัลชีท คำนวณจำนวนแผ่น ตะปู และสกรูได้ทันที" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -20,6 +20,8 @@
       --accent2: #e3b341;
       --blue: #58a6ff;
       --green: #3fb950;
+      --teal: #39d0c8;
+      --purple: #a371f7;
       --red: #f85149;
       --text: #e6edf3;
       --text2: #8b949e;
@@ -40,7 +42,7 @@
     /* ─── Header ─── */
     header {
       text-align: center;
-      margin-bottom: 36px;
+      margin-bottom: 28px;
       margin-top: 12px;
     }
     .logo {
@@ -68,6 +70,65 @@
       margin-top: 6px;
     }
 
+    /* ─── Tab Navigation ─── */
+    .tabs-wrapper {
+      width: 100%;
+      max-width: 560px;
+      margin-bottom: 24px;
+    }
+    .tabs-nav {
+      display: flex;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 5px;
+      gap: 4px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 12px 16px;
+      border: none;
+      background: transparent;
+      color: var(--text2);
+      border-radius: 10px;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.28s cubic-bezier(0.34,1.56,0.64,1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      position: relative;
+    }
+    .tab-btn .tab-icon { font-size: 1.25em; }
+    .tab-btn:hover:not(.active) {
+      background: var(--surface2);
+      color: var(--text);
+    }
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      box-shadow: 0 4px 18px rgba(240,136,62,0.4);
+    }
+    .tab-btn.tab-metal.active {
+      background: linear-gradient(135deg, #39d0c8, #a371f7);
+      box-shadow: 0 4px 18px rgba(57,208,200,0.4);
+    }
+    .tab-badge {
+      background: rgba(255,255,255,0.2);
+      border-radius: 20px;
+      padding: 1px 8px;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    /* ─── Tab Panels ─── */
+    .tab-panel { display: none; width: 100%; max-width: 560px; }
+    .tab-panel.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+
     /* ─── Card ─── */
     .card {
       background: var(--surface);
@@ -75,7 +136,6 @@
       border-radius: var(--radius);
       padding: 28px;
       width: 100%;
-      max-width: 560px;
       margin-bottom: 20px;
     }
     .card h2 {
@@ -116,12 +176,22 @@
       color: #fff;
       box-shadow: 0 2px 12px rgba(240,136,62,0.35);
     }
+    .unit-toggle.teal button.active {
+      background: linear-gradient(135deg, #39d0c8, #a371f7);
+      box-shadow: 0 2px 12px rgba(57,208,200,0.35);
+    }
 
     /* ─── Input grid ─── */
     .input-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
+      margin-bottom: 20px;
+    }
+    .input-grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
       margin-bottom: 20px;
     }
     .field label {
@@ -134,22 +204,32 @@
     .field .input-wrap {
       position: relative;
     }
-    .field input {
+    .field input, .field select {
       width: 100%;
       background: var(--surface2);
       border: 1.5px solid var(--border);
       border-radius: 10px;
       color: var(--text);
       font-family: 'Sarabun', sans-serif;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 700;
-      padding: 14px 52px 14px 16px;
+      padding: 13px 50px 13px 14px;
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none;
     }
-    .field input:focus {
+    .field select {
+      padding-right: 14px;
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+    .field input:focus, .field select:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 3px rgba(240,136,62,0.15);
+    }
+    .teal-focus .field input:focus, .teal-focus .field select:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(57,208,200,0.15);
     }
     .field .unit-badge {
       position: absolute;
@@ -161,6 +241,7 @@
       font-weight: 700;
       pointer-events: none;
     }
+    .teal-badge { color: var(--teal) !important; }
 
     /* ─── Auto-sheet banner ─── */
     .auto-sheet-banner {
@@ -188,9 +269,18 @@
       white-space: nowrap;
       color: var(--green);
     }
-    @keyframes fadeIn { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+    .auto-sheet-banner.teal-banner {
+      background: rgba(57,208,200,0.08);
+      border-color: rgba(57,208,200,0.25);
+      color: var(--teal);
+    }
+    .auto-sheet-banner.teal-banner .sheet-pill {
+      background: rgba(57,208,200,0.18);
+      border-color: rgba(57,208,200,0.35);
+      color: var(--teal);
+    }
 
-    /* ─── Overlap info ─── */
+    /* ─── Info box ─── */
     .info-box {
       background: rgba(88,166,255,0.08);
       border: 1px solid rgba(88,166,255,0.2);
@@ -201,9 +291,14 @@
       margin-bottom: 22px;
       line-height: 1.6;
     }
+    .info-box.teal-info {
+      background: rgba(57,208,200,0.06);
+      border-color: rgba(57,208,200,0.2);
+      color: var(--teal);
+    }
 
     /* ─── Calculate button ─── */
-    #calcBtn {
+    .calc-btn {
       width: 100%;
       padding: 16px;
       border: none;
@@ -220,25 +315,27 @@
       position: relative;
       overflow: hidden;
     }
-    #calcBtn::after {
+    .calc-btn.teal-btn {
+      background: linear-gradient(135deg, #39d0c8, #a371f7);
+      box-shadow: 0 4px 20px rgba(57,208,200,0.35);
+    }
+    .calc-btn::after {
       content: '';
       position: absolute;
       inset: 0;
       background: rgba(255,255,255,0);
       transition: background 0.2s;
     }
-    #calcBtn:hover::after { background: rgba(255,255,255,0.1); }
-    #calcBtn:active { transform: scale(0.98); }
+    .calc-btn:hover::after { background: rgba(255,255,255,0.1); }
+    .calc-btn:active { transform: scale(0.98); }
 
     /* ─── Result card ─── */
-    #resultCard {
+    .result-card {
       display: none;
       opacity: 0;
       transform: translateY(20px);
-      transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
     }
-    #resultCard.show {
-      display: block;
+    .result-card.show {
       animation: slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards;
     }
     @keyframes slideUp {
@@ -299,17 +396,35 @@
       font-weight: 700;
       margin-left: 6px;
     }
+    .chip-teal {
+      background: rgba(57,208,200,0.12);
+      border-color: rgba(57,208,200,0.3);
+      color: var(--teal);
+    }
+    .chip-purple {
+      background: rgba(163,113,247,0.12);
+      border-color: rgba(163,113,247,0.3);
+      color: var(--purple);
+    }
 
     .val-orange { color: var(--accent); }
     .val-gold   { color: var(--accent2); }
     .val-green  { color: var(--green); }
     .val-blue   { color: var(--blue); }
+    .val-teal   { color: var(--teal); }
+    .val-purple { color: var(--purple); }
 
-    /* ─── summary row ─── */
+    /* ─── Summary row ─── */
     .summary-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
+      margin-bottom: 14px;
+    }
+    .summary-row-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
       margin-bottom: 14px;
     }
     .summary-box {
@@ -324,8 +439,10 @@
       font-weight: 800;
       color: var(--blue);
     }
+    .summary-box .s-val.teal  { color: var(--teal); }
+    .summary-box .s-val.purple { color: var(--purple); }
     .summary-box .s-label {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--text2);
       margin-top: 4px;
     }
@@ -337,7 +454,7 @@
       margin: 20px 0;
     }
 
-    /* ─── footer ─── */
+    /* ─── Footer ─── */
     footer {
       color: var(--text2);
       font-size: 0.82rem;
@@ -345,10 +462,24 @@
       margin-top: 12px;
     }
 
-    @media (max-width: 420px) {
+    /* ─── Animations ─── */
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%,60% { transform: translateX(-6px); }
+      40%,80% { transform: translateX(6px); }
+    }
+
+    @media (max-width: 480px) {
       header h1 { font-size: 1.5rem; }
       .input-grid { grid-template-columns: 1fr; }
+      .input-grid-3 { grid-template-columns: 1fr 1fr; }
+      .summary-row-3 { grid-template-columns: 1fr 1fr; }
       .result-val { font-size: 1.4rem; }
+      .tab-btn { font-size: 0.9rem; padding: 10px 8px; }
+    }
+    @media (max-width: 360px) {
+      .input-grid-3 { grid-template-columns: 1fr; }
+      .summary-row-3 { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -356,253 +487,592 @@
 
 <header>
   <div class="logo">🏠</div>
-  <h1>คำนวณหลังคาสังกะสี</h1>
-  <p>คำนวณปริมาณสังกะสีและตะปูสำหรับหลังคา</p>
+  <h1>คำนวณวัสดุหลังคา</h1>
+  <p>สังกะสี &amp; เมทัลชีท — คำนวณแผ่น ตะปู และสกรูได้ทันที</p>
 </header>
 
-<!-- Input Card -->
-<div class="card">
-  <h2><span>📐</span> ขนาดหลังคา</h2>
-
-  <!-- Unit toggle -->
-  <div class="unit-toggle" role="group" aria-label="หน่วยวัด">
-    <button id="btnMeter" class="active" onclick="setUnit('m')">เมตร (m)</button>
-    <button id="btnFoot"            onclick="setUnit('ft')">ฟุต (ft)</button>
-  </div>
-
-  <!-- Width / Length -->
-  <div class="input-grid">
-    <div class="field">
-      <label for="inputW">ความกว้าง</label>
-      <div class="input-wrap">
-        <input id="inputW" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" />
-        <span class="unit-badge" id="unitBadgeW">ม.</span>
-      </div>
-    </div>
-    <div class="field">
-      <label for="inputL">ความยาว</label>
-      <div class="input-wrap">
-        <input id="inputL" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" />
-        <span class="unit-badge" id="unitBadgeL">ม.</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Auto-selected sheet banner -->
-  <div class="auto-sheet-banner" id="autoSheetBanner">
-    <span>🤖 ระบบเลือกแผ่นสังกะสี</span>
-    <span class="sheet-pill" id="autoSheetPill">— ฟุต</span>
-    <span id="autoSheetReason" style="color:var(--text2); font-weight:400;"></span>
-  </div>
-
-  <!-- Info -->
-  <div class="info-box">
-    💡 คำนวณโดยใช้แผ่นสังกะสีมาตรฐานกว้าง <strong>2.5 ฟุต</strong>
-    (ทับซ้อนด้านข้าง 0.5 ฟุต → ใช้งานได้จริง <strong>2 ฟุต/แผ่น</strong>)
-    และทับซ้อนต่อความยาว <strong>6 นิ้ว</strong>
-  </div>
-
-  <button id="calcBtn" onclick="calculate()">⚡ คำนวณ</button>
+<!-- ─── Tab Navigation ─── -->
+<div class="tabs-wrapper">
+  <nav class="tabs-nav" role="tablist" aria-label="ประเภทหลังคา">
+    <button id="tab-btn-zinc" class="tab-btn active" role="tab" aria-selected="true"
+            aria-controls="tab-zinc" onclick="switchTab('zinc')">
+      <span class="tab-icon">🔩</span> สังกะสี
+      <span class="tab-badge">แท็บ 1</span>
+    </button>
+    <button id="tab-btn-metal" class="tab-btn tab-metal" role="tab" aria-selected="false"
+            aria-controls="tab-metal" onclick="switchTab('metal')">
+      <span class="tab-icon">🏗️</span> เมทัลชีท
+      <span class="tab-badge">แท็บ 2</span>
+    </button>
+  </nav>
 </div>
 
-<!-- Result Card -->
-<div class="card" id="resultCard">
-  <h2><span>📊</span> ผลการคำนวณ</h2>
+<!-- ════════════════════════════════════════
+     TAB 1 — สังกะสี
+════════════════════════════════════════ -->
+<div class="tab-panel active" id="tab-zinc" role="tabpanel" aria-labelledby="tab-btn-zinc">
 
-  <!-- Summary -->
-  <div class="summary-row">
-    <div class="summary-box">
-      <div class="s-val" id="resArea">—</div>
-      <div class="s-label">พื้นที่หลังคา (ตร.ม.)</div>
+  <!-- Input Card -->
+  <div class="card">
+    <h2><span>📐</span> ขนาดหลังคา</h2>
+
+    <!-- Unit toggle -->
+    <div class="unit-toggle" role="group" aria-label="หน่วยวัด">
+      <button id="btnMeter" class="active" onclick="setUnit('m')">เมตร (m)</button>
+      <button id="btnFoot"            onclick="setUnit('ft')">ฟุต (ft)</button>
     </div>
-    <div class="summary-box">
-      <div class="s-val" id="resSheets">—</div>
-      <div class="s-label">จำนวนแผ่นสังกะสี</div>
+
+    <!-- Width / Length -->
+    <div class="input-grid">
+      <div class="field">
+        <label for="inputW">ความกว้าง</label>
+        <div class="input-wrap">
+          <input id="inputW" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" />
+          <span class="unit-badge" id="unitBadgeW">ม.</span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="inputL">ความยาว</label>
+        <div class="input-wrap">
+          <input id="inputL" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" />
+          <span class="unit-badge" id="unitBadgeL">ม.</span>
+        </div>
+      </div>
     </div>
+
+    <!-- Auto-selected sheet banner -->
+    <div class="auto-sheet-banner" id="autoSheetBanner">
+      <span>🤖 ระบบเลือกแผ่นสังกะสี</span>
+      <span class="sheet-pill" id="autoSheetPill">— ฟุต</span>
+      <span id="autoSheetReason" style="color:var(--text2); font-weight:400;"></span>
+    </div>
+
+    <!-- Info -->
+    <div class="info-box">
+      💡 คำนวณโดยใช้แผ่นสังกะสีมาตรฐานกว้าง <strong>2.5 ฟุต</strong>
+      (ทับซ้อนด้านข้าง 0.5 ฟุต → ใช้งานได้จริง <strong>2 ฟุต/แผ่น</strong>)
+      และทับซ้อนต่อความยาว <strong>6 นิ้ว</strong>
+    </div>
+
+    <button id="calcBtn" class="calc-btn" onclick="calculateZinc()">⚡ คำนวณ</button>
   </div>
 
-  <div class="result-items">
+  <!-- Result Card -->
+  <div class="card result-card" id="resultCard">
+    <h2><span>📊</span> ผลการคำนวณ</h2>
 
-    <!-- Zinc feet -->
-    <div class="result-item">
-      <div class="result-icon">📜</div>
-      <div class="result-body">
-        <div class="result-label">ปริมาณสังกะสี (รวม)</div>
-        <div class="result-val val-orange" id="resZincFt">—</div>
-        <div class="result-sub" id="resZincDesc">—</div>
+    <!-- Summary -->
+    <div class="summary-row">
+      <div class="summary-box">
+        <div class="s-val" id="resArea">—</div>
+        <div class="s-label">พื้นที่หลังคา (ตร.ม.)</div>
+      </div>
+      <div class="summary-box">
+        <div class="s-val" id="resSheets">—</div>
+        <div class="s-label">จำนวนแผ่นสังกะสี</div>
       </div>
     </div>
 
-    <!-- Nails - ขีด/กก -->
-    <div class="result-item">
-      <div class="result-icon">🔨</div>
-      <div class="result-body">
-        <div class="result-label">ตะปูตอกสังกะสี</div>
-        <div class="result-val val-gold" id="resNailKid">—</div>
-        <div class="result-sub" id="resNailKg">—</div>
+    <div class="result-items">
+      <!-- Zinc feet -->
+      <div class="result-item">
+        <div class="result-icon">📜</div>
+        <div class="result-body">
+          <div class="result-label">ปริมาณสังกะสี (รวม)</div>
+          <div class="result-val val-orange" id="resZincFt">—</div>
+          <div class="result-sub" id="resZincDesc">—</div>
+        </div>
+      </div>
+
+      <!-- Nails -->
+      <div class="result-item">
+        <div class="result-icon">🔨</div>
+        <div class="result-body">
+          <div class="result-label">ตะปูตอกสังกะสี</div>
+          <div class="result-val val-gold" id="resNailKid">—</div>
+          <div class="result-sub" id="resNailKg">—</div>
+        </div>
+      </div>
+
+      <!-- Nail count -->
+      <div class="result-item">
+        <div class="result-icon">📦</div>
+        <div class="result-body">
+          <div class="result-label">จำนวนตะปูโดยประมาณ</div>
+          <div class="result-val val-green" id="resNailCount">—</div>
+          <div class="result-sub">ตะปูตอกสังกะสี 1.5 นิ้ว (≈5 ก./ตัว)</div>
+        </div>
       </div>
     </div>
 
-    <!-- Nail count detail -->
-    <div class="result-item">
-      <div class="result-icon">📦</div>
-      <div class="result-body">
-        <div class="result-label">จำนวนตะปูโดยประมาณ</div>
-        <div class="result-val val-green" id="resNailCount">—</div>
-        <div class="result-sub">ตะปูตอกสังกะสี 1.5 นิ้ว (≈5 ก./ตัว)</div>
-      </div>
-    </div>
-
+    <hr class="divider" />
+    <div id="resBreakdown" style="font-size:0.88rem; color:var(--text2); line-height:1.9;"></div>
   </div>
 
-  <hr class="divider" />
+</div><!-- /tab-zinc -->
 
-  <!-- Breakdown -->
-  <div id="resBreakdown" style="font-size:0.88rem; color: var(--text2); line-height:1.9;"></div>
-</div>
 
-<footer>ข้อมูลอ้างอิงมาตรฐานแผ่นสังกะสีลอนทั่วไปในประเทศไทย</footer>
+<!-- ════════════════════════════════════════
+     TAB 2 — เมทัลชีท
+════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-metal" role="tabpanel" aria-labelledby="tab-btn-metal">
+
+  <!-- Input Card -->
+  <div class="card teal-focus">
+    <h2><span>📐</span> ขนาดหลังคาเมทัลชีท</h2>
+
+    <!-- Unit toggle -->
+    <div class="unit-toggle teal" role="group" aria-label="หน่วยวัด">
+      <button id="mBtnMeter" class="active" onclick="setUnitMetal('m')">เมตร (m)</button>
+      <button id="mBtnFoot"            onclick="setUnitMetal('ft')">ฟุต (ft)</button>
+    </div>
+
+    <!-- ด้าน B (ความกว้าง) / ด้าน A (ความยาวลาด) -->
+    <div class="input-grid">
+      <div class="field">
+        <label for="mInputW">ด้าน B — ความกว้างหลังคา</label>
+        <div class="input-wrap">
+          <input id="mInputW" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" />
+          <span class="unit-badge teal-badge" id="mUnitBadgeW">ม.</span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="mInputL">ด้าน A — ความยาวลาดหลังคา</label>
+        <div class="input-wrap">
+          <input id="mInputL" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" />
+          <span class="unit-badge teal-badge" id="mUnitBadgeL">ม.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Options row -->
+    <div class="input-grid-3">
+      <div class="field">
+        <label for="mSheetWidth">ความกว้างแผ่น (มม.)</label>
+        <select id="mSheetWidth">
+          <option value="0.762" selected>762 mm</option>
+          <option value="0.700">700 mm</option>
+          <option value="0.800">800 mm</option>
+          <option value="1.000">1,000 mm</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="mPurlin">ระยะแป</label>
+        <select id="mPurlin">
+          <option value="0.9">0.9 ม.</option>
+          <option value="1.2" selected>1.2 ม.</option>
+          <option value="1.5">1.5 ม.</option>
+          <option value="1.8">1.8 ม.</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="mScrew">สกรูต่อแถวแป</label>
+        <select id="mScrew">
+          <option value="2" selected>2 ตัว</option>
+          <option value="3">3 ตัว</option>
+          <option value="4">4 ตัว</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Price row -->
+    <div class="input-grid">
+      <div class="field">
+        <label for="mPrice">ราคาต่อเมตรเชิงเส้น (บาท)</label>
+        <div class="input-wrap">
+          <input id="mPrice" type="number" min="0" step="1" placeholder="0" inputmode="decimal" />
+          <span class="unit-badge teal-badge">฿/ม.</span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="mExtraPrice">ค่าติดตั้งเพิ่มต่อเมตร (บาท)</label>
+        <div class="input-wrap">
+          <input id="mExtraPrice" type="number" min="0" step="1" placeholder="0" inputmode="decimal" />
+          <span class="unit-badge teal-badge">฿/ม.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Info -->
+    <div class="info-box teal-info">
+      💡 แผ่นเมทัลชีทตัดยาวเต็มลาด (ด้าน A) ไม่ต่อแถว<br>
+      <strong>จำนวนแผ่น</strong> = ด้าน B ÷ ความกว้างแผ่น (ปัดขึ้น) •
+      <strong>ยาวรวม</strong> = จำนวนแผ่น × ด้าน A
+    </div>
+
+    <button id="mCalcBtn" class="calc-btn teal-btn" onclick="calculateMetal()">⚡ คำนวณเมทัลชีท</button>
+  </div>
+
+  <!-- Result Card -->
+  <div class="card result-card" id="mResultCard">
+    <h2><span>📊</span> ผลการคำนวณเมทัลชีท</h2>
+
+    <!-- Summary 4 boxes -->
+    <div class="summary-row" style="grid-template-columns:1fr 1fr; margin-bottom:10px;">
+      <div class="summary-box">
+        <div class="s-val teal" id="mResArea">—</div>
+        <div class="s-label">พื้นที่หลังคา (ตร.ม.)</div>
+      </div>
+      <div class="summary-box">
+        <div class="s-val teal" id="mResSheets">—</div>
+        <div class="s-label">จำนวนแผ่น</div>
+      </div>
+    </div>
+    <div class="summary-row" style="grid-template-columns:1fr 1fr;">
+      <div class="summary-box">
+        <div class="s-val purple" id="mResScrewBox">—</div>
+        <div class="s-label">กล่องสกรู (100 ตัว)</div>
+      </div>
+      <div class="summary-box">
+        <div class="s-val" style="color:var(--accent2);" id="mResTotal">—</div>
+        <div class="s-label">ราคารวมโดยประมาณ (บาท)</div>
+      </div>
+    </div>
+
+    <div class="result-items" style="margin-top:14px;">
+
+      <!-- จำนวนแผ่น -->
+      <div class="result-item">
+        <div class="result-icon">🏗️</div>
+        <div class="result-body">
+          <div class="result-label">จำนวนแผ่นเมทัลชีท</div>
+          <div class="result-val val-teal" id="mResSheetDetail">—</div>
+          <div class="result-sub" id="mResSheetDesc">—</div>
+        </div>
+      </div>
+
+      <!-- ความยาวรวม -->
+      <div class="result-item">
+        <div class="result-icon">📏</div>
+        <div class="result-body">
+          <div class="result-label">ความยาวรวม (เมตรเชิงเส้น)</div>
+          <div class="result-val val-blue" id="mResLinear">—</div>
+          <div class="result-sub" id="mResLinearSub">—</div>
+        </div>
+      </div>
+
+      <!-- สกรู -->
+      <div class="result-item">
+        <div class="result-icon">🔩</div>
+        <div class="result-body">
+          <div class="result-label">จำนวนสกรูเมทัลชีท</div>
+          <div class="result-val val-purple" id="mResScrewCount">—</div>
+          <div class="result-sub" id="mResScrewSub">—</div>
+        </div>
+      </div>
+
+      <!-- กล่องสกรู -->
+      <div class="result-item">
+        <div class="result-icon">📦</div>
+        <div class="result-body">
+          <div class="result-label">จำนวนกล่องสกรู</div>
+          <div class="result-val val-gold" id="mResScrewBoxDetail">—</div>
+          <div class="result-sub">สกรูเมทัลชีท ขนาด 65 mm (100 ตัว/กล่อง)</div>
+        </div>
+      </div>
+
+      <!-- ราคารวม -->
+      <div class="result-item" id="mResPriceRow" style="display:none;">
+        <div class="result-icon">💰</div>
+        <div class="result-body">
+          <div class="result-label">ราคารวมค่าวัสดุ</div>
+          <div class="result-val val-gold" id="mResPriceVal">—</div>
+          <div class="result-sub" id="mResPriceSub">—</div>
+        </div>
+      </div>
+
+    </div>
+
+    <hr class="divider" />
+    <div id="mResBreakdown" style="font-size:0.88rem; color:var(--text2); line-height:1.9;"></div>
+  </div>
+
+</div><!-- /tab-metal -->
+
+
+<footer>ข้อมูลอ้างอิงมาตรฐานวัสดุหลังคาไทย — เพื่อประมาณการเท่านั้น ควรตรวจสอบกับผู้รับเหมาอีกครั้ง</footer>
 
 <script>
-  // ─── State ────────────────────────────────────────────
-  let currentUnit = 'm';   // 'm' | 'ft'
-
-  // ─── Unit Toggle ──────────────────────────────────────
-  function setUnit(u) {
-    currentUnit = u;
-    document.getElementById('btnMeter').classList.toggle('active', u === 'm');
-    document.getElementById('btnFoot').classList.toggle('active', u === 'ft');
-    const badge = u === 'm' ? 'ม.' : 'ฟุต';
-    document.getElementById('unitBadgeW').textContent = badge;
-    document.getElementById('unitBadgeL').textContent = badge;
-  }
-
-  // ─── Auto-pick sheet length from slope length (ft) ────
-  // Rules: pick smallest standard size that covers the slope in ≤2 rows
-  // Available sizes: 6, 8, 10, 12 ft
-  function autoPickSheet(lFt) {
-    const sizes = [6, 8, 10, 12];
-    const LEN_OVERLAP = 0.5;
-    for (const sz of sizes) {
-      const eff = sz - LEN_OVERLAP;   // effective per row
-      if (lFt <= eff * 2) return sz;  // fits in 1 or 2 rows with this size
-    }
-    return 12; // fallback: longest available
-  }
-
-  // ─── Main Calculate ───────────────────────────────────
-  function calculate() {
-    const wRaw = parseFloat(document.getElementById('inputW').value);
-    const lRaw = parseFloat(document.getElementById('inputL').value);
-
-    if (!wRaw || !lRaw || wRaw <= 0 || lRaw <= 0) {
-      shake(document.getElementById('calcBtn'));
-      alert('กรุณากรอกขนาดกว้างและยาวให้ถูกต้อง');
-      return;
-    }
-
-    // Convert to feet
-    const M_TO_FT = 3.28084;
-    const wFt = currentUnit === 'm' ? wRaw * M_TO_FT : wRaw;
-    const lFt = currentUnit === 'm' ? lRaw * M_TO_FT : lRaw;
-    const areaM2 = (currentUnit === 'm')
-      ? wRaw * lRaw
-      : (wRaw / M_TO_FT) * (lRaw / M_TO_FT);
-
-    // ─── Auto-select sheet length ──────────────────────
-    const sheetLen = autoPickSheet(lFt);
-    const LEN_OVERLAP = 0.5;
-    const sheetLenEff = sheetLen - LEN_OVERLAP;
-
-    // Show banner
-    const banner = document.getElementById('autoSheetBanner');
-    banner.classList.add('visible');
-    document.getElementById('autoSheetPill').textContent = sheetLen + ' ฟุต';
-    const lFtRounded = lFt.toFixed(1);
-    const rows2   = Math.ceil(lFt / sheetLenEff);
-    document.getElementById('autoSheetReason').textContent =
-      `(ความยาวจริง ${lFtRounded} ฟุต → ใช้ ${rows2} แถว)`;
-
-    // ─── Zinc sheets ───────────────────────────────────
-    const SHEET_W_EFF = 2;          // effective width per sheet (ft) after 0.5ft overlap
-
-    const cols  = Math.ceil(wFt / SHEET_W_EFF);        // แผ่นต่อแถว (ตามความกว้าง)
-    const rows  = Math.ceil(lFt / sheetLenEff);        // จำนวนแถว (ตามความยาว)
-    const total = cols * rows;
-
-    const totalFt = total * sheetLen;                  // total linear feet of zinc
-
-    // ─── Nails ─────────────────────────────────────────
-    const purlinsPerSheet = Math.ceil(sheetLen / 2) + 1;
-    const NAILS_PER_PURLIN = 3;
-    const nailsPerSheet = purlinsPerSheet * NAILS_PER_PURLIN;
-    const totalNails = total * nailsPerSheet;
-
-    const NAIL_GRAM = 5;            // grams per nail (1.5" zinc nail)
-    const totalGrams = totalNails * NAIL_GRAM;
-    const totalKid   = totalGrams / 100;
-    const totalKg    = totalGrams / 1000;
-
-    // ─── Render ────────────────────────────────────────
-    document.getElementById('resArea').textContent   = areaM2.toFixed(2) + ' ตร.ม.';
-    document.getElementById('resSheets').textContent = total + ' แผ่น';
-
-    document.getElementById('resZincFt').innerHTML =
-      `${totalFt.toLocaleString()} ฟุต <span class="chip">${total} แผ่น</span>`;
-    document.getElementById('resZincDesc').textContent =
-      `แผ่น ${sheetLen} ฟุต × ${total} แผ่น  (${cols} คอลัมน์ × ${rows} แถว)`;
-
-    document.getElementById('resNailKid').textContent =
-      `${totalKid.toFixed(1)} ขีด`;
-    document.getElementById('resNailKg').textContent =
-      `≈ ${totalKg.toFixed(2)} กิโลกรัม  (${totalGrams.toLocaleString()} กรัม)`;
-
-    document.getElementById('resNailCount').textContent =
-      `${totalNails.toLocaleString()} ตัว`;
-
-    document.getElementById('resBreakdown').innerHTML = `
-      <strong style="color:var(--text)">รายละเอียดการคำนวณ</strong><br>
-      พื้นที่หลังคา: ${wRaw} × ${lRaw} ${currentUnit === 'm' ? 'เมตร' : 'ฟุต'}
-        = ${areaM2.toFixed(2)} ตร.ม. (${(wFt*lFt).toFixed(2)} ตร.ฟุต)<br>
-      แผ่นสังกะสีกว้างใช้งานได้จริง: ${SHEET_W_EFF} ฟุต/แผ่น<br>
-      ขนาดแผ่นที่เลือกอัตโนมัติ: <strong style="color:var(--green)">${sheetLen} ฟุต</strong>
-        (ใช้งานได้ต่อแถว: ${sheetLenEff} ฟุต)<br>
-      จำนวนแผ่น: ${cols} คอลัมน์ × ${rows} แถว = <strong style="color:var(--text)">${total} แผ่น</strong><br>
-      ตะปูต่อแผ่น: ${nailsPerSheet} ตัว (${purlinsPerSheet} แถวแป × 3 ตะปู)
-    `;
-
-    // Show result
-    const rc = document.getElementById('resultCard');
-    rc.classList.remove('show');
-    rc.style.display = 'none';
-    requestAnimationFrame(() => {
-      rc.style.display = 'block';
-      requestAnimationFrame(() => rc.classList.add('show'));
-    });
-
-    setTimeout(() => rc.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
-  }
-
-  // ─── Shake animation for error ────────────────────────
-  function shake(el) {
-    el.style.animation = 'none';
-    el.offsetHeight; // reflow
-    el.style.animation = 'shake 0.35s ease';
-    setTimeout(() => el.style.animation = '', 400);
-  }
-
-  // ─── Allow Enter key ──────────────────────────────────
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Enter') calculate();
+/* ═══════════════════════════════════════════
+   TAB SWITCHING
+═══════════════════════════════════════════ */
+function switchTab(tab) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-selected', 'false');
   });
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('tab-btn-' + tab).classList.add('active');
+  document.getElementById('tab-btn-' + tab).setAttribute('aria-selected', 'true');
+}
+
+/* ═══════════════════════════════════════════
+   TAB 1 — สังกะสี
+═══════════════════════════════════════════ */
+let currentUnit = 'm';
+
+function setUnit(u) {
+  currentUnit = u;
+  document.getElementById('btnMeter').classList.toggle('active', u === 'm');
+  document.getElementById('btnFoot').classList.toggle('active', u === 'ft');
+  const badge = u === 'm' ? 'ม.' : 'ฟุต';
+  document.getElementById('unitBadgeW').textContent = badge;
+  document.getElementById('unitBadgeL').textContent = badge;
+}
+
+function autoPickSheetZinc(lFt) {
+  const sizes = [6, 8, 10, 12];
+  const LEN_OVERLAP = 0.5;
+  for (const sz of sizes) {
+    const eff = sz - LEN_OVERLAP;
+    if (lFt <= eff * 2) return sz;
+  }
+  return 12;
+}
+
+function calculateZinc() {
+  const wRaw = parseFloat(document.getElementById('inputW').value);
+  const lRaw = parseFloat(document.getElementById('inputL').value);
+
+  if (!wRaw || !lRaw || wRaw <= 0 || lRaw <= 0) {
+    shake(document.getElementById('calcBtn'));
+    showToast('กรุณากรอกขนาดกว้างและยาวให้ถูกต้อง', 'zinc');
+    return;
+  }
+
+  const M_TO_FT = 3.28084;
+  const wFt = currentUnit === 'm' ? wRaw * M_TO_FT : wRaw;
+  const lFt = currentUnit === 'm' ? lRaw * M_TO_FT : lRaw;
+  const areaM2 = (currentUnit === 'm')
+    ? wRaw * lRaw
+    : (wRaw / M_TO_FT) * (lRaw / M_TO_FT);
+
+  const sheetLen     = autoPickSheetZinc(lFt);
+  const LEN_OVERLAP  = 0.5;
+  const sheetLenEff  = sheetLen - LEN_OVERLAP;
+
+  const banner = document.getElementById('autoSheetBanner');
+  banner.classList.add('visible');
+  document.getElementById('autoSheetPill').textContent = sheetLen + ' ฟุต';
+  const rows2 = Math.ceil(lFt / sheetLenEff);
+  document.getElementById('autoSheetReason').textContent =
+    `(ความยาวจริง ${lFt.toFixed(1)} ฟุต → ใช้ ${rows2} แถว)`;
+
+  const SHEET_W_EFF = 2;
+  const cols  = Math.ceil(wFt / SHEET_W_EFF);
+  const rows  = Math.ceil(lFt / sheetLenEff);
+  const total = cols * rows;
+  const totalFt = total * sheetLen;
+
+  const purlinsPerSheet = Math.ceil(sheetLen / 2) + 1;
+  const NAILS_PER_PURLIN = 3;
+  const nailsPerSheet = purlinsPerSheet * NAILS_PER_PURLIN;
+  const totalNails = total * nailsPerSheet;
+
+  const NAIL_GRAM = 5;
+  const totalGrams = totalNails * NAIL_GRAM;
+  const totalKid   = totalGrams / 100;
+  const totalKg    = totalGrams / 1000;
+
+  document.getElementById('resArea').textContent   = areaM2.toFixed(2) + ' ตร.ม.';
+  document.getElementById('resSheets').textContent = total + ' แผ่น';
+
+  document.getElementById('resZincFt').innerHTML =
+    `${totalFt.toLocaleString()} ฟุต <span class="chip">${total} แผ่น</span>`;
+  document.getElementById('resZincDesc').textContent =
+    `แผ่น ${sheetLen} ฟุต × ${total} แผ่น  (${cols} คอลัมน์ × ${rows} แถว)`;
+
+  document.getElementById('resNailKid').textContent = `${totalKid.toFixed(1)} ขีด`;
+  document.getElementById('resNailKg').textContent  =
+    `≈ ${totalKg.toFixed(2)} กิโลกรัม  (${totalGrams.toLocaleString()} กรัม)`;
+  document.getElementById('resNailCount').textContent = `${totalNails.toLocaleString()} ตัว`;
+
+  document.getElementById('resBreakdown').innerHTML = `
+    <strong style="color:var(--text)">รายละเอียดการคำนวณ</strong><br>
+    พื้นที่หลังคา: ${wRaw} × ${lRaw} ${currentUnit === 'm' ? 'เมตร' : 'ฟุต'}
+      = ${areaM2.toFixed(2)} ตร.ม. (${(wFt*lFt).toFixed(2)} ตร.ฟุต)<br>
+    แผ่นสังกะสีกว้างใช้งานได้จริง: ${SHEET_W_EFF} ฟุต/แผ่น<br>
+    ขนาดแผ่นที่เลือกอัตโนมัติ: <strong style="color:var(--green)">${sheetLen} ฟุต</strong>
+      (ใช้งานได้ต่อแถว: ${sheetLenEff} ฟุต)<br>
+    จำนวนแผ่น: ${cols} คอลัมน์ × ${rows} แถว = <strong style="color:var(--text)">${total} แผ่น</strong><br>
+    ตะปูต่อแผ่น: ${nailsPerSheet} ตัว (${purlinsPerSheet} แถวแป × 3 ตะปู)
+  `;
+
+  showResult('resultCard');
+}
+
+/* ═══════════════════════════════════════════
+   TAB 2 — เมทัลชีท
+═══════════════════════════════════════════ */
+let currentUnitMetal = 'm';
+
+function setUnitMetal(u) {
+  currentUnitMetal = u;
+  document.getElementById('mBtnMeter').classList.toggle('active', u === 'm');
+  document.getElementById('mBtnFoot').classList.toggle('active', u === 'ft');
+  const badge = u === 'm' ? 'ม.' : 'ฟุต';
+  document.getElementById('mUnitBadgeW').textContent = badge;
+  document.getElementById('mUnitBadgeL').textContent = badge;
+}
+
+function calculateMetal() {
+  const wRaw = parseFloat(document.getElementById('mInputW').value);
+  const lRaw = parseFloat(document.getElementById('mInputL').value);
+
+  if (!wRaw || !lRaw || wRaw <= 0 || lRaw <= 0) {
+    shake(document.getElementById('mCalcBtn'));
+    showToast('กรุณากรอกขนาดกว้างและยาวให้ถูกต้อง', 'metal');
+    return;
+  }
+
+  // Convert to meters
+  const FT_TO_M = 0.3048;
+  const wM = currentUnitMetal === 'ft' ? wRaw * FT_TO_M : wRaw;  // ด้าน B
+  const lM = currentUnitMetal === 'ft' ? lRaw * FT_TO_M : lRaw;  // ด้าน A (ความยาวลาด)
+  const areaM2 = wM * lM;
+
+  // Options
+  const sheetEffW      = parseFloat(document.getElementById('mSheetWidth').value);  // e.g. 0.762 m
+  const purlinSpacing  = parseFloat(document.getElementById('mPurlin').value);      // e.g. 1.2 m
+  const screwPerPurlin = parseInt(document.getElementById('mScrew').value);         // e.g. 2
+  const pricePerM      = parseFloat(document.getElementById('mPrice').value) || 0;
+  const extraPerM      = parseFloat(document.getElementById('mExtraPrice').value) || 0;
+
+  // ════════════════════════════════════════
+  // วิธีคิดเหมือน homeEST:
+  // จำนวนแผ่น (cols) = ceil(ด้าน B / ความกว้างแผ่น)
+  // ความยาวแต่ละแผ่น = ด้าน A (ตัดยาวเต็มลาด ไม่ต่อแถว)
+  // ความยาวรวม = cols × ด้าน A
+  // ════════════════════════════════════════
+  const cols       = Math.ceil(wM / sheetEffW);  // จำนวนแผ่น (ด้าน B / กว้างแผ่น)
+  const sheetLen   = lM;                          // แผ่นยาวเต็มลาด = ด้าน A
+  const totalLinear = cols * sheetLen;            // เมตรเชิงเส้นรวม
+
+  // ══ สกรู ══
+  // จำนวนแปต่อแผ่น = ceil(ด้าน A / ระยะแป) + 1 (รวมแปปลาย)
+  const purlinsPerSheet = Math.ceil(sheetLen / purlinSpacing) + 1;
+  const screwsPerSheet  = purlinsPerSheet * screwPerPurlin;
+  const totalScrews     = cols * screwsPerSheet;
+  const screwBoxes100   = Math.ceil(totalScrews / 100);
+
+  // ══ ราคา ══
+  const totalPrice = totalLinear * (pricePerM + extraPerM);
+  const hasPrice   = pricePerM > 0;
+
+  // — Render Summary —
+  document.getElementById('mResArea').textContent    = areaM2.toFixed(2) + ' ตร.ม.';
+  document.getElementById('mResSheets').textContent  = cols + ' แผ่น';
+  document.getElementById('mResScrewBox').textContent = screwBoxes100 + ' กล่อง';
+  document.getElementById('mResTotal').textContent   =
+    hasPrice ? totalPrice.toLocaleString('th-TH', {maximumFractionDigits:0}) + ' ฿' : '—';
+
+  // — จำนวนแผ่น —
+  document.getElementById('mResSheetDetail').innerHTML =
+    `${cols} แผ่น <span class="chip chip-teal">ยาว ${lM.toFixed(2)} ม./แผ่น</span>`;
+  document.getElementById('mResSheetDesc').textContent =
+    `${wM.toFixed(2)} ม. ÷ ${sheetEffW*1000|0} mm = ${(wM/sheetEffW).toFixed(2)} → ปัดขึ้น ${cols} แผ่น`;
+
+  // — ความยาวรวม —
+  document.getElementById('mResLinear').textContent = totalLinear.toFixed(2) + ' ม.';
+  document.getElementById('mResLinearSub').textContent =
+    `${cols} แผ่น × ${lM.toFixed(2)} ม. = ${totalLinear.toFixed(2)} เมตรเชิงเส้น`;
+
+  // — สกรู —
+  document.getElementById('mResScrewCount').innerHTML =
+    `${totalScrews.toLocaleString()} ตัว <span class="chip chip-purple">${screwBoxes100} กล่อง</span>`;
+  document.getElementById('mResScrewSub').textContent =
+    `${screwsPerSheet} ตัว/แผ่น (${purlinsPerSheet} แถวแป × ${screwPerPurlin} สกรู)`;
+
+  // — กล่องสกรู —
+  document.getElementById('mResScrewBoxDetail').textContent = screwBoxes100 + ' กล่อง';
+
+  // — ราคา —
+  const priceRow = document.getElementById('mResPriceRow');
+  if (hasPrice) {
+    priceRow.style.display = 'flex';
+    document.getElementById('mResPriceVal').textContent =
+      totalPrice.toLocaleString('th-TH', {maximumFractionDigits:0}) + ' บาท';
+    document.getElementById('mResPriceSub').textContent =
+      `${totalLinear.toFixed(2)} ม. × ${(pricePerM+extraPerM).toLocaleString()} ฿/ม.` +
+      (extraPerM > 0 ? ` (แผ่น ${pricePerM} + ติดตั้ง ${extraPerM} ฿/ม.)` : '');
+  } else {
+    priceRow.style.display = 'none';
+  }
+
+  // — Breakdown —
+  document.getElementById('mResBreakdown').innerHTML = `
+    <strong style="color:var(--text)">รายละเอียดการคำนวณ (วิธีเดียวกับมาตรฐานช่างไทย)</strong><br>
+    ด้าน B (ความกว้างหลังคา): <strong style="color:var(--teal)">${wM.toFixed(2)} ม.</strong><br>
+    ด้าน A (ความยาวลาดหลังคา): <strong style="color:var(--teal)">${lM.toFixed(2)} ม.</strong><br>
+    ความกว้างแผ่น: ${sheetEffW*1000|0} mm<br>
+    จำนวนแผ่น: ${wM.toFixed(2)} ÷ ${sheetEffW} = ${(wM/sheetEffW).toFixed(2)}
+      → ปัดขึ้น <strong style="color:var(--text)">${cols} แผ่น</strong><br>
+    ความยาวต่อแผ่น: ${lM.toFixed(2)} ม. (ตัดเต็มลาด ไม่ต่อแถว)<br>
+    ความยาวรวม: ${cols} × ${lM.toFixed(2)} = <strong style="color:var(--blue)">${totalLinear.toFixed(2)} ม.</strong><br>
+    ระยะแป: ${purlinSpacing} ม. → แปต่อแผ่น ${purlinsPerSheet} แถว<br>
+    สกรูต่อแผ่น: ${purlinsPerSheet} × ${screwPerPurlin} = ${screwsPerSheet} ตัว<br>
+    สกรูรวม: ${cols} × ${screwsPerSheet} = <strong style="color:var(--purple)">${totalScrews.toLocaleString()} ตัว</strong>
+      → <strong style="color:var(--accent2)">${screwBoxes100} กล่อง</strong><br>
+    ${hasPrice ? `ราคารวม: ${totalLinear.toFixed(2)} × ${pricePerM+extraPerM} = <strong style="color:var(--accent2)">${totalPrice.toLocaleString('th-TH',{maximumFractionDigits:0})} บาท</strong>` : ''}
+  `;
+
+  showResult('mResultCard');
+}
+
+/* ═══════════════════════════════════════════
+   UTILITIES
+═══════════════════════════════════════════ */
+function showResult(id) {
+  const rc = document.getElementById(id);
+  rc.classList.remove('show');
+  rc.style.display = 'none';
+  requestAnimationFrame(() => {
+    rc.style.display = 'block';
+    requestAnimationFrame(() => rc.classList.add('show'));
+  });
+  setTimeout(() => rc.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+}
+
+function shake(el) {
+  el.style.animation = 'none';
+  el.offsetHeight;
+  el.style.animation = 'shake 0.35s ease';
+  setTimeout(() => el.style.animation = '', 400);
+}
+
+// Simple inline toast (no alert())
+function showToast(msg, tab) {
+  const existingId = 'toast-' + tab;
+  let toast = document.getElementById(existingId);
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = existingId;
+    toast.style.cssText = `
+      position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+      background:#f85149; color:#fff; border-radius:10px;
+      padding:12px 24px; font-family:'Sarabun',sans-serif;
+      font-weight:700; font-size:0.95rem; z-index:9999;
+      box-shadow:0 4px 20px rgba(0,0,0,0.4);
+      animation: fadeIn 0.3s ease;
+    `;
+    document.body.appendChild(toast);
+  }
+  toast.textContent = '⚠️ ' + msg;
+  toast.style.display = 'block';
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(() => { toast.style.display = 'none'; }, 3000);
+}
+
+// Enter key
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    const activeTab = document.querySelector('.tab-panel.active').id;
+    if (activeTab === 'tab-zinc')  calculateZinc();
+    else if (activeTab === 'tab-metal') calculateMetal();
+  }
+});
 </script>
 
-<style>
-  @keyframes shake {
-    0%,100% { transform: translateX(0); }
-    20%,60% { transform: translateX(-6px); }
-    40%,80% { transform: translateX(6px); }
-  }
-</style>
 </body>
 </html>
