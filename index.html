@@ -596,6 +596,11 @@
       .summary-row-3 { grid-template-columns: 1fr; }
     }
 
+    /* ─── BOQ Calculation ─── */
+    .boq-item { margin-bottom: 12px; }
+    .boq-title { font-weight: 700; color: var(--text); font-size: 0.9rem; }
+    .boq-val { color: var(--text2); padding-left: 14px; border-left: 2px solid var(--border); margin-top: 4px; font-size: 0.9rem; line-height: 1.5; }
+
     /* ─── Frame Toggle ─── */
     .frame-toggle-row {
       display: flex;
@@ -1506,15 +1511,47 @@ function calculateZinc() {
   }
 
   document.getElementById('resBreakdown').innerHTML = `
-    <strong style="color:var(--text)">รายละเอียดการคำนวณ</strong><br>
-    พื้นที่หลังคา: ${wRaw} × ${lRaw} ${currentUnit === 'm' ? 'เมตร' : 'ฟุต'}
-      = ${areaM2.toFixed(2)} ตร.ม. (${(wFt*lFt).toFixed(2)} ตร.ฟุต)<br>
-    แผ่นสังกะสีกว้างใช้งานได้จริง: ${SHEET_W_EFF} ฟุต/แผ่น<br>
-    ขนาดแผ่นที่เลือกอัตโนมัติ: <strong style="color:var(--green)">${sheetLen} ฟุต</strong>
-      (ใช้งานได้ต่อแถว: ${sheetLenEff} ฟุต)<br>
-    จำนวนแผ่น: ${cols} คอลัมน์ × ${rows} แถว = <strong style="color:var(--text)">${total} แผ่น</strong><br>
-    ระยะแป: ${purlinSpacingM} ม. → แปต่อแผ่น ${purlinsPerSheet} แถว<br>
-    ตะปูต่อแผ่น: ${nailsPerSheet} ตัว (${purlinsPerSheet} แถวแป × 3 ตะปู)
+    <div style="font-family:'Sarabun', sans-serif; font-size:0.9rem; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background: var(--surface2);">
+      <h4 style="color:var(--text); margin-top:0; border-bottom: 2px solid var(--border); padding-bottom: 8px;">รายการคำนวณปริมาณงานวัสดุมุงหลังคาสังกะสี (อ้างอิงหลักเกณฑ์)</h4>
+      <div class="boq-list" style="margin-top: 14px;">
+        <div class="boq-item">
+          <div class="boq-title">1. ข้อมูลพื้นที่รับน้ำหนัก (Area)</div>
+          <div class="boq-val">กว้าง ${wRaw} × ยาว ${lRaw} ${currentUnit === 'm' ? 'ม.' : 'ฟุต'} = <strong>${areaM2.toFixed(2)} ตร.ม.</strong></div>
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">2. ข้อกำหนดวัสดุสังกะสี (Material Spec)</div>
+          <div class="boq-val">กว้างใช้งานจริง = <strong>${SHEET_W_EFF} ฟุต/แผ่น</strong><br>
+          <span style="font-size:0.85rem">(หักซ้อนทับแนวลึก 0.5 ฟุต/รอยต่อ)</span></div>
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">3. ปริมาณแผ่นตามขวาง (Columns)</div>
+          <div class="boq-val">${wFt.toFixed(2)} ฟุต ÷ ${SHEET_W_EFF} ฟุต/แผ่น = ${(wFt/SHEET_W_EFF).toFixed(2)} ➡️ ปัดขึ้นเป็น <strong>${cols} แผ่น</strong></div>
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">4. ขนาดแผ่นที่เหมาะสม (Auto Selection)</div>
+          <div class="boq-val">ระบบเลือกอัตโนมัติให้ใช้แผ่น <strong>${sheetLen} ฟุต</strong><br>
+          <span style="font-size:0.85rem">(หักซ้อนทับแล้ว ใช้งานได้ต่อแถว: <strong>${sheetLenEff} ฟุต</strong>)</span></div>
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">5. ปริมาณแผ่นตามยาว (Rows)</div>
+          <div class="boq-val">ความยาวหลังคา ${lFt.toFixed(2)} ฟุต ÷ ${sheetLenEff} ฟุต = ${(lFt/sheetLenEff).toFixed(2)} ➡️ ปัดขึ้นเป็น <strong>${rows} แถว</strong></div>
+        </div>
+        <div class="boq-item" style="border-bottom:1px dashed var(--border); padding-bottom:12px;">
+          <div class="boq-title">6. รวมปริมาณสังกะสี (Total Sheets)</div>
+          <div class="boq-val">${cols} คอลัมน์ × ${rows} แถว = <strong>${total} แผ่น</strong></div>
+        </div>
+        <div class="boq-item" style="margin-top:12px;">
+          <div class="boq-title">7. อุปกรณ์จับยึด (Fasteners)</div>
+          <div class="boq-val">ระยะแป ${purlinSpacingM} ม. ➡️ แป ${purlinsPerSheet} แถว/แผ่น</div>
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">8. รวมตะปูสังกะสี (Total Nails)</div>
+          <div class="boq-val">ตะปู ${nailsPerSheet} ตัว/แผ่น (${purlinsPerSheet} แถวแป × 3 ตัว)<br>
+          ${total} แผ่น × ${nailsPerSheet} ตัว = <strong>${totalNails.toLocaleString()} ตัว</strong></div>
+        </div>
+      </div>
+      <div style="margin-top: 12px; font-size: 0.8rem; color: var(--text2); text-align: right;">หมายเหตุ: คำนวณแบบปัดเศษขึ้นตามหน่วยบรรจุภัณฑ์เต็ม ปริมาณการสูญเสีย (Wastage) ผู้ประเมินควรพิจารณาบวกเผื่อเปอร์เซ็นต์ตามมาตรฐานการทำงานจริง</div>
+    </div>
   `;
 
   const suggContainer = document.getElementById('resRoofSuggestionContainer');
@@ -1612,18 +1649,41 @@ function calculateMetal() {
 
   // — Breakdown —
   document.getElementById('mResBreakdown').innerHTML = `
-    <strong style="color:var(--text)">รายละเอียดการคำนวณ (วิธีเดียวกับมาตรฐานช่างไทย)</strong><br>
-    ด้าน B (ความกว้างหลังคา): <strong style="color:var(--teal)">${wM.toFixed(2)} ม.</strong><br>
-    ด้าน A (ความยาวลาดหลังคา): <strong style="color:var(--teal)">${lM.toFixed(2)} ม.</strong><br>
-    ความกว้างแผ่น: ${sheetEffW*1000|0} mm<br>
-    จำนวนแผ่น: ${wM.toFixed(2)} ÷ ${sheetEffW} = ${(wM/sheetEffW).toFixed(2)}
-      → ปัดขึ้น <strong style="color:var(--text)">${cols} แผ่น</strong><br>
-    ความยาวต่อแผ่น: ${lM.toFixed(2)} ม. (ตัดเต็มลาด ไม่ต่อแถว)<br>
-    ความยาวรวม: ${cols} × ${lM.toFixed(2)} = <strong style="color:var(--blue)">${totalLinear.toFixed(2)} ม.</strong><br>
-    ระยะแป: ${purlinSpacing} ม. → แปต่อแผ่น ${purlinsPerSheet} แถว<br>
-    สกรูต่อแผ่น: ${purlinsPerSheet} × ${screwPerPurlin} = ${screwsPerSheet} ตัว<br>
-    สกรูรวม: ${cols} × ${screwsPerSheet} = <strong style="color:var(--purple)">${totalScrews.toLocaleString()} ตัว</strong>
-      → <strong style="color:var(--accent2)">${screwBoxes100} กล่อง</strong>
+    <div style="font-family:'Sarabun', sans-serif; font-size:0.9rem; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background: var(--surface2);">
+      <h4 style="color:var(--text); margin-top:0; border-bottom: 2px solid var(--border); padding-bottom: 8px;">รายการคำนวณปริมาณงานวัสดุมุงหลังคาแผ่นเหล็กขึ้นรูป (Metal Sheet)</h4>
+      <div class="boq-list" style="margin-top: 14px;">
+        <div class="boq-item">
+          <div class="boq-title">1. ข้อมูลพื้นที่รับน้ำหนัก (Area)</div>
+          <div class="boq-val">กว้าง ${wM.toFixed(2)} ม. × ยาวลาด ${lM.toFixed(2)} ม. = <strong>${areaM2.toFixed(2)} ตร.ม.</strong></div>
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">2. ข้อกำหนดวัสดุ (Material Spec)</div>
+          <div class="boq-val">ความกว้างใช้งานจริง = <strong>${sheetEffW} ม.</strong> (${sheetEffW*1000|0} มม.)</div>
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">3. ปริมาณแผ่นตามขวาง (Total Sheets)</div>
+          <div class="boq-val">${wM.toFixed(2)} ม. ÷ ${sheetEffW} ม./แผ่น = ${(wM/sheetEffW).toFixed(2)} ➡️ ปัดขึ้นเป็น <strong>${cols} แผ่น</strong></div>
+        </div>
+        <div class="boq-item" style="border-bottom:1px dashed var(--border); padding-bottom:12px;">
+          <div class="boq-title">4. ความยาวสั่งตัด (Cut Length)</div>
+          <div class="boq-val">ตัดยาวรวดเดียว <strong>${lM.toFixed(2)} ม./แผ่น</strong> (รวมความยาว ${totalLinear.toFixed(2)} ม.เชิงเส้น)</div>
+        </div>
+        <div class="boq-item" style="margin-top:12px;">
+          <div class="boq-title">5. อุปกรณ์จับยึด (Screws)</div>
+          <div class="boq-val">ระยะแป ${purlinSpacing} ม. ➡️ แป ${purlinsPerSheet} แถว/แผ่น</div>
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">6. อัตราการยึด (Fixing Rate)</div>
+          <div class="boq-val">${screwPerPurlin} สกรู / จุดตัดแป ➡️ ${screwsPerSheet} ตัว/แผ่น</div>
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">7. รวมตะปูเกลียว (Total Screws)</div>
+          <div class="boq-val">${cols} แผ่น × ${screwsPerSheet} ตัว = <strong>${totalScrews.toLocaleString()} ตัว</strong><br>
+          <span style="font-size:0.85rem">(แบ่งซื้อเป็นกล่อง กล่องละ 100 ตัว ➡️ ใช้ <strong>${screwBoxes100} กล่อง</strong>)</span></div>
+        </div>
+      </div>
+      <div style="margin-top: 12px; font-size: 0.8rem; color: var(--text2); text-align: right;">หมายเหตุ: คำนวณความยาวเต็มแนวลาดโดยไร้รอยต่อขวาง (No End-lap) ตามมาตรฐานงานเมทัลชีท ปริมาณความเสียหาย (Wastage) ผู้ประเมินควรพิจารณาบวกเพิ่มตามความเหมาะสม</div>
+    </div>
   `;
 
   calculateFrame('metal', wM, lM, purlinSpacing);
@@ -1686,14 +1746,41 @@ function calculateTile() {
     `กระเบื้อง ${totalSheets} แผ่น × ${hookPerSheet} ขอยึด/แผ่น`;
 
   document.getElementById('tResBreakdown').innerHTML = `
-    <strong style="color:var(--text)">รายละเอียดการคำนวณกระเบื้องลอนคู่</strong><br>
-    ด้าน B (กว้าง): <strong style="color:var(--red)">${wM.toFixed(2)} ม.</strong><br>
-    ด้าน A (ยาวลาด): <strong style="color:var(--red)">${lM.toFixed(2)} ม.</strong><br>
-    ระยะซ้อนทับ: กว้างใช้งาน 0.4 ม., ยาวใช้งาน ${sheetEffL.toFixed(2)} ม.<br>
-    จำนวนตามความกว้าง: ${wM.toFixed(2)} ÷ 0.4 = ${(wM/0.4).toFixed(2)} → ปัดขึ้น ${cols} แผ่น<br>
-    จำนวนตามความลาด: ${lM.toFixed(2)} ÷ ${sheetEffL.toFixed(2)} = ${(lM/sheetEffL).toFixed(2)} → ปัดขึ้น ${rows} แถว<br>
-    รวมกระเบื้อง: ${cols} × ${rows} = <strong style="color:var(--red)">${totalSheets} แผ่น</strong><br>
-    ขอยึดกระเบื้อง: ${totalSheets} × ${hookPerSheet} = <strong style="color:var(--accent2)">${totalHooks.toLocaleString()} ตัว</strong>
+    <div style="font-family:'Sarabun', sans-serif; font-size:0.9rem; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background: var(--surface2);">
+      <h4 style="color:var(--text); margin-top:0; border-bottom: 2px solid var(--border); padding-bottom: 8px;">รายการคำนวณปริมาณงานวัสดุมุงหลังคากระเบื้องลอนคู่ (Fibre Cement)</h4>
+      <div class="boq-list" style="margin-top: 14px;">
+        <div class="boq-item">
+          <div class="boq-title">1. ข้อมูลพื้นที่รับน้ำหนัก (Area)</div>
+          <div class="boq-val">กว้าง ${wM.toFixed(2)} ม. × ยาวลาด ${lM.toFixed(2)} ม. = <strong>${areaM2.toFixed(2)} ตร.ม.</strong></div>
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">2. ข้อกำหนดการซ้อนทับ (Lap Allowance)</div>
+          <div class="boq-val">กว้างใช้งาน <strong>0.40 ม.</strong>, ยาวใช้งาน <strong>${sheetEffL.toFixed(2)} ม.</strong><br>
+          <span style="font-size:0.85rem">(หักระยะซ้อนทับแล้ว ตามคู่มือติดตั้ง)</span></div>
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">3. ปริมาณแผ่นตามขวาง (Columns)</div>
+          <div class="boq-val">${wM.toFixed(2)} ม. ÷ 0.40 ม./แผ่น = ${(wM/0.4).toFixed(2)} ➡️ ปัดขึ้นเป็น <strong>${cols} แผ่น</strong></div>
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">4. ปริมาณแผ่นตามยาวลาด (Rows)</div>
+          <div class="boq-val">${lM.toFixed(2)} ม. ÷ ${sheetEffL.toFixed(2)} ม./แผ่น = ${(lM/sheetEffL).toFixed(2)} ➡️ ปัดขึ้นเป็น <strong>${rows} แถว</strong></div>
+        </div>
+        <div class="boq-item" style="border-bottom:1px dashed var(--border); padding-bottom:12px;">
+          <div class="boq-title">5. รวมปริมาณกระเบื้อง (Total Tiles)</div>
+          <div class="boq-val">${cols} แผ่น × ${rows} แถว = <strong>${totalSheets.toLocaleString()} แผ่น</strong></div>
+        </div>
+        <div class="boq-item" style="margin-top:12px;">
+          <div class="boq-title">6. อุปกรณ์จับยึด (Fasteners)</div>
+          <div class="boq-val">ใช้อุปกรณ์ยึด ${hookPerSheet} ชุด/แผ่น</div>
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">7. รวมปริมาณขอยึด (Total Hooks)</div>
+          <div class="boq-val">${totalSheets} แผ่น × ${hookPerSheet} ชุด = <strong>${totalHooks.toLocaleString()} ชุด</strong></div>
+        </div>
+      </div>
+      <div style="margin-top: 12px; font-size: 0.8rem; color: var(--text2); text-align: right;">หมายเหตุ: คำนวณแบบปัดเศษขึ้นตามตารางสูตรคำนวณปริมาณ ปริมาณความเสียหายและตัดรอยต่อ (Wastage) ถือเป็นดุลยพินิจของผู้ประเมินราคาในการพิจารณาเพิ่ม</div>
+    </div>
   `;
 
   showResult('tResultCard');
