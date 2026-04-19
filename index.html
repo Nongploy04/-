@@ -1196,10 +1196,16 @@ function setUnit(u) {
 
 function autoPickSheetZinc(lFt) {
   const sizes = [6, 8, 10, 12];
-  const LEN_OVERLAP = 0.5;
+  // 1. ถ้าคลุมแผ่นเดียวได้มิดโดยไม่ต้องซ้อนทับ
   for (const sz of sizes) {
-    const eff = sz - LEN_OVERLAP;
-    if (lFt <= eff * 2) return sz;
+    if (lFt <= sz) return sz;
+  }
+  // 2. ถ้าต้องต่อแผ่น ให้กระจายใช้ซ้อนทับแล้วเพียงพอ
+  const minReqSheets = Math.ceil((lFt - 0.5) / 11.5);
+  for (const sz of sizes) {
+    if (minReqSheets * (sz - 0.5) + 0.5 >= lFt) {
+      return sz;
+    }
   }
   return 12;
 }
@@ -1263,6 +1269,37 @@ function calculateZinc() {
     `≈ ${totalKg.toFixed(2)} กิโลกรัม  (${totalGrams.toLocaleString()} กรัม)`;
   document.getElementById('resNailCount').textContent = `${totalNails.toLocaleString()} ตัว`;
 
+  let roofSuggestionHtml = "";
+  if (lFt > 12) {
+    const minReqSheets = Math.ceil((lFt - 0.5) / 11.5);
+    let bestSize = 12;
+    for (const s of [6, 8, 10, 12]) {
+      if (minReqSheets * (s - 0.5) + 0.5 >= lFt) { bestSize = s; break; }
+    }
+    const realTotalSheets = minReqSheets * cols;
+
+    const halfLen = lFt / 2;
+    const minReqSheetsHalf = Math.ceil((halfLen - 0.5) / 11.5);
+    let bestSizeHalf = 12;
+    for (const s of [6, 8, 10, 12]) {
+      if (minReqSheetsHalf * (s - 0.5) + 0.5 >= halfLen) { bestSizeHalf = s; break; }
+    }
+    const realTotalSheets2 = minReqSheetsHalf * 2 * cols;
+    const halfLenDisp = Number.isInteger(halfLen) ? halfLen : halfLen.toFixed(1);
+
+    roofSuggestionHtml = `<div style="margin-top:14px; padding:10px 14px; background:rgba(240,136,62,0.1); border:1px dashed var(--accent); border-radius:8px; font-size:0.85rem; color:var(--accent); line-height:1.5;">
+      ⚠️ ความยาวหลังคา <strong>${lFt.toFixed(1)} ฟุต</strong> มักไม่มีแผ่นสังกะสียาวขนาดนี้ขาย (ปกติสูงสุด 12 ฟุต) ขอแนะนำ 2 แนวทาง:<br>
+      <div style="margin-top:6px; background:rgba(0,0,0,0.15); padding:8px 10px; border-radius:6px;">
+        <strong>🔹 แบบที่ 1: เพิงหมาแหงน (ลาดเอียงด้านเดียว ${lFt.toFixed(1)} ฟุต)</strong><br>
+        👉 ข้อแนะนำ: <strong>สังกะสี ${bestSize} ฟุต × ${realTotalSheets.toLocaleString()} แผ่น = ${(bestSize * realTotalSheets).toLocaleString()} ฟุต</strong>
+      </div>
+      <div style="margin-top:6px; background:rgba(0,0,0,0.15); padding:8px 10px; border-radius:6px;">
+        <strong>🔹 แบบที่ 2: ทรงจั่ว (แบ่ง 2 ฝั่ง ฝั่งละ ${halfLenDisp} ฟุต)</strong><br>
+        👉 ข้อแนะนำ: <strong>สังกะสี ${bestSizeHalf} ฟุต × ${realTotalSheets2.toLocaleString()} แผ่น = ${(bestSizeHalf * realTotalSheets2).toLocaleString()} ฟุต</strong>
+      </div>
+    </div>`;
+  }
+
   document.getElementById('resBreakdown').innerHTML = `
     <strong style="color:var(--text)">รายละเอียดการคำนวณ</strong><br>
     พื้นที่หลังคา: ${wRaw} × ${lRaw} ${currentUnit === 'm' ? 'เมตร' : 'ฟุต'}
@@ -1273,6 +1310,7 @@ function calculateZinc() {
     จำนวนแผ่น: ${cols} คอลัมน์ × ${rows} แถว = <strong style="color:var(--text)">${total} แผ่น</strong><br>
     ระยะแป: ${purlinSpacingM} ม. → แปต่อแผ่น ${purlinsPerSheet} แถว<br>
     ตะปูต่อแผ่น: ${nailsPerSheet} ตัว (${purlinsPerSheet} แถวแป × 3 ตะปู)
+    ${roofSuggestionHtml}
   `;
 
   showResult('resultCard');
