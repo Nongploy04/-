@@ -595,6 +595,89 @@
       .input-grid-3 { grid-template-columns: 1fr; }
       .summary-row-3 { grid-template-columns: 1fr; }
     }
+
+    /* ─── Frame Toggle ─── */
+    .frame-toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 16px;
+      margin-bottom: 0;
+    }
+    .frame-toggle-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface2);
+      color: var(--text2);
+      font-family: 'Sarabun', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s;
+      white-space: nowrap;
+    }
+    .frame-toggle-btn:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+      background: rgba(88,166,255,0.08);
+    }
+    .frame-toggle-btn.active {
+      border-color: var(--blue);
+      background: linear-gradient(135deg, #58a6ff, #a371f7);
+      color: #fff;
+      box-shadow: 0 2px 12px rgba(88,166,255,0.35);
+    }
+    .frame-options {
+      display: none;
+      margin-top: 14px;
+      animation: fadeIn 0.3s ease;
+    }
+    .frame-options.visible { display: block; }
+
+    /* ─── Frame Result Section ─── */
+    .frame-result-section {
+      display: none;
+      margin-top: 14px;
+      animation: fadeIn 0.3s ease;
+    }
+    .frame-result-section.visible { display: block; }
+    .frame-result-section h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .frame-material-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin-top: 10px;
+    }
+    .frame-material-table th {
+      text-align: left;
+      padding: 8px 10px;
+      background: var(--surface2);
+      color: var(--text2);
+      font-weight: 700;
+      border-bottom: 1px solid var(--border);
+    }
+    .frame-material-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    .frame-material-table tr:last-child td { border-bottom: none; }
+    .frame-material-table .fm-val { font-weight: 800; }
+    .frame-material-table .fm-blue { color: var(--blue); }
+    .frame-material-table .fm-purple { color: var(--purple); }
+    .frame-material-table .fm-green { color: var(--green); }
   </style>
 </head>
 <body>
@@ -665,12 +748,19 @@
       </div>
 
       <label style="display:flex; align-items:center; gap:8px; font-size:0.9rem; color:var(--text2); margin:-10px 0 15px 0; cursor:pointer; width:fit-content; user-select:none;">
-        <input type="checkbox" onchange="document.getElementById('zPurlinSpacing').disabled = !this.checked;" style="width:16px;height:16px;accent-color:var(--primary);cursor:pointer;">
-        <span>⚙️ ปรับตั้งค่า (ระยะแป)</span>
+        <input type="checkbox" onchange="['zSheetType','zPurlinSpacing'].forEach(id=>document.getElementById(id).disabled=!this.checked);" style="width:16px;height:16px;accent-color:var(--primary);cursor:pointer;">
+        <span>⚙️ ปรับตั้งค่า (ประเภทลอน, ระยะแป)</span>
       </label>
 
-      <!-- Options: ระยะแป -->
-      <div class="input-grid" style="grid-template-columns:1fr; margin-bottom: 20px;">
+      <!-- Options: ประเภทลอน + ระยะแป -->
+      <div class="input-grid" style="margin-bottom: 20px;">
+        <div class="field" style="margin: 0;">
+          <label for="zSheetType">ประเภทลอนสังกะสี</label>
+          <select id="zSheetType" disabled>
+            <option value="1.8">ลอนเล็ก (ใช้งาน 1.8 ฟุต)</option>
+            <option value="2.3" selected>ลอนมาตรฐาน (ใช้งาน 2.3 ฟุต)</option>
+          </select>
+        </div>
         <div class="field" style="margin: 0;">
           <label for="zPurlinSpacing">ระยะแป</label>
           <select id="zPurlinSpacing" disabled>
@@ -691,12 +781,47 @@
 
       <!-- Info -->
       <div class="info-box">
-        💡 คำนวณโดยใช้แผ่นสังกะสีมาตรฐานกว้าง <strong>2.5 ฟุต</strong>
-        (ทับซ้อนด้านข้าง 0.5 ฟุต → ใช้งานได้จริง <strong>2 ฟุต/แผ่น</strong>)
-        และทับซ้อนต่อความยาว <strong>6 นิ้ว</strong>
+        💡 สังกะสี<strong>ลอนเล็ก</strong>: กว้างใช้งานจริง <strong>1.8 ฟุต/แผ่น</strong> (~55 ซม.)
+        สังกะสี<strong>ลอนมาตรฐาน</strong>: กว้างใช้งานจริง <strong>2.3 ฟุต/แผ่น</strong> (~70 ซม.)
+        ซ้อนทับข้าง ~1 ลอน, ซ้อนทับต่อความยาว <strong>6 นิ้ว</strong>
       </div>
 
-      <button id="calcBtn" class="calc-btn" type="submit">⚡ คำนวณ</button>
+      <!-- Frame toggle -->
+      <div class="frame-toggle-row">
+        <button type="button" id="zFrameToggle" class="frame-toggle-btn" onclick="toggleFrame('zinc')">
+          🏗️ คำนวณโครงหลังคาด้วย
+        </button>
+      </div>
+      <div class="frame-options" id="zFrameOptions">
+        <div class="input-grid" style="margin-bottom:0;">
+          <div class="field">
+            <label for="zRoofShape">ทรงหลังคา</label>
+            <select id="zRoofShape">
+              <option value="lean_to" selected>เพิงหมาแหงน</option>
+              <option value="gable">ทรงจั่ว</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="zFrameType">ประเภทโครง</label>
+            <select id="zFrameType">
+              <option value="wood">🪵 โครงไม้</option>
+              <option value="csteel" selected>🔩 เหล็กตัวซี (C)</option>
+              <option value="boxsteel">📦 เหล็กกล่อง</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="zRafterSpacing">ระยะจันทัน</label>
+            <select id="zRafterSpacing">
+              <option value="0.8">0.8 ม.</option>
+              <option value="1.0">1.0 ม.</option>
+              <option value="1.2">1.2 ม.</option>
+              <option value="1.5" selected>1.5 ม.</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <button id="calcBtn" class="calc-btn" type="submit" style="margin-top:16px;">⚡ คำนวณ</button>
     </form>
 
     <!-- Sub-panel: คำนวณตะปูจากแผ่น -->
@@ -807,9 +932,17 @@
         <div class="result-body">
           <div class="result-label">จำนวนตะปูโดยประมาณ</div>
           <div class="result-val val-green" id="resNailCount">—</div>
-          <div class="result-sub">ตะปูตอกสังกะสี 1.5 นิ้ว (≈5 ก./ตัว)</div>
+          <div class="result-sub">ตะปูตอกสังกะสี 1.5 นิ้ว (≈3 ก./ตัว)</div>
         </div>
       </div>
+    </div>
+
+    <!-- Frame Result Section -->
+    <div class="frame-result-section" id="zFrameResult">
+      <hr class="divider" />
+      <h3>🏗️ โครงหลังคา <span id="zFrameTypeLabel" style="font-size:0.85rem;color:var(--text2);font-weight:600;"></span></h3>
+      <div class="result-items" id="zFrameItems"></div>
+      <table class="frame-material-table" id="zFrameTable"></table>
     </div>
 
     <hr class="divider" />
@@ -963,7 +1096,42 @@
       <strong>ยาวรวม</strong> = จำนวนแผ่น × ด้าน A
     </div>
 
-      <button id="mCalcBtn" class="calc-btn teal-btn" type="submit">⚡ คำนวณเมทัลชีท</button>
+      <!-- Frame toggle -->
+      <div class="frame-toggle-row">
+        <button type="button" id="mFrameToggle" class="frame-toggle-btn" onclick="toggleFrame('metal')">
+          🏗️ คำนวณโครงหลังคาด้วย
+        </button>
+      </div>
+      <div class="frame-options" id="mFrameOptions">
+        <div class="input-grid" style="margin-bottom:0;">
+          <div class="field">
+            <label for="mRoofShape">ทรงหลังคา</label>
+            <select id="mRoofShape">
+              <option value="lean_to" selected>เพิงหมาแหงน</option>
+              <option value="gable">ทรงจั่ว</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="mFrameType">ประเภทโครง</label>
+            <select id="mFrameType">
+              <option value="wood">🪵 โครงไม้</option>
+              <option value="csteel" selected>🔩 เหล็กตัวซี (C)</option>
+              <option value="boxsteel">📦 เหล็กกล่อง</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="mRafterSpacing">ระยะจันทัน</label>
+            <select id="mRafterSpacing">
+              <option value="0.8">0.8 ม.</option>
+              <option value="1.0">1.0 ม.</option>
+              <option value="1.2">1.2 ม.</option>
+              <option value="1.5" selected>1.5 ม.</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <button id="mCalcBtn" class="calc-btn teal-btn" type="submit" style="margin-top:16px;">⚡ คำนวณเมทัลชีท</button>
     </form>
   </div>
 
@@ -1029,6 +1197,14 @@
         </div>
       </div>
 
+    </div>
+
+    <!-- Frame Result Section -->
+    <div class="frame-result-section" id="mFrameResult">
+      <hr class="divider" />
+      <h3>🏗️ โครงหลังคา <span id="mFrameTypeLabel" style="font-size:0.85rem;color:var(--text2);font-weight:600;"></span></h3>
+      <div class="result-items" id="mFrameItems"></div>
+      <table class="frame-material-table" id="mFrameTable"></table>
     </div>
 
     <hr class="divider" />
@@ -1265,7 +1441,7 @@ function calculateZinc() {
   document.getElementById('autoSheetReason').textContent =
     `(ความยาวจริง ${lFt.toFixed(1)} ฟุต → ใช้ ${rows2} แถว)`;
 
-  const SHEET_W_EFF = 2;
+  const SHEET_W_EFF = parseFloat(document.getElementById('zSheetType').value) || 1.8;
   const cols  = Math.ceil(wFt / SHEET_W_EFF);
   const rows  = Math.ceil(lFt / sheetLenEff);
   const total = cols * rows;
@@ -1278,7 +1454,7 @@ function calculateZinc() {
   const nailsPerSheet = purlinsPerSheet * NAILS_PER_PURLIN;
   const totalNails = total * nailsPerSheet;
 
-  const NAIL_GRAM = 5;
+  const NAIL_GRAM = 3;
   const totalGrams = totalNails * NAIL_GRAM;
   const totalKid   = totalGrams / 100;
   const totalKg    = totalGrams / 1000;
@@ -1349,6 +1525,10 @@ function calculateZinc() {
     suggContainer.style.display = 'none';
     suggContainer.innerHTML = '';
   }
+
+  const wM = currentUnit === 'm' ? wRaw : wRaw / M_TO_FT;
+  const lM = currentUnit === 'm' ? lRaw : lRaw / M_TO_FT;
+  calculateFrame('zinc', wM, lM, purlinSpacingM);
 
   showResult('resultCard');
 }
@@ -1445,6 +1625,8 @@ function calculateMetal() {
     สกรูรวม: ${cols} × ${screwsPerSheet} = <strong style="color:var(--purple)">${totalScrews.toLocaleString()} ตัว</strong>
       → <strong style="color:var(--accent2)">${screwBoxes100} กล่อง</strong>
   `;
+
+  calculateFrame('metal', wM, lM, purlinSpacing);
 
   showResult('mResultCard');
 }
@@ -1686,6 +1868,175 @@ document.addEventListener('keydown', e => {
     else if (activeTab === 'tab-tile') calculateTile();
   }
 });
+
+/* ═══════════════════════════════════════════
+   ROOF FRAME CALCULATOR
+═══════════════════════════════════════════ */
+const FRAME_DATA = {
+  wood: {
+    label: '🪵 โครงไม้',
+    rafter: { name: 'จันทัน', size: '2×4 นิ้ว', note: 'ไม้เนื้อแข็ง' },
+    purlin:  { name: 'แป',     size: '1.5×3 นิ้ว', note: 'ไม้เนื้อแข็ง/อ่อน' },
+    ridge:   { name: 'อกไก่',  size: '2×4 นิ้ว', note: 'ไม้เนื้อแข็ง' },
+    plate:   { name: 'อะเส',   size: '2×4 นิ้ว', note: 'ไม้เนื้อแข็ง' },
+    stdLen: 4.0
+  },
+  csteel: {
+    label: '🔩 เหล็กตัวซี (C-Channel)',
+    rafter: { name: 'จันทัน', size: 'C 100×50×20 มม. (4")', note: 'หนา 2.0–2.3 มม.' },
+    purlin:  { name: 'แป',     size: 'C 75×45×15 มม. (3")',  note: 'หนา 1.6–2.0 มม.' },
+    ridge:   { name: 'อกไก่/ดั้ง', size: 'C 100×50×20 มม.+',  note: 'หนา 2.3 มม.+' },
+    plate:   { name: 'อะเส',   size: 'C 100×50×20 มม.+',      note: 'หนา 2.3 มม.+' },
+    stdLen: 6.0
+  },
+  boxsteel: {
+    label: '📦 เหล็กกล่อง',
+    rafter: { name: 'จันทัน', size: '2×4 นิ้ว (50×100 มม.)', note: 'หนา 2.0–2.3 มม.' },
+    purlin:  { name: 'แป',     size: '1.5×3 นิ้ว (38×75 มม.)', note: 'หนา 1.6–2.0 มม.' },
+    ridge:   { name: 'อกไก่/ดั้ง', size: '2×4 นิ้ว+',           note: 'หนา 2.3 มม.+' },
+    plate:   { name: 'อะเส',   size: '2×4 นิ้ว+',              note: 'หนา 2.3 มม.+' },
+    stdLen: 6.0
+  }
+};
+
+let frameEnabled = { zinc: false, metal: false };
+
+function toggleFrame(tab) {
+  frameEnabled[tab] = !frameEnabled[tab];
+  const prefix = tab === 'zinc' ? 'z' : 'm';
+  document.getElementById(prefix + 'FrameToggle').classList.toggle('active', frameEnabled[tab]);
+  document.getElementById(prefix + 'FrameOptions').classList.toggle('visible', frameEnabled[tab]);
+  if (!frameEnabled[tab]) {
+    document.getElementById(prefix + 'FrameResult').classList.remove('visible');
+  }
+}
+
+function calculateFrame(tab, lengthM, slopeM, purlinSpacingM) {
+  const prefix = tab === 'zinc' ? 'z' : 'm';
+  if (!frameEnabled[tab]) {
+    document.getElementById(prefix + 'FrameResult').classList.remove('visible');
+    return;
+  }
+
+  const frameType = document.getElementById(prefix + 'FrameType').value;
+  const roofShape = document.getElementById(prefix + 'RoofShape').value;
+  const rafterSpacing = parseFloat(document.getElementById(prefix + 'RafterSpacing').value);
+  const fd = FRAME_DATA[frameType];
+  const stdLen = fd.stdLen;
+
+  let rafterCount = 0;
+  let rafterLenEach = 0;
+  let rafterTotalLen = 0;
+  
+  let purlinRows = 0;
+  let purlinLenPerRow = 0;
+  let purlinTotalLen = 0;
+  
+  let ridgePieces = 0;
+  let plateTotalLen = 0;
+
+  if (roofShape === 'lean_to') {
+    // เพิงหมาแหงน
+    rafterCount = Math.floor(lengthM / rafterSpacing) + 1;
+    rafterLenEach = slopeM;
+    rafterTotalLen = rafterCount * rafterLenEach;
+
+    purlinRows = Math.floor(slopeM / purlinSpacingM) + 1;
+    purlinLenPerRow = lengthM;
+    purlinTotalLen = purlinRows * purlinLenPerRow;
+
+    ridgePieces = 0; // ไม่มีอกไก่
+    plateTotalLen = lengthM * 2; // อะเสหัวท้าย
+  } else {
+    // ทรงจั่ว
+    const halfSlope = slopeM / 2;
+    const rafterCountPerSide = Math.floor(lengthM / rafterSpacing) + 1;
+    rafterCount = rafterCountPerSide * 2;
+    rafterLenEach = halfSlope;
+    rafterTotalLen = rafterCount * rafterLenEach;
+
+    const purlinRowsPerSide = Math.floor(halfSlope / purlinSpacingM) + 1;
+    purlinRows = purlinRowsPerSide * 2;
+    purlinLenPerRow = lengthM;
+    purlinTotalLen = purlinRows * purlinLenPerRow;
+
+    ridgePieces = Math.ceil(lengthM / stdLen); // อกไก่ 1 เส้นตรงกลาง
+    plateTotalLen = lengthM * 2; // อะเส 2 ฝั่งซ้ายขวา
+  }
+
+  const rafterPieces = Math.ceil(rafterTotalLen / stdLen);
+  const purlinPieces = Math.ceil(purlinTotalLen / stdLen);
+  const platePieces = Math.ceil(plateTotalLen / stdLen);
+
+  // --- Label ---
+  const shapeLabel = roofShape === 'lean_to' ? 'เพิงหมาแหงน' : 'ทรงจั่ว';
+  document.getElementById(prefix + 'FrameTypeLabel').textContent = '— ' + shapeLabel + ' (' + fd.label + ')';
+
+  // --- Result Items ---
+  const unitLabel = frameType === 'wood' ? 'ท่อน' : 'ท่อน';
+  document.getElementById(prefix + 'FrameItems').innerHTML = `
+    <div class="result-item">
+      <div class="result-icon">📐</div>
+      <div class="result-body">
+        <div class="result-label">${fd.rafter.name} (Rafter)</div>
+        <div class="result-val val-blue">${rafterCount} ตัว <span class="chip chip-purple">${rafterPieces} ${unitLabel} (${stdLen} ม.)</span></div>
+        <div class="result-sub">ยาว ${rafterLenEach.toFixed(2)} ม./ตัว × ${rafterCount} ตัว = ${rafterTotalLen.toFixed(2)} ม. | ขนาด: ${fd.rafter.size}</div>
+      </div>
+    </div>
+    <div class="result-item">
+      <div class="result-icon">📏</div>
+      <div class="result-body">
+        <div class="result-label">${fd.purlin.name} (Purlin)</div>
+        <div class="result-val val-purple">${purlinRows} แถว <span class="chip chip-teal">${purlinPieces} ${unitLabel} (${stdLen} ม.)</span></div>
+        <div class="result-sub">ยาว ${purlinLenPerRow.toFixed(2)} ม./แถว × ${purlinRows} แถว = ${purlinTotalLen.toFixed(2)} ม. | ขนาด: ${fd.purlin.size}</div>
+      </div>
+    </div>
+  `;
+
+  // --- Material Table ---
+  let ridgeRow = '';
+  if (ridgePieces > 0) {
+    ridgeRow = `<tr>
+        <td class="fm-val">${fd.ridge.name}</td>
+        <td class="fm-green">${fd.ridge.size}</td>
+        <td class="fm-val">${ridgePieces} ${unitLabel}</td>
+        <td>${lengthM.toFixed(2)} ม.</td>
+        <td style="color:var(--text2);font-size:0.8rem">${fd.ridge.note} | 1 แนวตรงกลาง</td>
+      </tr>`;
+  }
+
+  document.getElementById(prefix + 'FrameTable').innerHTML = `
+    <thead>
+      <tr><th>ส่วน</th><th>ขนาดแนะนำ</th><th>จำนวน</th><th>ความยาวรวม</th><th>หมายเหตุ</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="fm-val">${fd.rafter.name}</td>
+        <td class="fm-blue">${fd.rafter.size}</td>
+        <td class="fm-val">${rafterCount} ตัว (${rafterPieces} ${unitLabel})</td>
+        <td>${rafterTotalLen.toFixed(2)} ม.</td>
+        <td style="color:var(--text2);font-size:0.8rem">${fd.rafter.note} | ห่าง ${rafterSpacing} ม.</td>
+      </tr>
+      <tr>
+        <td class="fm-val">${fd.purlin.name}</td>
+        <td class="fm-purple">${fd.purlin.size}</td>
+        <td class="fm-val">${purlinRows} แถว (${purlinPieces} ${unitLabel})</td>
+        <td>${purlinTotalLen.toFixed(2)} ม.</td>
+        <td style="color:var(--text2);font-size:0.8rem">${fd.purlin.note} | ห่าง ${purlinSpacingM} ม.</td>
+      </tr>
+      ${ridgeRow}
+      <tr>
+        <td class="fm-val">${fd.plate.name}</td>
+        <td class="fm-green">${fd.plate.size}</td>
+        <td class="fm-val">${platePieces} ${unitLabel}</td>
+        <td>${plateTotalLen.toFixed(2)} ม.</td>
+        <td style="color:var(--text2);font-size:0.8rem">${fd.plate.note} | 2 แนว</td>
+      </tr>
+    </tbody>
+  `;
+
+  document.getElementById(prefix + 'FrameResult').classList.add('visible');
+}
 </script>
 
 </body>
