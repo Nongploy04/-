@@ -618,7 +618,7 @@
     </button>
     <button id="tab-btn-tile" class="tab-btn tab-tile" role="tab" aria-selected="false"
             aria-controls="tab-tile" onclick="switchTab('tile')">
-      <span class="tab-icon"><img src="assets/tile.svg" class="img-icon" alt="Tile"></span> ลอนคู่
+      <span class="tab-icon"><img src="assets/tile.png" class="img-icon" alt="Tile"></span> ลอนคู่
     </button>
   </nav>
 </div>
@@ -824,6 +824,16 @@
     </div>
 
     <div class="result-items">
+
+      <!-- ความยาวรวม (เพิ่มใหม่) -->
+      <div class="result-item">
+        <div class="result-icon">📏</div>
+        <div class="result-body">
+          <div class="result-label">ความยาวสังกะสีรวม</div>
+          <div class="result-val val-teal" id="nResTotalFeet">—</div>
+          <div class="result-sub" id="nResTotalFeetSub">—</div>
+        </div>
+      </div>
 
       <!-- จำนวนตะปู -->
       <div class="result-item">
@@ -1095,7 +1105,7 @@
 
       <!-- จำนวนแผ่น -->
       <div class="result-item">
-        <div class="result-icon"><img src="assets/tile.svg" class="img-icon" alt="Tile"></div>
+        <div class="result-icon"><img src="assets/tile.png" class="img-icon" alt="Tile"></div>
         <div class="result-body">
           <div class="result-label">จำนวนกระเบื้องลอนคู่</div>
           <div class="result-val val-red" id="tResSheetDetail">—</div>
@@ -1506,12 +1516,19 @@ function calculateNail() {
   const totalKid   = totalGrams / 100;
   const totalKg    = totalGrams / 1000;
 
+  // ความยาวรวม (ฟุต)
+  const totalFeet  = sheetLen * sheetCount;
+
   // — Summary —
   document.getElementById('nResTotal').textContent = totalNails.toLocaleString() + ' ตัว';
   document.getElementById('nResKid').textContent   = totalKid.toFixed(1) + ' ขีด';
   document.getElementById('nResKg').textContent    = totalKg.toFixed(2) + ' กก.';
 
   // — รายละเอียด —
+  document.getElementById('nResTotalFeet').textContent = totalFeet.toLocaleString() + ' ฟุต';
+  document.getElementById('nResTotalFeetSub').textContent = 
+    `สังกะสี ${sheetLen} ฟุต × ${sheetCount} แผ่น = ${totalFeet.toLocaleString()} ฟุต`;
+
   document.getElementById('nResTotalDetail').innerHTML =
     `${totalNails.toLocaleString()} ตัว <span class="chip" style="background:rgba(248,81,73,0.15);border-color:rgba(248,81,73,0.3);color:#f98080;">${sheetCount} แผ่น</span>`;
   document.getElementById('nResTotalSub').textContent =
@@ -1531,6 +1548,7 @@ function calculateNail() {
     <strong style="color:var(--text)">รายละเอียดการคำนวณ</strong><br>
     ขนาดสังกะสี: <strong style="color:#f98080;">${sheetLen} ฟุต</strong> ≈ ${sheetLenM.toFixed(2)} ม.<br>
     จำนวนสังกะสี: <strong style="color:#f98080;">${sheetCount} แผ่น</strong><br>
+    ความยาวรวม: ${sheetLen} × ${sheetCount} = <strong style="color:var(--teal)">${totalFeet.toLocaleString()} ฟุต</strong><br>
     ระยะแป: ${purlinSpacing} ม.<br>
     จำนวนแถวแป/แผ่น: ceil(${sheetLenM.toFixed(2)} ÷ ${purlinSpacing}) + 1 = <strong style="color:var(--text)">${purlinsPerSheet} แถว</strong><br>
     ตะปู/แผ่น: ${purlinsPerSheet} × ${nailPerPurlin} = <strong style="color:var(--text)">${nailsPerSheet} ตัว</strong><br>
