@@ -1526,8 +1526,27 @@ function calculateNail() {
 
   // — รายละเอียด —
   document.getElementById('nResTotalFeet').textContent = totalFeet.toLocaleString() + ' ฟุต';
-  document.getElementById('nResTotalFeetSub').textContent = 
-    `สังกะสี ${sheetLen} ฟุต × ${sheetCount} แผ่น = ${totalFeet.toLocaleString()} ฟุต`;
+
+  let feetSubHtml = `สังกะสี ${sheetLen} ฟุต × ${sheetCount} แผ่น = ${totalFeet.toLocaleString()} ฟุต`;
+  
+  if (sheetLen > 12) {
+    const minReqSheets = Math.ceil((sheetLen - 0.5) / 11.5);
+    let bestSize = 12;
+    for (const s of [6, 8, 10, 12]) {
+      if (minReqSheets * (s - 0.5) + 0.5 >= sheetLen) {
+        bestSize = s;
+        break;
+      }
+    }
+    const realTotalSheets = minReqSheets * sheetCount;
+    feetSubHtml += `<div style="margin-top:10px; padding:10px 14px; background:rgba(248,81,73,0.1); border:1px dashed #f85149; border-radius:8px; font-size:0.85rem; color:#f98080; line-height:1.5;">
+      ⚠️ สังกะสีความยาว <strong>${sheetLen} ฟุต</strong> มักไม่มีขาย<br>
+      💡 แนะนำแบ่งต่อแนว: <strong>${bestSize} ฟุต × ${minReqSheets} แผ่น = ${bestSize * minReqSheets} ฟุต</strong> (ครอบคลุมระยะ ${sheetLen} ฟุต ได้พอดีเมื่อหักระยะซ้อนทับ)<br>
+      👉 สรุปใช้สังกะสีแบบใหม่รวม: <strong>${minReqSheets} แผ่น (ต่อแนว) × ${sheetCount} แผ่น(แนวเดิม) = ${realTotalSheets.toLocaleString()} แผ่นดิบ</strong>
+    </div>`;
+  }
+  
+  document.getElementById('nResTotalFeetSub').innerHTML = feetSubHtml;
 
   document.getElementById('nResTotalDetail').innerHTML =
     `${totalNails.toLocaleString()} ตัว <span class="chip" style="background:rgba(248,81,73,0.15);border-color:rgba(248,81,73,0.3);color:#f98080;">${sheetCount} แผ่น</span>`;
