@@ -1540,9 +1540,8 @@ function calculateNail() {
     }
     const realTotalSheets = minReqSheets * sheetCount;
     feetSubHtml += `<div style="margin-top:10px; padding:10px 14px; background:rgba(248,81,73,0.1); border:1px dashed #f85149; border-radius:8px; font-size:0.85rem; color:#f98080; line-height:1.5;">
-      ⚠️ สังกะสีความยาว <strong>${sheetLen} ฟุต</strong> มักไม่มีขาย<br>
-      💡 แนะนำแบ่งต่อแนว: <strong>${bestSize} ฟุต × ${minReqSheets} แผ่น = ${bestSize * minReqSheets} ฟุต</strong> (ครอบคลุมระยะ ${sheetLen} ฟุต ได้พอดีเมื่อหักระยะซ้อนทับ)<br>
-      👉 สรุปใช้สังกะสีแบบใหม่รวม: <strong>${minReqSheets} แผ่น (ต่อแนว) × ${sheetCount} แผ่น(แนวเดิม) = ${realTotalSheets.toLocaleString()} แผ่นดิบ</strong>
+      ⚠️ สังกะสีความยาว <strong>${sheetLen} ฟุต</strong> มักไม่มีขาย (แนะนำนำแผ่นสั้นมาซ้อนทับกัน)<br>
+      👉 ข้อแนะนำ: <strong>สังกะสี ${bestSize} ฟุต × ${realTotalSheets.toLocaleString()} แผ่น = ${(bestSize * realTotalSheets).toLocaleString()} ฟุต</strong>
     </div>`;
   }
   
