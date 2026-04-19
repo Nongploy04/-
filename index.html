@@ -589,6 +589,19 @@
         </div>
       </div>
 
+      <!-- Options: ระยะแป -->
+      <div class="input-grid" style="grid-template-columns:1fr; margin-bottom: 20px;">
+        <div class="field" style="margin: 0;">
+          <label for="zPurlinSpacing">ระยะแป</label>
+          <select id="zPurlinSpacing">
+            <option value="0.6">0.6 ม.</option>
+            <option value="0.8">0.8 ม.</option>
+            <option value="1.0" selected>1.0 ม.</option>
+            <option value="1.2">1.2 ม.</option>
+          </select>
+        </div>
+      </div>
+
       <!-- Auto-selected sheet banner -->
       <div class="auto-sheet-banner" id="autoSheetBanner">
         <span>🤖 ระบบเลือกแผ่นสังกะสี</span>
@@ -630,9 +643,9 @@
           <label for="nPurlinSpacing">ระยะแป</label>
           <select id="nPurlinSpacing">
             <option value="0.6">0.6 ม.</option>
-            <option value="0.9">0.9 ม.</option>
-            <option value="1.2" selected>1.2 ม.</option>
-            <option value="1.5">1.5 ม.</option>
+            <option value="0.8">0.8 ม.</option>
+            <option value="1.0" selected>1.0 ม.</option>
+            <option value="1.2">1.2 ม.</option>
           </select>
         </div>
         <div class="field">
@@ -824,9 +837,9 @@
         <label for="mPurlin">ระยะแป</label>
         <select id="mPurlin">
           <option value="0.9">0.9 ม.</option>
-          <option value="1.2" selected>1.2 ม.</option>
+          <option value="1.0" selected>1.0 ม.</option>
+          <option value="1.2">1.2 ม.</option>
           <option value="1.5">1.5 ม.</option>
-          <option value="1.8">1.8 ม.</option>
         </select>
       </div>
       <div class="field">
@@ -836,24 +849,6 @@
           <option value="3">3 ตัว</option>
           <option value="4">4 ตัว</option>
         </select>
-      </div>
-    </div>
-
-    <!-- Price row -->
-    <div class="input-grid">
-      <div class="field">
-        <label for="mPrice">ราคาต่อเมตรเชิงเส้น (บาท)</label>
-        <div class="input-wrap">
-          <input id="mPrice" type="number" min="0" step="1" placeholder="0" inputmode="decimal" />
-          <span class="unit-badge teal-badge">฿/ม.</span>
-        </div>
-      </div>
-      <div class="field">
-        <label for="mExtraPrice">ค่าติดตั้งเพิ่มต่อเมตร (บาท)</label>
-        <div class="input-wrap">
-          <input id="mExtraPrice" type="number" min="0" step="1" placeholder="0" inputmode="decimal" />
-          <span class="unit-badge teal-badge">฿/ม.</span>
-        </div>
       </div>
     </div>
 
@@ -871,8 +866,8 @@
   <div class="card result-card" id="mResultCard">
     <h2><span>📊</span> ผลการคำนวณเมทัลชีท</h2>
 
-    <!-- Summary 4 boxes -->
-    <div class="summary-row" style="grid-template-columns:1fr 1fr; margin-bottom:10px;">
+    <!-- Summary 3 boxes -->
+    <div class="summary-row-3" style="margin-bottom:14px;">
       <div class="summary-box">
         <div class="s-val teal" id="mResArea">—</div>
         <div class="s-label">พื้นที่หลังคา (ตร.ม.)</div>
@@ -881,15 +876,9 @@
         <div class="s-val teal" id="mResSheets">—</div>
         <div class="s-label">จำนวนแผ่น</div>
       </div>
-    </div>
-    <div class="summary-row" style="grid-template-columns:1fr 1fr;">
       <div class="summary-box">
         <div class="s-val purple" id="mResScrewBox">—</div>
-        <div class="s-label">กล่องสกรู (100 ตัว)</div>
-      </div>
-      <div class="summary-box">
-        <div class="s-val" style="color:var(--accent2);" id="mResTotal">—</div>
-        <div class="s-label">ราคารวมโดยประมาณ (บาท)</div>
+        <div class="s-label">กล่องสกรู</div>
       </div>
     </div>
 
@@ -932,16 +921,6 @@
           <div class="result-label">จำนวนกล่องสกรู</div>
           <div class="result-val val-gold" id="mResScrewBoxDetail">—</div>
           <div class="result-sub">สกรูเมทัลชีท ขนาด 65 mm (100 ตัว/กล่อง)</div>
-        </div>
-      </div>
-
-      <!-- ราคารวม -->
-      <div class="result-item" id="mResPriceRow" style="display:none;">
-        <div class="result-icon">💰</div>
-        <div class="result-body">
-          <div class="result-label">ราคารวมค่าวัสดุ</div>
-          <div class="result-val val-gold" id="mResPriceVal">—</div>
-          <div class="result-sub" id="mResPriceSub">—</div>
         </div>
       </div>
 
@@ -1060,7 +1039,9 @@ function calculateZinc() {
   const total = cols * rows;
   const totalFt = total * sheetLen;
 
-  const purlinsPerSheet = Math.ceil(sheetLen / 2) + 1;
+  const purlinSpacingM = parseFloat(document.getElementById('zPurlinSpacing').value) || 1.0;
+  const sheetLenM = sheetLen * 0.3048;
+  const purlinsPerSheet = Math.ceil(sheetLenM / purlinSpacingM) + 1;
   const NAILS_PER_PURLIN = 3;
   const nailsPerSheet = purlinsPerSheet * NAILS_PER_PURLIN;
   const totalNails = total * nailsPerSheet;
@@ -1091,6 +1072,7 @@ function calculateZinc() {
     ขนาดแผ่นที่เลือกอัตโนมัติ: <strong style="color:var(--green)">${sheetLen} ฟุต</strong>
       (ใช้งานได้ต่อแถว: ${sheetLenEff} ฟุต)<br>
     จำนวนแผ่น: ${cols} คอลัมน์ × ${rows} แถว = <strong style="color:var(--text)">${total} แผ่น</strong><br>
+    ระยะแป: ${purlinSpacingM} ม. → แปต่อแผ่น ${purlinsPerSheet} แถว<br>
     ตะปูต่อแผ่น: ${nailsPerSheet} ตัว (${purlinsPerSheet} แถวแป × 3 ตะปู)
   `;
 
@@ -1131,8 +1113,6 @@ function calculateMetal() {
   const sheetEffW      = parseFloat(document.getElementById('mSheetWidth').value);  // e.g. 0.762 m
   const purlinSpacing  = parseFloat(document.getElementById('mPurlin').value);      // e.g. 1.2 m
   const screwPerPurlin = parseInt(document.getElementById('mScrew').value);         // e.g. 2
-  const pricePerM      = parseFloat(document.getElementById('mPrice').value) || 0;
-  const extraPerM      = parseFloat(document.getElementById('mExtraPrice').value) || 0;
 
   // ════════════════════════════════════════
   // วิธีคิดเหมือน homeEST:
@@ -1151,16 +1131,10 @@ function calculateMetal() {
   const totalScrews     = cols * screwsPerSheet;
   const screwBoxes100   = Math.ceil(totalScrews / 100);
 
-  // ══ ราคา ══
-  const totalPrice = totalLinear * (pricePerM + extraPerM);
-  const hasPrice   = pricePerM > 0;
-
   // — Render Summary —
   document.getElementById('mResArea').textContent    = areaM2.toFixed(2) + ' ตร.ม.';
   document.getElementById('mResSheets').textContent  = cols + ' แผ่น';
   document.getElementById('mResScrewBox').textContent = screwBoxes100 + ' กล่อง';
-  document.getElementById('mResTotal').textContent   =
-    hasPrice ? totalPrice.toLocaleString('th-TH', {maximumFractionDigits:0}) + ' ฿' : '—';
 
   // — จำนวนแผ่น —
   document.getElementById('mResSheetDetail').innerHTML =
@@ -1182,19 +1156,6 @@ function calculateMetal() {
   // — กล่องสกรู —
   document.getElementById('mResScrewBoxDetail').textContent = screwBoxes100 + ' กล่อง';
 
-  // — ราคา —
-  const priceRow = document.getElementById('mResPriceRow');
-  if (hasPrice) {
-    priceRow.style.display = 'flex';
-    document.getElementById('mResPriceVal').textContent =
-      totalPrice.toLocaleString('th-TH', {maximumFractionDigits:0}) + ' บาท';
-    document.getElementById('mResPriceSub').textContent =
-      `${totalLinear.toFixed(2)} ม. × ${(pricePerM+extraPerM).toLocaleString()} ฿/ม.` +
-      (extraPerM > 0 ? ` (แผ่น ${pricePerM} + ติดตั้ง ${extraPerM} ฿/ม.)` : '');
-  } else {
-    priceRow.style.display = 'none';
-  }
-
   // — Breakdown —
   document.getElementById('mResBreakdown').innerHTML = `
     <strong style="color:var(--text)">รายละเอียดการคำนวณ (วิธีเดียวกับมาตรฐานช่างไทย)</strong><br>
@@ -1208,8 +1169,7 @@ function calculateMetal() {
     ระยะแป: ${purlinSpacing} ม. → แปต่อแผ่น ${purlinsPerSheet} แถว<br>
     สกรูต่อแผ่น: ${purlinsPerSheet} × ${screwPerPurlin} = ${screwsPerSheet} ตัว<br>
     สกรูรวม: ${cols} × ${screwsPerSheet} = <strong style="color:var(--purple)">${totalScrews.toLocaleString()} ตัว</strong>
-      → <strong style="color:var(--accent2)">${screwBoxes100} กล่อง</strong><br>
-    ${hasPrice ? `ราคารวม: ${totalLinear.toFixed(2)} × ${pricePerM+extraPerM} = <strong style="color:var(--accent2)">${totalPrice.toLocaleString('th-TH',{maximumFractionDigits:0})} บาท</strong>` : ''}
+      → <strong style="color:var(--accent2)">${screwBoxes100} กล่อง</strong>
   `;
 
   showResult('mResultCard');
