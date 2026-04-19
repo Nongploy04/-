@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>คำนวณหลังคาสังกะสี | Zinc Roof Calculator</title>
+  <meta name="description" content="เครื่องมือคำนวณปริมาณสังกะสีและตะปูสำหรับหลังคา ใส่ขนาดกว้าง-ยาวแล้วรับผลทันที" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #21262d;
+      --border: #30363d;
+      --accent: #f0883e;
+      --accent2: #e3b341;
+      --blue: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --text: #e6edf3;
+      --text2: #8b949e;
+      --radius: 14px;
+    }
+
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 60px;
+    }
+
+    /* ─── Header ─── */
+    header {
+      text-align: center;
+      margin-bottom: 36px;
+      margin-top: 12px;
+    }
+    .logo {
+      font-size: 3rem;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 0 20px rgba(240,136,62,0.5));
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-8px); }
+    }
+    header h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+    header p {
+      color: var(--text2);
+      font-size: 1rem;
+      margin-top: 6px;
+    }
+
+    /* ─── Card ─── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      width: 100%;
+      max-width: 560px;
+      margin-bottom: 20px;
+    }
+    .card h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--text2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card h2 span { font-size: 1.3em; }
+
+    /* ─── Unit Toggle ─── */
+    .unit-toggle {
+      display: flex;
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+    }
+    .unit-toggle button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: transparent;
+      color: var(--text2);
+      border-radius: 7px;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .unit-toggle button.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      box-shadow: 0 2px 12px rgba(240,136,62,0.35);
+    }
+
+    /* ─── Input grid ─── */
+    .input-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .field label {
+      display: block;
+      font-size: 0.88rem;
+      color: var(--text2);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .field .input-wrap {
+      position: relative;
+    }
+    .field input {
+      width: 100%;
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'Sarabun', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      padding: 14px 52px 14px 16px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .field input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(240,136,62,0.15);
+    }
+    .field .unit-badge {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 700;
+      pointer-events: none;
+    }
+
+    /* ─── Auto-sheet banner ─── */
+    .auto-sheet-banner {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      background: rgba(63,185,80,0.08);
+      border: 1px solid rgba(63,185,80,0.25);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      font-size: 0.88rem;
+      color: var(--green);
+      font-weight: 600;
+      animation: fadeIn 0.3s ease;
+    }
+    .auto-sheet-banner.visible { display: flex; }
+    .auto-sheet-banner .sheet-pill {
+      background: rgba(63,185,80,0.18);
+      border: 1px solid rgba(63,185,80,0.35);
+      border-radius: 20px;
+      padding: 3px 12px;
+      font-size: 1rem;
+      font-weight: 800;
+      white-space: nowrap;
+      color: var(--green);
+    }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+
+    /* ─── Overlap info ─── */
+    .info-box {
+      background: rgba(88,166,255,0.08);
+      border: 1px solid rgba(88,166,255,0.2);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      color: var(--blue);
+      margin-bottom: 22px;
+      line-height: 1.6;
+    }
+
+    /* ─── Calculate button ─── */
+    #calcBtn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, #f0883e, #e3b341);
+      color: #fff;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: all 0.25s;
+      box-shadow: 0 4px 20px rgba(240,136,62,0.35);
+      position: relative;
+      overflow: hidden;
+    }
+    #calcBtn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0);
+      transition: background 0.2s;
+    }
+    #calcBtn:hover::after { background: rgba(255,255,255,0.1); }
+    #calcBtn:active { transform: scale(0.98); }
+
+    /* ─── Result card ─── */
+    #resultCard {
+      display: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    #resultCard.show {
+      display: block;
+      animation: slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── Result items ─── */
+    .result-items {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .result-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .result-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.3);
+    }
+    .result-icon {
+      font-size: 2rem;
+      flex-shrink: 0;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4));
+    }
+    .result-body { flex: 1; }
+    .result-label {
+      font-size: 0.85rem;
+      color: var(--text2);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .result-val {
+      font-size: 1.7rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .result-sub {
+      font-size: 0.82rem;
+      color: var(--text2);
+      margin-top: 4px;
+    }
+    .chip {
+      display: inline-block;
+      background: rgba(240,136,62,0.15);
+      border: 1px solid rgba(240,136,62,0.3);
+      color: var(--accent);
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin-left: 6px;
+    }
+
+    .val-orange { color: var(--accent); }
+    .val-gold   { color: var(--accent2); }
+    .val-green  { color: var(--green); }
+    .val-blue   { color: var(--blue); }
+
+    /* ─── summary row ─── */
+    .summary-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .summary-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+    .summary-box .s-val {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--blue);
+    }
+    .summary-box .s-label {
+      font-size: 0.8rem;
+      color: var(--text2);
+      margin-top: 4px;
+    }
+
+    /* ─── Divider ─── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 20px 0;
+    }
+
+    /* ─── footer ─── */
+    footer {
+      color: var(--text2);
+      font-size: 0.82rem;
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 420px) {
+      header h1 { font-size: 1.5rem; }
+      .input-grid { grid-template-columns: 1fr; }
+      .result-val { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🏠</div>
+  <h1>คำนวณหลังคาสังกะสี</h1>
+  <p>คำนวณปริมาณสังกะสีและตะปูสำหรับหลังคา</p>
+</header>
+
+<!-- Input Card -->
+<div class="card">
+  <h2><span>📐</span> ขนาดหลังคา</h2>
+
+  <!-- Unit toggle -->
+  <div class="unit-toggle" role="group" aria-label="หน่วยวัด">
+    <button id="btnMeter" class="active" onclick="setUnit('m')">เมตร (m)</button>
+    <button id="btnFoot"            onclick="setUnit('ft')">ฟุต (ft)</button>
+  </div>
+
+  <!-- Width / Length -->
+  <div class="input-grid">
+    <div class="field">
+      <label for="inputW">ความกว้าง</label>
+      <div class="input-wrap">
+        <input id="inputW" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" />
+        <span class="unit-badge" id="unitBadgeW">ม.</span>
+      </div>
+    </div>
+    <div class="field">
+      <label for="inputL">ความยาว</label>
+      <div class="input-wrap">
+        <input id="inputL" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" />
+        <span class="unit-badge" id="unitBadgeL">ม.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Auto-selected sheet banner -->
+  <div class="auto-sheet-banner" id="autoSheetBanner">
+    <span>🤖 ระบบเลือกแผ่นสังกะสี</span>
+    <span class="sheet-pill" id="autoSheetPill">— ฟุต</span>
+    <span id="autoSheetReason" style="color:var(--text2); font-weight:400;"></span>
+  </div>
+
+  <!-- Info -->
+  <div class="info-box">
+    💡 คำนวณโดยใช้แผ่นสังกะสีมาตรฐานกว้าง <strong>2.5 ฟุต</strong>
+    (ทับซ้อนด้านข้าง 0.5 ฟุต → ใช้งานได้จริง <strong>2 ฟุต/แผ่น</strong>)
+    และทับซ้อนต่อความยาว <strong>6 นิ้ว</strong>
+  </div>
+
+  <button id="calcBtn" onclick="calculate()">⚡ คำนวณ</button>
+</div>
+
+<!-- Result Card -->
+<div class="card" id="resultCard">
+  <h2><span>📊</span> ผลการคำนวณ</h2>
+
+  <!-- Summary -->
+  <div class="summary-row">
+    <div class="summary-box">
+      <div class="s-val" id="resArea">—</div>
+      <div class="s-label">พื้นที่หลังคา (ตร.ม.)</div>
+    </div>
+    <div class="summary-box">
+      <div class="s-val" id="resSheets">—</div>
+      <div class="s-label">จำนวนแผ่นสังกะสี</div>
+    </div>
+  </div>
+
+  <div class="result-items">
+
+    <!-- Zinc feet -->
+    <div class="result-item">
+      <div class="result-icon">📜</div>
+      <div class="result-body">
+        <div class="result-label">ปริมาณสังกะสี (รวม)</div>
+        <div class="result-val val-orange" id="resZincFt">—</div>
+        <div class="result-sub" id="resZincDesc">—</div>
+      </div>
+    </div>
+
+    <!-- Nails - ขีด/กก -->
+    <div class="result-item">
+      <div class="result-icon">🔨</div>
+      <div class="result-body">
+        <div class="result-label">ตะปูตอกสังกะสี</div>
+        <div class="result-val val-gold" id="resNailKid">—</div>
+        <div class="result-sub" id="resNailKg">—</div>
+      </div>
+    </div>
+
+    <!-- Nail count detail -->
+    <div class="result-item">
+      <div class="result-icon">📦</div>
+      <div class="result-body">
+        <div class="result-label">จำนวนตะปูโดยประมาณ</div>
+        <div class="result-val val-green" id="resNailCount">—</div>
+        <div class="result-sub">ตะปูตอกสังกะสี 1.5 นิ้ว (≈5 ก./ตัว)</div>
+      </div>
+    </div>
+
+  </div>
+
+  <hr class="divider" />
+
+  <!-- Breakdown -->
+  <div id="resBreakdown" style="font-size:0.88rem; color: var(--text2); line-height:1.9;"></div>
+</div>
+
+<footer>ข้อมูลอ้างอิงมาตรฐานแผ่นสังกะสีลอนทั่วไปในประเทศไทย</footer>
+
+<script>
+  // ─── State ────────────────────────────────────────────
+  let currentUnit = 'm';   // 'm' | 'ft'
+
+  // ─── Unit Toggle ──────────────────────────────────────
+  function setUnit(u) {
+    currentUnit = u;
+    document.getElementById('btnMeter').classList.toggle('active', u === 'm');
+    document.getElementById('btnFoot').classList.toggle('active', u === 'ft');
+    const badge = u === 'm' ? 'ม.' : 'ฟุต';
+    document.getElementById('unitBadgeW').textContent = badge;
+    document.getElementById('unitBadgeL').textContent = badge;
+  }
+
+  // ─── Auto-pick sheet length from slope length (ft) ────
+  // Rules: pick smallest standard size that covers the slope in ≤2 rows
+  // Available sizes: 6, 8, 10, 12 ft
+  function autoPickSheet(lFt) {
+    const sizes = [6, 8, 10, 12];
+    const LEN_OVERLAP = 0.5;
+    for (const sz of sizes) {
+      const eff = sz - LEN_OVERLAP;   // effective per row
+      if (lFt <= eff * 2) return sz;  // fits in 1 or 2 rows with this size
+    }
+    return 12; // fallback: longest available
+  }
+
+  // ─── Main Calculate ───────────────────────────────────
+  function calculate() {
+    const wRaw = parseFloat(document.getElementById('inputW').value);
+    const lRaw = parseFloat(document.getElementById('inputL').value);
+
+    if (!wRaw || !lRaw || wRaw <= 0 || lRaw <= 0) {
+      shake(document.getElementById('calcBtn'));
+      alert('กรุณากรอกขนาดกว้างและยาวให้ถูกต้อง');
+      return;
+    }
+
+    // Convert to feet
+    const M_TO_FT = 3.28084;
+    const wFt = currentUnit === 'm' ? wRaw * M_TO_FT : wRaw;
+    const lFt = currentUnit === 'm' ? lRaw * M_TO_FT : lRaw;
+    const areaM2 = (currentUnit === 'm')
+      ? wRaw * lRaw
+      : (wRaw / M_TO_FT) * (lRaw / M_TO_FT);
+
+    // ─── Auto-select sheet length ──────────────────────
+    const sheetLen = autoPickSheet(lFt);
+    const LEN_OVERLAP = 0.5;
+    const sheetLenEff = sheetLen - LEN_OVERLAP;
+
+    // Show banner
+    const banner = document.getElementById('autoSheetBanner');
+    banner.classList.add('visible');
+    document.getElementById('autoSheetPill').textContent = sheetLen + ' ฟุต';
+    const lFtRounded = lFt.toFixed(1);
+    const rows2   = Math.ceil(lFt / sheetLenEff);
+    document.getElementById('autoSheetReason').textContent =
+      `(ความยาวจริง ${lFtRounded} ฟุต → ใช้ ${rows2} แถว)`;
+
+    // ─── Zinc sheets ───────────────────────────────────
+    const SHEET_W_EFF = 2;          // effective width per sheet (ft) after 0.5ft overlap
+
+    const cols  = Math.ceil(wFt / SHEET_W_EFF);        // แผ่นต่อแถว (ตามความกว้าง)
+    const rows  = Math.ceil(lFt / sheetLenEff);        // จำนวนแถว (ตามความยาว)
+    const total = cols * rows;
+
+    const totalFt = total * sheetLen;                  // total linear feet of zinc
+
+    // ─── Nails ─────────────────────────────────────────
+    const purlinsPerSheet = Math.ceil(sheetLen / 2) + 1;
+    const NAILS_PER_PURLIN = 3;
+    const nailsPerSheet = purlinsPerSheet * NAILS_PER_PURLIN;
+    const totalNails = total * nailsPerSheet;
+
+    const NAIL_GRAM = 5;            // grams per nail (1.5" zinc nail)
+    const totalGrams = totalNails * NAIL_GRAM;
+    const totalKid   = totalGrams / 100;
+    const totalKg    = totalGrams / 1000;
+
+    // ─── Render ────────────────────────────────────────
+    document.getElementById('resArea').textContent   = areaM2.toFixed(2) + ' ตร.ม.';
+    document.getElementById('resSheets').textContent = total + ' แผ่น';
+
+    document.getElementById('resZincFt').innerHTML =
+      `${totalFt.toLocaleString()} ฟุต <span class="chip">${total} แผ่น</span>`;
+    document.getElementById('resZincDesc').textContent =
+      `แผ่น ${sheetLen} ฟุต × ${total} แผ่น  (${cols} คอลัมน์ × ${rows} แถว)`;
+
+    document.getElementById('resNailKid').textContent =
+      `${totalKid.toFixed(1)} ขีด`;
+    document.getElementById('resNailKg').textContent =
+      `≈ ${totalKg.toFixed(2)} กิโลกรัม  (${totalGrams.toLocaleString()} กรัม)`;
+
+    document.getElementById('resNailCount').textContent =
+      `${totalNails.toLocaleString()} ตัว`;
+
+    document.getElementById('resBreakdown').innerHTML = `
+      <strong style="color:var(--text)">รายละเอียดการคำนวณ</strong><br>
+      พื้นที่หลังคา: ${wRaw} × ${lRaw} ${currentUnit === 'm' ? 'เมตร' : 'ฟุต'}
+        = ${areaM2.toFixed(2)} ตร.ม. (${(wFt*lFt).toFixed(2)} ตร.ฟุต)<br>
+      แผ่นสังกะสีกว้างใช้งานได้จริง: ${SHEET_W_EFF} ฟุต/แผ่น<br>
+      ขนาดแผ่นที่เลือกอัตโนมัติ: <strong style="color:var(--green)">${sheetLen} ฟุต</strong>
+        (ใช้งานได้ต่อแถว: ${sheetLenEff} ฟุต)<br>
+      จำนวนแผ่น: ${cols} คอลัมน์ × ${rows} แถว = <strong style="color:var(--text)">${total} แผ่น</strong><br>
+      ตะปูต่อแผ่น: ${nailsPerSheet} ตัว (${purlinsPerSheet} แถวแป × 3 ตะปู)
+    `;
+
+    // Show result
+    const rc = document.getElementById('resultCard');
+    rc.classList.remove('show');
+    rc.style.display = 'none';
+    requestAnimationFrame(() => {
+      rc.style.display = 'block';
+      requestAnimationFrame(() => rc.classList.add('show'));
+    });
+
+    setTimeout(() => rc.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  }
+
+  // ─── Shake animation for error ────────────────────────
+  function shake(el) {
+    el.style.animation = 'none';
+    el.offsetHeight; // reflow
+    el.style.animation = 'shake 0.35s ease';
+    setTimeout(() => el.style.animation = '', 400);
+  }
+
+  // ─── Allow Enter key ──────────────────────────────────
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') calculate();
+  });
+</script>
+
+<style>
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20%,60% { transform: translateX(-6px); }
+    40%,80% { transform: translateX(6px); }
+  }
+</style>
+</body>
+</html>
