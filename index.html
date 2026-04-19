@@ -2124,6 +2124,20 @@ function calculateFrame(tab, lengthM, slopeM, purlinSpacingM) {
 
   document.getElementById(prefix + 'FrameResult').classList.add('visible');
 }
+
+// Add click-to-clear functionality to unit badges without altering HTML UI
+document.querySelectorAll('.unit-badge').forEach(badge => {
+  badge.style.pointerEvents = 'auto';
+  badge.style.cursor = 'pointer';
+  badge.title = 'คลิกเพื่อล้างค่า (Clear)';
+  badge.addEventListener('click', function() {
+    const input = this.previousElementSibling;
+    if (input && input.tagName === 'INPUT') {
+      input.value = '';
+      input.focus();
+    }
+  });
+});
 </script>
 
 </body>
