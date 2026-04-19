@@ -778,6 +778,9 @@
         </div>
       </div>
 
+      <!-- Roof Suggestion Alert Container -->
+      <div id="resRoofSuggestionContainer" style="display:none; margin: -6px 0 6px 0; transition:all 0.3s;"></div>
+
       <!-- Nails -->
       <div class="result-item">
         <div class="result-icon">🔨</div>
@@ -1287,7 +1290,7 @@ function calculateZinc() {
     const realTotalSheets2 = minReqSheetsHalf * 2 * cols;
     const halfLenDisp = Number.isInteger(halfLen) ? halfLen : halfLen.toFixed(1);
 
-    roofSuggestionHtml = `<div style="margin-top:14px; padding:10px 14px; background:rgba(240,136,62,0.1); border:1px dashed var(--accent); border-radius:8px; font-size:0.85rem; color:var(--accent); line-height:1.5;">
+    roofSuggestionHtml = `<div style="padding:10px 14px; background:rgba(240,136,62,0.1); border:1px dashed var(--accent); border-radius:8px; font-size:0.85rem; color:var(--accent); line-height:1.5; margin-bottom:8px;">
       ⚠️ ความยาวหลังคา <strong>${lFt.toFixed(1)} ฟุต</strong> มักไม่มีแผ่นสังกะสียาวขนาดนี้ขาย (ปกติสูงสุด 12 ฟุต) ขอแนะนำ 2 แนวทาง:<br>
       <div style="margin-top:6px; background:rgba(0,0,0,0.15); padding:8px 10px; border-radius:6px;">
         <strong>🔹 แบบที่ 1: เพิงหมาแหงน (ลาดเอียงด้านเดียว ${lFt.toFixed(1)} ฟุต)</strong><br>
@@ -1310,8 +1313,16 @@ function calculateZinc() {
     จำนวนแผ่น: ${cols} คอลัมน์ × ${rows} แถว = <strong style="color:var(--text)">${total} แผ่น</strong><br>
     ระยะแป: ${purlinSpacingM} ม. → แปต่อแผ่น ${purlinsPerSheet} แถว<br>
     ตะปูต่อแผ่น: ${nailsPerSheet} ตัว (${purlinsPerSheet} แถวแป × 3 ตะปู)
-    ${roofSuggestionHtml}
   `;
+
+  const suggContainer = document.getElementById('resRoofSuggestionContainer');
+  if (roofSuggestionHtml) {
+    suggContainer.innerHTML = roofSuggestionHtml;
+    suggContainer.style.display = 'block';
+  } else {
+    suggContainer.style.display = 'none';
+    suggContainer.innerHTML = '';
+  }
 
   showResult('resultCard');
 }
