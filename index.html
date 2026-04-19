@@ -644,21 +644,21 @@
     </div>
 
     <!-- Sub-panel: คำนวณหลังคา -->
-    <div id="zincModeRoof">
+    <form id="zincModeRoof" onsubmit="event.preventDefault(); document.activeElement.blur(); calculateZinc(); return false;">
 
       <!-- Width / Length -->
       <div class="input-grid">
         <div class="field">
           <label for="inputW">ความกว้าง</label>
           <div class="input-wrap">
-            <input id="inputW" onkeydown="if(event.key==='Enter'||event.keyCode===13){event.preventDefault();calculateZinc();}" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
+            <input id="inputW" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
             <span class="unit-badge" id="unitBadgeW">ม.</span>
           </div>
         </div>
         <div class="field">
           <label for="inputL">ความยาว</label>
           <div class="input-wrap">
-            <input id="inputL" onkeydown="if(event.key==='Enter'||event.keyCode===13){event.preventDefault();calculateZinc();}" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
+            <input id="inputL" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
             <span class="unit-badge" id="unitBadgeL">ม.</span>
           </div>
         </div>
@@ -691,23 +691,23 @@
         และทับซ้อนต่อความยาว <strong>6 นิ้ว</strong>
       </div>
 
-      <button id="calcBtn" class="calc-btn" onclick="calculateZinc()">⚡ คำนวณ</button>
-    </div>
+      <button id="calcBtn" class="calc-btn" type="submit">⚡ คำนวณ</button>
+    </form>
 
     <!-- Sub-panel: คำนวณตะปูจากแผ่น -->
-    <div id="zincModeNail" style="display:none;">
+    <form id="zincModeNail" style="display:none;" onsubmit="event.preventDefault(); document.activeElement.blur(); calculateNail(); return false;">
       <div class="input-grid">
         <div class="field">
           <label for="nSheetLen">ขนาดสังกะสี (ความยาว)</label>
           <div class="input-wrap">
-            <input id="nSheetLen" onkeydown="if(event.key==='Enter'||event.keyCode===13){event.preventDefault();calculateNail();}" type="number" min="1" step="0.5" placeholder="กรอกความยาว..." value="12" inputmode="decimal"  enterkeyhint="done"/>
+            <input id="nSheetLen" type="number" min="1" step="0.5" placeholder="กรอกความยาว..." value="12" inputmode="decimal"  enterkeyhint="done"/>
             <span class="unit-badge" style="color:#f85149;">ฟุต</span>
           </div>
         </div>
         <div class="field">
           <label for="nSheetCount">จำนวนสังกะสี (แผ่น)</label>
           <div class="input-wrap">
-            <input id="nSheetCount" onkeydown="if(event.key==='Enter'||event.keyCode===13){event.preventDefault();calculateNail();}" type="number" min="1" step="1" placeholder="0" inputmode="numeric"  enterkeyhint="done"/>
+            <input id="nSheetCount" type="number" min="1" step="1" placeholder="0" inputmode="numeric"  enterkeyhint="done"/>
             <span class="unit-badge" style="color:#f85149;">แผ่น</span>
           </div>
         </div>
@@ -747,8 +747,8 @@
         แปต่อแผ่น = ceil(ความยาว ÷ ระยะแป) + 1 (รวมแปปลาย)
       </div>
 
-      <button id="nCalcBtn" class="calc-btn" style="background:linear-gradient(135deg,#f85149,#e3b341); box-shadow:0 4px 20px rgba(248,81,73,0.35);" onclick="calculateNail()">🔨 คำนวณตะปู</button>
-    </div>
+      <button id="nCalcBtn" class="calc-btn" type="submit" style="background:linear-gradient(135deg,#f85149,#e3b341); box-shadow:0 4px 20px rgba(248,81,73,0.35);">🔨 คำนวณตะปู</button>
+    </form>
   </div>
 
   <!-- Result Card -->
@@ -892,19 +892,20 @@
       <button id="mBtnFoot"            onclick="setUnitMetal('ft')">ฟุต (ft)</button>
     </div>
 
-    <!-- ด้าน B (ความกว้าง) / ด้าน A (ความยาวลาด) -->
-    <div class="input-grid">
-      <div class="field">
-        <label for="mInputW">ด้าน B — ความกว้างหลังคา</label>
-        <div class="input-wrap">
-          <input id="mInputW" onkeydown="if(event.key==='Enter'||event.keyCode===13){event.preventDefault();calculateMetal();}" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
+    <form onsubmit="event.preventDefault(); document.activeElement.blur(); calculateMetal(); return false;">
+      <!-- ด้าน B (ความกว้าง) / ด้าน A (ความยาวลาด) -->
+      <div class="input-grid">
+        <div class="field">
+          <label for="mInputW">ด้าน B — ความกว้างหลังคา</label>
+          <div class="input-wrap">
+            <input id="mInputW" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
           <span class="unit-badge teal-badge" id="mUnitBadgeW">ม.</span>
         </div>
       </div>
       <div class="field">
         <label for="mInputL">ด้าน A — ความยาวลาดหลังคา</label>
         <div class="input-wrap">
-          <input id="mInputL" onkeydown="if(event.key==='Enter'||event.keyCode===13){event.preventDefault();calculateMetal();}" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
+          <input id="mInputL" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
           <span class="unit-badge teal-badge" id="mUnitBadgeL">ม.</span>
         </div>
       </div>
@@ -947,7 +948,8 @@
       <strong>ยาวรวม</strong> = จำนวนแผ่น × ด้าน A
     </div>
 
-    <button id="mCalcBtn" class="calc-btn teal-btn" onclick="calculateMetal()">⚡ คำนวณเมทัลชีท</button>
+      <button id="mCalcBtn" class="calc-btn teal-btn" type="submit">⚡ คำนวณเมทัลชีท</button>
+    </form>
   </div>
 
   <!-- Result Card -->
@@ -1035,19 +1037,20 @@
       <button id="tBtnFoot"            onclick="setUnitTile('ft')">ฟุต (ft)</button>
     </div>
 
-    <!-- ด้าน B / ด้าน A -->
-    <div class="input-grid">
-      <div class="field">
-        <label for="tInputW">ด้าน B — ความกว้างหลังคา</label>
-        <div class="input-wrap">
-          <input id="tInputW" onkeydown="if(event.key==='Enter'||event.keyCode===13){event.preventDefault();calculateTile();}" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
+    <form onsubmit="event.preventDefault(); document.activeElement.blur(); calculateTile(); return false;">
+      <!-- ด้าน B / ด้าน A -->
+      <div class="input-grid">
+        <div class="field">
+          <label for="tInputW">ด้าน B — ความกว้างหลังคา</label>
+          <div class="input-wrap">
+            <input id="tInputW" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
           <span class="unit-badge red-badge" id="tUnitBadgeW">ม.</span>
         </div>
       </div>
       <div class="field">
         <label for="tInputL">ด้าน A — ความยาวลาดหลังคา</label>
         <div class="input-wrap">
-          <input id="tInputL" onkeydown="if(event.key==='Enter'||event.keyCode===13){event.preventDefault();calculateTile();}" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
+          <input id="tInputL" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"  enterkeyhint="done"/>
           <span class="unit-badge red-badge" id="tUnitBadgeL">ม.</span>
         </div>
       </div>
@@ -1081,7 +1084,8 @@
       • รุ่น 150 ซม. ระยะแป 130 ซม. (ใช้งาน 1.3 เมตร)
     </div>
 
-    <button id="tCalcBtn" class="calc-btn red-btn" onclick="calculateTile()">⚡ คำนวณกระเบื้องลอนคู่</button>
+      <button id="tCalcBtn" class="calc-btn red-btn" type="submit">⚡ คำนวณกระเบื้องลอนคู่</button>
+    </form>
   </div>
 
   <!-- Result Card -->
