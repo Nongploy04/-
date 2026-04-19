@@ -1530,6 +1530,7 @@ function calculateNail() {
   let feetSubHtml = `สังกะสี ${sheetLen} ฟุต × ${sheetCount} แผ่น = ${totalFeet.toLocaleString()} ฟุต`;
   
   if (sheetLen > 12) {
+    // Case 1: เพิงหมาแหงนลอนเดียว (Single slope)
     const minReqSheets = Math.ceil((sheetLen - 0.5) / 11.5);
     let bestSize = 12;
     for (const s of [6, 8, 10, 12]) {
@@ -1539,9 +1540,30 @@ function calculateNail() {
       }
     }
     const realTotalSheets = minReqSheets * sheetCount;
+
+    // Case 2: ทรงจั่ว (Gable roof - แบ่ง 2 ฝั่ง)
+    const halfLen = sheetLen / 2;
+    const minReqSheetsHalf = Math.ceil((halfLen - 0.5) / 11.5);
+    let bestSizeHalf = 12;
+    for (const s of [6, 8, 10, 12]) {
+      if (minReqSheetsHalf * (s - 0.5) + 0.5 >= halfLen) {
+        bestSizeHalf = s;
+        break;
+      }
+    }
+    const realTotalSheets2 = minReqSheetsHalf * 2 * sheetCount;
+    const halfLenDisp = Number.isInteger(halfLen) ? halfLen : halfLen.toFixed(1);
+
     feetSubHtml += `<div style="margin-top:10px; padding:10px 14px; background:rgba(248,81,73,0.1); border:1px dashed #f85149; border-radius:8px; font-size:0.85rem; color:#f98080; line-height:1.5;">
-      ⚠️ สังกะสีความยาว <strong>${sheetLen} ฟุต</strong> มักไม่มีขาย (แนะนำนำแผ่นสั้นมาซ้อนทับกัน)<br>
-      👉 ข้อแนะนำ: <strong>สังกะสี ${bestSize} ฟุต × ${realTotalSheets.toLocaleString()} แผ่น = ${(bestSize * realTotalSheets).toLocaleString()} ฟุต</strong>
+      ⚠️ สังกะสีความยาว <strong>${sheetLen} ฟุต</strong> มักไม่มีขาย ขอแนะนำ 2 แนวทางดังนี้:<br>
+      <div style="margin-top:6px; background:rgba(0,0,0,0.15); padding:8px 10px; border-radius:6px;">
+        <strong>🔹 แบบที่ 1: เพิงหมาแหงน (ลาดเอียงด้านเดียว ${sheetLen} ฟุต)</strong><br>
+        👉 นำแผ่นมาซ้อนทับต่อกัน: <strong>สังกะสี ${bestSize} ฟุต × ${realTotalSheets.toLocaleString()} แผ่น = ${(bestSize * realTotalSheets).toLocaleString()} ฟุต</strong>
+      </div>
+      <div style="margin-top:6px; background:rgba(0,0,0,0.15); padding:8px 10px; border-radius:6px;">
+        <strong>🔹 แบบที่ 2: ทรงจั่ว (แบ่ง 2 ฝั่ง ฝั่งละ ${halfLenDisp} ฟุต)</strong><br>
+        👉 นำแผ่นมาปู 2 ฝั่ง: <strong>สังกะสี ${bestSizeHalf} ฟุต × ${realTotalSheets2.toLocaleString()} แผ่น = ${(bestSizeHalf * realTotalSheets2).toLocaleString()} ฟุต</strong>
+      </div>
     </div>`;
   }
   
