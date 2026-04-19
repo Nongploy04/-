@@ -1290,17 +1290,19 @@ function calculateZinc() {
     const realTotalSheets2 = minReqSheetsHalf * 2 * cols;
     const halfLenDisp = Number.isInteger(halfLen) ? halfLen : halfLen.toFixed(1);
 
-    roofSuggestionHtml = `<div style="padding:10px 14px; background:rgba(240,136,62,0.1); border:1px dashed var(--accent); border-radius:8px; font-size:0.85rem; color:var(--accent); line-height:1.5; margin-bottom:8px;">
-      💡 หลังคาความยาว <strong>${lFt.toFixed(1)} ฟุต</strong> ระบบได้จัดสรรการซ้อนทับแผ่นตามมาตรฐานให้แล้ว โดยนำเสนอเป็น 2 กรณีดังนี้:<br>
-      <div style="margin-top:6px; background:rgba(0,0,0,0.15); padding:8px 10px; border-radius:6px;">
-        <strong>🔹 แบบที่ 1: เพิงหมาแหงน (ลาดเอียงด้านเดียว ${lFt.toFixed(1)} ฟุต)</strong><br>
-        👉 ข้อแนะนำ: <strong>สังกะสี ${bestSize} ฟุต × ${realTotalSheets.toLocaleString()} แผ่น = ${(bestSize * realTotalSheets).toLocaleString()} ฟุต</strong>
-      </div>
-      <div style="margin-top:6px; background:rgba(0,0,0,0.15); padding:8px 10px; border-radius:6px;">
-        <strong>🔹 แบบที่ 2: ทรงจั่ว (แบ่ง 2 ฝั่ง ฝั่งละ ${halfLenDisp} ฟุต)</strong><br>
-        👉 ข้อแนะนำ: <strong>สังกะสี ${bestSizeHalf} ฟุต × ${realTotalSheets2.toLocaleString()} แผ่น = ${(bestSizeHalf * realTotalSheets2).toLocaleString()} ฟุต</strong>
-      </div>
-    </div>`;
+    if (bestSize !== bestSizeHalf || realTotalSheets !== realTotalSheets2) {
+      roofSuggestionHtml = `<div style="padding:10px 14px; background:rgba(240,136,62,0.1); border:1px dashed var(--accent); border-radius:8px; font-size:0.85rem; color:var(--accent); line-height:1.5; margin-bottom:8px;">
+        💡 หลังคาความยาว <strong>${lFt.toFixed(1)} ฟุต</strong> ระบบได้จัดสรรการซ้อนทับแผ่นตามมาตรฐานให้แล้ว โดยนำเสนอเป็น 2 กรณีดังนี้:<br>
+        <div style="margin-top:6px; background:rgba(0,0,0,0.15); padding:8px 10px; border-radius:6px;">
+          <strong>🔹 แบบที่ 1: เพิงหมาแหงน (ลาดเอียงด้านเดียว ${lFt.toFixed(1)} ฟุต)</strong><br>
+          👉 ข้อแนะนำ: <strong>สังกะสี ${bestSize} ฟุต × ${realTotalSheets.toLocaleString()} แผ่น = ${(bestSize * realTotalSheets).toLocaleString()} ฟุต</strong>
+        </div>
+        <div style="margin-top:6px; background:rgba(0,0,0,0.15); padding:8px 10px; border-radius:6px;">
+          <strong>🔹 แบบที่ 2: ทรงจั่ว (แบ่ง 2 ฝั่ง ฝั่งละ ${halfLenDisp} ฟุต)</strong><br>
+          👉 ข้อแนะนำ: <strong>สังกะสี ${bestSizeHalf} ฟุต × ${realTotalSheets2.toLocaleString()} แผ่น = ${(bestSizeHalf * realTotalSheets2).toLocaleString()} ฟุต</strong>
+        </div>
+      </div>`;
+    }
   }
 
   document.getElementById('resBreakdown').innerHTML = `
