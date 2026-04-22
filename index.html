@@ -122,6 +122,15 @@
       background: linear-gradient(135deg, #f85149, #e3b341);
       box-shadow: 0 4px 18px rgba(248,81,73,0.4);
     }
+    .tab-btn.tab-cpac.active {
+      background: linear-gradient(135deg, #2ea043, #3fb950);
+      box-shadow: 0 4px 18px rgba(63,185,80,0.4);
+      color: #fff;
+    }
+    .tab-btn.tab-masonry.active {
+      background: linear-gradient(135deg, #d35400, #e67e22);
+      box-shadow: 0 4px 18px rgba(211,84,0,0.4);
+    }
 
     .tab-badge {
       background: rgba(255,255,255,0.2);
@@ -286,6 +295,14 @@
       border-color: var(--red);
       box-shadow: 0 0 0 3px rgba(248,81,73,0.15);
     }
+    .orange-focus .field input:focus, .orange-focus .field select:focus {
+      border-color: #e67e22;
+      box-shadow: 0 0 0 3px rgba(230,126,34,0.15);
+    }
+    .green-focus .field input:focus, .green-focus .field select:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(63,185,80,0.15);
+    }
     .field .unit-badge {
       position: absolute;
       right: 14px;
@@ -298,6 +315,8 @@
     }
     .teal-badge { color: var(--teal) !important; }
     .red-badge { color: var(--red) !important; }
+    .orange-badge { color: #e67e22 !important; }
+    .green-badge { color: var(--green) !important; }
 
     /* ─── Auto-sheet banner ─── */
     .auto-sheet-banner {
@@ -367,6 +386,67 @@
       border-color: rgba(248,81,73,0.2);
       color: var(--red);
     }
+    .brick-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+    .brick-option { cursor: pointer; }
+    .brick-option input { display: none; }
+    .brick-card {
+      background: var(--surface2);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 8px;
+      text-align: center;
+      transition: all 0.2s;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .brick-option input:checked + .brick-card {
+      border-color: #e67e22;
+      background: rgba(230,126,34,0.1);
+      box-shadow: 0 4px 12px rgba(230,126,34,0.2);
+    }
+    .brick-card img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      margin-bottom: 8px;
+      border-radius: 6px;
+    }
+    .brick-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+    .brick-size {
+      font-size: 0.7rem;
+      color: var(--text2);
+      line-height: 1.2;
+    }
+    @media (max-width: 480px) {
+      .brick-selector { grid-template-columns: 1fr; gap: 8px; }
+      .brick-card { flex-direction: row; text-align: left; padding: 10px 14px; gap: 14px; justify-content: flex-start; }
+      .brick-card img { margin-bottom: 0; width: 40px; height: 40px; }
+      .brick-info { display: flex; flex-direction: column; }
+    }
+
+    .info-box.orange-info {
+      background: rgba(230,126,34,0.08);
+      border-color: rgba(230,126,34,0.2);
+      color: #e67e22;
+    }
+    .info-box.green-info {
+      background: rgba(63,185,80,0.08);
+      border-color: rgba(63,185,80,0.2);
+      color: var(--green);
+    }
 
     /* ─── Calculate button ─── */
     .calc-btn {
@@ -393,6 +473,14 @@
     .calc-btn.red-btn {
       background: linear-gradient(135deg, #f85149, #e3b341);
       box-shadow: 0 4px 20px rgba(248,81,73,0.35);
+    }
+    .calc-btn.orange-btn {
+      background: linear-gradient(135deg, #d35400, #e67e22);
+      box-shadow: 0 4px 20px rgba(211,84,0,0.35);
+    }
+    .calc-btn.green-btn {
+      background: linear-gradient(135deg, #2ea043, #3fb950);
+      box-shadow: 0 4px 20px rgba(63,185,80,0.35);
     }
     .calc-btn::after {
       content: '';
@@ -689,7 +777,7 @@
 
 <header>
   <div class="logo">🏠</div>
-  <h1>คำนวณวัสดุหลังคา</h1>
+  <h1>คำนวณวัสดุ</h1>
   <p>กองช่าง อบต.สงยาง อ.มหาชนะชัย จ.ยโสธร</p>
 </header>
 
@@ -707,6 +795,14 @@
     <button id="tab-btn-tile" class="tab-btn tab-tile" role="tab" aria-selected="false"
             aria-controls="tab-tile" onclick="switchTab('tile')">
       <span class="tab-icon"><img src="assets/tile.png" class="img-icon" alt="Tile"></span> ลอนคู่
+    </button>
+    <button id="tab-btn-cpac" class="tab-btn tab-cpac" role="tab" aria-selected="false"
+            aria-controls="tab-cpac" onclick="switchTab('cpac')">
+      <span class="tab-icon"><img src="assets/60392108.webp" class="img-icon" alt="CPAC"></span> กระเบื้องคอนกรีต
+    </button>
+    <button id="tab-btn-masonry" class="tab-btn tab-masonry" role="tab" aria-selected="false"
+            aria-controls="tab-masonry" onclick="switchTab('masonry')">
+      <span class="tab-icon"><img src="assets/mm.jpg" class="img-icon" alt="Masonry"></span> ก่ออิฐ
     </button>
   </nav>
 </div>
@@ -1340,7 +1436,374 @@
 </div><!-- /tab-tile -->
 
 
-<footer>ข้อมูลอ้างอิงมาตรฐานวัสดุหลังคาไทย — เพื่อประมาณการเท่านั้น ควรตรวจสอบกับผู้รับเหมาอีกครั้ง</footer>
+<!-- ════════════════════════════════════════
+     TAB 4 — กระเบื้องคอนกรีต
+════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-cpac" role="tabpanel" aria-labelledby="tab-btn-cpac">
+
+  <div class="card green-focus">
+    <h2><span>🏘️</span> คำนวณกระเบื้องคอนกรีต (CPAC)</h2>
+
+    <form onsubmit="event.preventDefault(); document.activeElement.blur(); calculateCpac(); return false;">
+      <div class="input-grid">
+        <div class="field">
+          <label for="cInputW">ด้าน B — ความกว้างหลังคา</label>
+          <div class="input-wrap">
+            <input id="cInputW" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" enterkeyhint="done"/>
+            <span class="unit-badge green-badge">ม.</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="cInputL">ด้าน A — ความยาวลาดหลังคา</label>
+          <div class="input-wrap">
+            <input id="cInputL" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" enterkeyhint="done"/>
+            <span class="unit-badge green-badge">ม.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="field" style="margin-bottom: 20px;">
+        <label for="cInputRidge">ความยาวสันหลังคาและตะเข้สันรวม (สำหรับกระเบื้องครอบ)</label>
+        <div class="input-wrap">
+          <input id="cInputRidge" type="number" min="0" step="0.01" placeholder="0.00 (ใส่ 0 หรือเว้นว่างได้)" inputmode="decimal" enterkeyhint="done"/>
+          <span class="unit-badge green-badge">ม.</span>
+        </div>
+      </div>
+
+      <div class="info-box green-info">
+        💡 <strong>กระเบื้องคอนกรีต:</strong> อ้างอิงอัตราการใช้ 11 แผ่น/ตร.ม. (รวมเผื่อความเสียหาย 5% ตามมาตรฐาน)<br>
+        <strong>กระเบื้องครอบ:</strong> อ้างอิง 3.3 แผ่น/เมตร
+      </div>
+
+      <!-- Frame toggle -->
+      <div class="frame-toggle-row">
+        <button type="button" id="cFrameToggle" class="frame-toggle-btn" onclick="toggleFrame('cpac')">
+          🏗️ คำนวณโครงหลังคาด้วย
+        </button>
+      </div>
+      <div class="frame-options" id="cFrameOptions">
+        <div class="input-grid" style="margin-bottom:0;">
+          <div class="field">
+            <label for="cRoofShape">ทรงหลังคา</label>
+            <select id="cRoofShape">
+              <option value="lean_to">เพิงหมาแหงน</option>
+              <option value="gable" selected>ทรงจั่ว</option>
+              <option value="hip">ปั้นหยา</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="cFrameType">ประเภทโครง</label>
+            <select id="cFrameType">
+              <option value="csteel" selected>🔩 เหล็กตัวซี (C)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="cRafterSpacing">ระยะจันทัน</label>
+            <select id="cRafterSpacing">
+              <option value="1.0" selected>1.0 ม.</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <button id="cCalcBtn" class="calc-btn green-btn" type="submit" style="margin-top:20px;">⚡ คำนวณกระเบื้องคอนกรีต</button>
+    </form>
+  </div>
+
+  <div class="card result-card" id="cResultCard">
+    <h2><span>📊</span> สรุปปริมาณกระเบื้องคอนกรีต</h2>
+
+    <div class="summary-row-3">
+      <div class="summary-box" style="border-color:var(--green);">
+        <div class="s-val" style="color:var(--green);" id="cResArea">—</div>
+        <div class="s-label">พื้นที่หลังคา (ตร.ม.)</div>
+      </div>
+      <div class="summary-box">
+        <div class="s-val" id="cResSheets">—</div>
+        <div class="s-label">กระเบื้องหลังคา (แผ่น)</div>
+      </div>
+      <div class="summary-box">
+        <div class="s-val val-orange" id="cResRidge">—</div>
+        <div class="s-label">กระเบื้องครอบ (แผ่น)</div>
+      </div>
+    </div>
+
+    <div class="result-list">
+      <div class="result-item">
+        <div class="result-icon">📏</div>
+        <div class="result-body">
+          <div class="result-label">ความยาวแป (ระยะแป 0.32-0.34 ม.)</div>
+          <div class="result-val val-blue" id="cResBattenLen">—</div>
+          <div class="result-sub" id="cResBattenSub">—</div>
+        </div>
+      </div>
+
+      <div class="result-item">
+        <div class="result-icon">⚖️</div>
+        <div class="result-body">
+          <div class="result-label">น้ำหนักกระเบื้องรวม (~4.05 กก./แผ่น)</div>
+          <div class="result-val val-gold" id="cResWeight">—</div>
+          <div class="result-sub" id="cResWeightSub">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Frame Material Details -->
+    <div class="frame-result-section" id="cFrameResult">
+      <h3>🏗️ โครงหลังคา (โดยประมาณ) <span id="cFrameTypeLabel" style="font-weight:normal;font-size:0.85em;color:var(--text2);"></span></h3>
+      <div class="result-items" id="cFrameItems" style="margin-bottom:12px;"></div>
+      <table class="frame-material-table" id="cFrameTable">
+      </table>
+      <div style="font-size:0.75rem; color:var(--text2); margin-top:8px;">* คำนวณแบบคร่าวๆ เพื่อตั้งงบประมาณ อาจมีความคลาดเคลื่อนขึ้นอยู่กับแบบโครงสร้างจริง</div>
+    </div>
+
+    <hr class="divider" />
+    <div id="cResBreakdown" style="font-size:0.88rem; color:var(--text2); line-height:1.9;"></div>
+  </div>
+
+</div><!-- /tab-cpac -->
+
+
+<!-- ════════════════════════════════════════
+     TAB 5 — ก่ออิฐ
+════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-masonry" role="tabpanel" aria-labelledby="tab-btn-masonry">
+
+  <!-- Input Card -->
+  <div class="card orange-focus">
+    <h2><span>🧱</span> คำนวณผนังก่ออิฐ</h2>
+
+    <form onsubmit="event.preventDefault(); document.activeElement.blur(); calculateMasonry(); return false;">
+      <div id="wallInputsContainer">
+        <div class="input-grid wall-input-row" style="margin-bottom:0;">
+          <div class="field">
+            <label>ความกว้างผนัง</label>
+            <div class="input-wrap">
+              <input class="wall-w" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" enterkeyhint="done"/>
+              <span class="unit-badge orange-badge">ม.</span>
+            </div>
+          </div>
+          <div class="field">
+            <label>ความสูงผนัง</label>
+            <div class="input-wrap">
+              <input class="wall-h" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" enterkeyhint="done"/>
+              <span class="unit-badge orange-badge">ม.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <button type="button" onclick="addWallInput()" style="background:none; border:none; color:var(--orange); font-size:0.85rem; cursor:pointer; margin: 10px 0 15px 0; padding:0; display:flex; align-items:center; gap:4px; font-family:'Sarabun', sans-serif; font-weight:600;">
+        <span style="font-size:1.1rem;">➕</span> เพิ่มผนังด้านอื่น
+      </button>
+
+      <label style="display:flex; align-items:center; gap:8px; font-size:0.9rem; color:var(--text2); margin:-5px 0 15px 0; cursor:pointer; width:fit-content; user-select:none;">
+        <input type="checkbox" id="hasOpenings" onchange="document.getElementById('openingSection').style.display=this.checked?'block':'none';" style="width:16px;height:16px;accent-color:#e67e22;cursor:pointer;">
+        <span>🚪 มีช่องเปิด (ประตู / หน้าต่าง) ให้หักลบ</span>
+      </label>
+
+      <!-- Openings Section -->
+      <div id="openingSection" style="display:none; background:var(--surface2); padding:16px; border-radius:10px; border:1px solid var(--border); margin-bottom:20px;">
+        <div style="font-size:0.85rem; color:var(--text2); margin-bottom:12px;">กรอกขนาดช่องเปิดเพื่อหักลบพื้นที่ (ถ้าไม่มีให้เว้นว่างไว้)</div>
+        
+        <div id="openingInputsContainer">
+          <div class="input-grid-3 opening-input-row" style="gap:8px; margin-bottom:10px; position:relative;">
+            <div class="field" style="margin:0;"><input class="op-w" type="number" min="0" step="0.01" placeholder="กว้าง (ม.)" inputmode="decimal"/></div>
+            <div class="field" style="margin:0;"><input class="op-h" type="number" min="0" step="0.01" placeholder="สูง (ม.)" inputmode="decimal"/></div>
+            <div class="field" style="margin:0;"><input class="op-c" type="number" min="0" step="1" placeholder="จำนวนบาน" inputmode="numeric"/></div>
+          </div>
+        </div>
+        
+        <button type="button" onclick="addOpeningInput()" style="background:none; border:none; color:var(--orange); font-size:0.85rem; cursor:pointer; margin-top:5px; padding:0; display:flex; align-items:center; gap:4px; font-family:'Sarabun', sans-serif; font-weight:600;">
+          <span style="font-size:1.1rem;">➕</span> เพิ่มช่องเปิดอื่น
+        </button>
+      </div>
+
+      <!-- Brick Type Selection -->
+      <div class="field" style="margin-bottom: 20px;">
+        <label>ชนิดอิฐ</label>
+        <div class="brick-selector">
+          <label class="brick-option">
+            <input type="radio" name="masBrickType" value="block" checked>
+            <div class="brick-card">
+              <img src="assets/bb.png" alt="อิฐบล็อก">
+              <div class="brick-info">
+                <div class="brick-name">อิฐบล็อก</div>
+                <div class="brick-size">7x19x39 ซม.</div>
+              </div>
+            </div>
+          </label>
+          <label class="brick-option">
+            <input type="radio" name="masBrickType" value="mon">
+            <div class="brick-card">
+              <img src="assets/mm.jpg" alt="อิฐมอญ">
+              <div class="brick-info">
+                <div class="brick-name">อิฐมอญ</div>
+                <div class="brick-size">ครึ่ง/เต็มแผ่น</div>
+              </div>
+            </div>
+          </label>
+          <label class="brick-option">
+            <input type="radio" name="masBrickType" value="aac">
+            <div class="brick-card">
+              <img src="assets/mb.webp" alt="อิฐมวลเบา">
+              <div class="brick-info">
+                <div class="brick-name">อิฐมวลเบา</div>
+                <div class="brick-size">7.5x20x60 ซม.</div>
+              </div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="info-box orange-info">
+        💡 คำนวณปริมาณวัสดุอ้างอิงตาม <strong>หลักเกณฑ์ราคากลางกรมบัญชีกลาง</strong> โดยแสดงผลตามชนิดอิฐที่ท่านเลือก
+      </div>
+
+      <button id="masCalcBtn" class="calc-btn orange-btn" type="submit">⚡ คำนวณปริมาณวัสดุ</button>
+    </form>
+  </div>
+
+  <!-- Result Card -->
+  <div class="card result-card" id="masResultCard">
+    <h2><span>📊</span> สรุปปริมาณวัสดุก่อผนัง</h2>
+
+    <div class="summary-row-3" style="margin-bottom:14px;">
+      <div class="summary-box">
+        <div class="s-val" id="masResTotalArea">—</div>
+        <div class="s-label">พื้นที่รวม (ตร.ม.)</div>
+      </div>
+      <div class="summary-box">
+        <div class="s-val" style="color:var(--red);" id="masResOpArea">—</div>
+        <div class="s-label">หักช่องเปิด (ตร.ม.)</div>
+      </div>
+      <div class="summary-box">
+        <div class="s-val" style="color:var(--green);" id="masResNetArea">—</div>
+        <div class="s-label">พื้นที่สุทธิ (ตร.ม.)</div>
+      </div>
+    </div>
+
+    <!-- Result Container -->
+    <div id="masResContainer">
+      <!-- Brick Red (Half & Full) -->
+      <div id="resCardMon" style="display:none; margin-top:20px;">
+        <h3 style="font-size:1.05rem; color:var(--text); margin-bottom:12px; display:flex; align-items:center; gap:6px;">
+          <img src="assets/mm.jpg" style="height:1.4em; border-radius:4px; object-fit:contain;"> เปรียบเทียบการก่ออิฐมอญ 2 แบบ
+        </h3>
+        <div class="input-grid">
+          <!-- ครึ่งแผ่น -->
+          <div class="result-item" style="padding:16px; flex-direction:column; align-items:flex-start; gap:12px;">
+            <img src="assets/half_brick.png" alt="ก่ออิฐครึ่งแผ่น" style="width:100%; max-height:140px; object-fit:contain; border-radius:8px; background:#fff; padding:4px;">
+            <div style="font-weight:700; color:var(--orange);">ก่อครึ่งแผ่น (Stretcher)</div>
+            <div style="font-size:0.8rem; color:var(--text2); margin-top:-6px;">ก่อเรียงชั้นเดียว หนา 7-10 ซม. (ประหยัดวัสดุ)</div>
+            <div style="width:100%;">
+              <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom:12px;">
+                <div><span style="color:var(--text2);font-size:0.85rem;">อิฐ:</span><br><strong class="val-orange" id="resMonBrickH" style="font-size:1.1rem;">—</strong> <span style="font-size:0.75rem;color:var(--text2);">ก้อน</span></div>
+                <div><span style="color:var(--text2);font-size:0.85rem;">ปูนก่อ:</span><br><strong class="val-blue" id="resMonMortarH" style="font-size:1.1rem;">—</strong> <span style="font-size:0.75rem;color:var(--text2);">ถุง</span></div>
+                <div><span style="color:var(--text2);font-size:0.85rem;">ทรายก่อ:</span><br><strong class="val-gold" id="resMonSandH" style="font-size:1.1rem;">—</strong> <span style="font-size:0.75rem;color:var(--text2);">คิว</span></div>
+              </div>
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                <div style="background:rgba(0,0,0,0.03); padding:8px; border-radius:6px;">
+                  <div style="font-size:0.8rem; font-weight:bold; color:var(--text); margin-bottom:4px;">ฉาบ 1 ด้าน</div>
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;"><span style="font-size:0.75rem; color:var(--text2);">ปูนฉาบ:</span> <div><strong class="val-green" id="resMonPlast1H" style="font-size:0.95rem;">—</strong> <span style="font-size:0.7rem;color:var(--text2);">ถุง</span></div></div>
+                  <div style="display:flex; justify-content:space-between; align-items:center;"><span style="font-size:0.75rem; color:var(--text2);">ทรายฉาบ:</span> <div><strong class="val-gold" id="resMonPlastSand1H" style="font-size:0.95rem;">—</strong> <span style="font-size:0.7rem;color:var(--text2);">คิว</span></div></div>
+                </div>
+                <div style="background:rgba(0,0,0,0.03); padding:8px; border-radius:6px;">
+                  <div style="font-size:0.8rem; font-weight:bold; color:var(--text); margin-bottom:4px;">ฉาบ 2 ด้าน</div>
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;"><span style="font-size:0.75rem; color:var(--text2);">ปูนฉาบ:</span> <div><strong class="val-purple" id="resMonPlast2H" style="font-size:0.95rem;">—</strong> <span style="font-size:0.7rem;color:var(--text2);">ถุง</span></div></div>
+                  <div style="display:flex; justify-content:space-between; align-items:center;"><span style="font-size:0.75rem; color:var(--text2);">ทรายฉาบ:</span> <div><strong class="val-gold" id="resMonPlastSand2H" style="font-size:0.95rem;">—</strong> <span style="font-size:0.7rem;color:var(--text2);">คิว</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- เต็มแผ่น -->
+          <div class="result-item" style="padding:16px; flex-direction:column; align-items:flex-start; gap:12px;">
+            <img src="assets/full_brick.png" alt="ก่ออิฐเต็มแผ่น" style="width:100%; max-height:140px; object-fit:contain; border-radius:8px; background:#fff; padding:4px;">
+            <div style="font-weight:700; color:var(--orange);">ก่อเต็มแผ่น (English)</div>
+            <div style="font-size:0.8rem; color:var(--text2); margin-top:-6px;">ก่อขวางสลับ หนา 15-20 ซม. (แข็งแรง, กันเสียง)</div>
+            <div style="width:100%;">
+              <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom:12px;">
+                <div><span style="color:var(--text2);font-size:0.85rem;">อิฐ:</span><br><strong class="val-orange" id="resMonBrickF" style="font-size:1.1rem;">—</strong> <span style="font-size:0.75rem;color:var(--text2);">ก้อน</span></div>
+                <div><span style="color:var(--text2);font-size:0.85rem;">ปูนก่อ:</span><br><strong class="val-blue" id="resMonMortarF" style="font-size:1.1rem;">—</strong> <span style="font-size:0.75rem;color:var(--text2);">ถุง</span></div>
+                <div><span style="color:var(--text2);font-size:0.85rem;">ทรายก่อ:</span><br><strong class="val-gold" id="resMonSandF" style="font-size:1.1rem;">—</strong> <span style="font-size:0.75rem;color:var(--text2);">คิว</span></div>
+              </div>
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                <div style="background:rgba(0,0,0,0.03); padding:8px; border-radius:6px;">
+                  <div style="font-size:0.8rem; font-weight:bold; color:var(--text); margin-bottom:4px;">ฉาบ 1 ด้าน</div>
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;"><span style="font-size:0.75rem; color:var(--text2);">ปูนฉาบ:</span> <div><strong class="val-green" id="resMonPlast1F" style="font-size:0.95rem;">—</strong> <span style="font-size:0.7rem;color:var(--text2);">ถุง</span></div></div>
+                  <div style="display:flex; justify-content:space-between; align-items:center;"><span style="font-size:0.75rem; color:var(--text2);">ทรายฉาบ:</span> <div><strong class="val-gold" id="resMonPlastSand1F" style="font-size:0.95rem;">—</strong> <span style="font-size:0.7rem;color:var(--text2);">คิว</span></div></div>
+                </div>
+                <div style="background:rgba(0,0,0,0.03); padding:8px; border-radius:6px;">
+                  <div style="font-size:0.8rem; font-weight:bold; color:var(--text); margin-bottom:4px;">ฉาบ 2 ด้าน</div>
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;"><span style="font-size:0.75rem; color:var(--text2);">ปูนฉาบ:</span> <div><strong class="val-purple" id="resMonPlast2F" style="font-size:0.95rem;">—</strong> <span style="font-size:0.7rem;color:var(--text2);">ถุง</span></div></div>
+                  <div style="display:flex; justify-content:space-between; align-items:center;"><span style="font-size:0.75rem; color:var(--text2);">ทรายฉาบ:</span> <div><strong class="val-gold" id="resMonPlastSand2F" style="font-size:0.95rem;">—</strong> <span style="font-size:0.7rem;color:var(--text2);">คิว</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Concrete Block -->
+      <div id="resCardBlk" style="display:none; margin-top:20px;">
+        <h3 style="font-size:1rem; color:var(--text); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+          <img src="assets/bb.png" style="height:1.4em; border-radius:4px; object-fit:contain;"> อิฐบล็อกคอนกรีต (7x19x39)
+        </h3>
+        <div class="result-item" style="padding:12px 16px;">
+          <div class="result-body" style="width:100%;">
+            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom:12px;">
+              <div><span style="color:var(--text2);font-size:0.85rem;">จำนวนอิฐ:</span><br><strong class="val-orange" id="resBlkBrick" style="font-size:1.1rem;">—</strong> <span style="font-size:0.75rem;color:var(--text2);">ก้อน</span></div>
+              <div><span style="color:var(--text2);font-size:0.85rem;">ปูนก่อ:</span><br><strong class="val-blue" id="resBlkMortar" style="font-size:1.1rem;">—</strong> <span style="font-size:0.75rem;color:var(--text2);">ถุง</span></div>
+              <div><span style="color:var(--text2);font-size:0.85rem;">ทรายก่อ:</span><br><strong class="val-gold" id="resBlkSand" style="font-size:1.1rem;">—</strong> <span style="font-size:0.75rem;color:var(--text2);">คิว</span></div>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+              <div style="background:rgba(0,0,0,0.03); padding:8px; border-radius:6px;">
+                <div style="font-size:0.8rem; font-weight:bold; color:var(--text); margin-bottom:4px;">ฉาบ 1 ด้าน</div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;"><span style="font-size:0.75rem; color:var(--text2);">ปูนฉาบ:</span> <div><strong class="val-green" id="resBlkPlast1" style="font-size:0.95rem;">—</strong> <span style="font-size:0.7rem;color:var(--text2);">ถุง</span></div></div>
+                <div style="display:flex; justify-content:space-between; align-items:center;"><span style="font-size:0.75rem; color:var(--text2);">ทรายฉาบ:</span> <div><strong class="val-gold" id="resBlkPlastSand1" style="font-size:0.95rem;">—</strong> <span style="font-size:0.7rem;color:var(--text2);">คิว</span></div></div>
+              </div>
+              <div style="background:rgba(0,0,0,0.03); padding:8px; border-radius:6px;">
+                <div style="font-size:0.8rem; font-weight:bold; color:var(--text); margin-bottom:4px;">ฉาบ 2 ด้าน</div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;"><span style="font-size:0.75rem; color:var(--text2);">ปูนฉาบ:</span> <div><strong class="val-purple" id="resBlkPlast2" style="font-size:0.95rem;">—</strong> <span style="font-size:0.7rem;color:var(--text2);">ถุง</span></div></div>
+                <div style="display:flex; justify-content:space-between; align-items:center;"><span style="font-size:0.75rem; color:var(--text2);">ทรายฉาบ:</span> <div><strong class="val-gold" id="resBlkPlastSand2" style="font-size:0.95rem;">—</strong> <span style="font-size:0.7rem;color:var(--text2);">คิว</span></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AAC Block -->
+      <div id="resCardAac" style="display:none; margin-top:20px;">
+        <h3 style="font-size:1rem; color:var(--text); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+          <img src="assets/mb.webp" style="height:1.4em; border-radius:4px; object-fit:contain;"> อิฐมวลเบา (7.5x20x60)
+        </h3>
+        <div class="result-item" style="padding:12px 16px;">
+          <div class="result-body" style="width:100%;">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:12px;">
+              <div><span style="color:var(--text2);font-size:0.85rem;">จำนวนอิฐ:</span><br><strong class="val-orange" id="resAacBrick" style="font-size:1.1rem;">—</strong> <span style="font-size:0.75rem;color:var(--text2);">ก้อน</span></div>
+              <div><span style="color:var(--text2);font-size:0.85rem;">ปูนก่อ (มวลเบา):</span><br><strong class="val-blue" id="resAacMortar" style="font-size:1.1rem;">—</strong> <span style="font-size:0.75rem;color:var(--text2);">ถุง</span></div>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+              <div><span style="color:var(--text2);font-size:0.85rem;">ฉาบ 1 ด้าน:</span><br><strong class="val-green" id="resAacPlast1" style="font-size:1.1rem;">—</strong> <span style="font-size:0.75rem;color:var(--text2);">ถุง</span></div>
+              <div><span style="color:var(--text2);font-size:0.85rem;">ฉาบ 2 ด้าน:</span><br><strong class="val-purple" id="resAacPlast2" style="font-size:1.1rem;">—</strong> <span style="font-size:0.75rem;color:var(--text2);">ถุง</span></div>
+            </div>
+            
+            <div style="margin-top:12px; padding:10px 14px; background:rgba(62,168,240,0.1); border:1px dashed var(--blue); border-radius:8px; font-size:0.85rem; color:var(--blue); line-height:1.5;">
+              💡 <strong>ข้อมูลทางช่าง:</strong> อิฐมวลเบาจำเป็นต้องใช้ <u>ปูนก่อและปูนฉาบสำเร็จรูปสำหรับอิฐมวลเบาโดยเฉพาะ</u> ซึ่งผสมสารอุ้มน้ำและโพลิเมอร์มาแล้ว (แกะถุงผสมน้ำใช้งานได้ทันที) <strong>ไม่จำเป็นต้องผสมทรายเพิ่มครับ</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+    <div id="masResBreakdown" style="margin-top:20px; display:none;"></div>
+  </div>
+
+</div><!-- /tab-masonry -->
+
+
+<footer>ข้อมูลอ้างอิงมาตรฐานวัสดุก่อสร้างไทย — เพื่อประมาณการเท่านั้น ควรตรวจสอบกับผู้รับเหมาอีกครั้ง</footer>
 
 <script>
 /* ═══════════════════════════════════════════
@@ -1953,6 +2416,8 @@ document.addEventListener('keydown', e => {
     }
     else if (activeTab === 'tab-metal') calculateMetal();
     else if (activeTab === 'tab-tile') calculateTile();
+    else if (activeTab === 'tab-cpac') calculateCpac();
+    else if (activeTab === 'tab-masonry') calculateMasonry();
   }
 });
 
@@ -1986,11 +2451,11 @@ const FRAME_DATA = {
   }
 };
 
-let frameEnabled = { zinc: false, metal: false };
+let frameEnabled = { zinc: false, metal: false, cpac: false };
 
 function toggleFrame(tab) {
   frameEnabled[tab] = !frameEnabled[tab];
-  const prefix = tab === 'zinc' ? 'z' : 'm';
+  const prefix = tab === 'zinc' ? 'z' : (tab === 'metal' ? 'm' : 'c');
   document.getElementById(prefix + 'FrameToggle').classList.toggle('active', frameEnabled[tab]);
   document.getElementById(prefix + 'FrameOptions').classList.toggle('visible', frameEnabled[tab]);
   if (!frameEnabled[tab]) {
@@ -1999,7 +2464,7 @@ function toggleFrame(tab) {
 }
 
 function calculateFrame(tab, lengthM, slopeM, purlinSpacingM) {
-  const prefix = tab === 'zinc' ? 'z' : 'm';
+  const prefix = tab === 'zinc' ? 'z' : (tab === 'metal' ? 'm' : 'c');
   if (!frameEnabled[tab]) {
     document.getElementById(prefix + 'FrameResult').classList.remove('visible');
     return;
@@ -2138,6 +2603,365 @@ document.querySelectorAll('.unit-badge').forEach(badge => {
     }
   });
 });
+
+/* ═══════════════════════════════════════════
+   CPAC CALCULATOR
+═══════════════════════════════════════════ */
+function calculateCpac() {
+  const wRaw = parseFloat(document.getElementById('cInputW').value);
+  const lRaw = parseFloat(document.getElementById('cInputL').value);
+  const ridgeRaw = parseFloat(document.getElementById('cInputRidge').value) || 0;
+
+  if (!wRaw || !lRaw || wRaw <= 0 || lRaw <= 0) {
+    shake(document.getElementById('cCalcBtn'));
+    showToast('กรุณากรอกขนาดกว้างและยาวให้ถูกต้อง', 'cpac');
+    return;
+  }
+
+  const areaM2 = wRaw * lRaw;
+  const SHEET_PER_SQM = 11;
+  const totalSheets = Math.ceil(areaM2 * SHEET_PER_SQM);
+  
+  const RIDGE_PER_M = 3.3;
+  const totalRidge = Math.ceil(ridgeRaw * RIDGE_PER_M);
+  
+  const WEIGHT_PER_SHEET = 4.05;
+  const totalWeightKg = totalSheets * WEIGHT_PER_SHEET;
+  
+  const BATTEN_SPACING = 0.33; // average 0.32-0.34
+  const totalBattenM = Math.ceil(areaM2 / 0.32); // Use 3.2 m/sqm approximation as per standard practice
+
+  document.getElementById('cResArea').textContent = areaM2.toFixed(2);
+  document.getElementById('cResSheets').textContent = totalSheets.toLocaleString();
+  document.getElementById('cResRidge').textContent = totalRidge > 0 ? totalRidge.toLocaleString() : '—';
+  
+  document.getElementById('cResBattenLen').textContent = totalBattenM.toLocaleString() + ' เมตร';
+  document.getElementById('cResBattenSub').textContent = `พื้นที่ ${areaM2.toFixed(2)} ตร.ม. × 3.2 ม./ตร.ม. (โดยประมาณ)`;
+  
+  document.getElementById('cResWeight').textContent = totalWeightKg.toLocaleString() + ' กก.';
+  document.getElementById('cResWeightSub').textContent = `${totalSheets.toLocaleString()} แผ่น × ${WEIGHT_PER_SHEET} กก.`;
+
+  let breakdownHtml = `
+    <div style="font-family:'Sarabun', sans-serif; font-size:0.9rem; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background: var(--surface2);">
+      <h4 style="color:var(--text); margin-top:0; border-bottom: 2px solid var(--border); padding-bottom: 8px; display:flex; justify-content:space-between; align-items:center;">
+        <span>📜 รายการคำนวณและอ้างอิงมาตรฐาน</span>
+      </h4>
+      <div class="boq-list" style="margin-top: 14px;">
+        <div class="boq-item" style="background:rgba(0,0,0,0.1); padding:8px; border-radius:6px; margin:10px 0;">
+          <strong>อ้างอิง:</strong> มาตรฐานการคำนวณวัสดุมุงหลังคากระเบื้องคอนกรีต (เช่น CPAC Monier)
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">1. พื้นที่หลังคา (Roof Area)</div>
+          <div class="boq-val">กว้าง ${wRaw} ม. × ยาว ${lRaw} ม. = <strong>${areaM2.toFixed(2)} ตร.ม.</strong></div>
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">2. กระเบื้องหลังคา (Roof Tiles)</div>
+          <div class="boq-val">อัตราการใช้ 11 แผ่น/ตร.ม. <em>(รวมระยะซ้อนทับและเผื่อสูญเสีย 5% แล้ว)</em><br>
+          ${areaM2.toFixed(2)} × 11 = <strong>${totalSheets.toLocaleString()} แผ่น</strong></div>
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">3. กระเบื้องครอบสัน/ตะเข้ (Ridge Tiles)</div>
+          <div class="boq-val">อัตราการใช้ 3.3 แผ่น/เมตร<br>
+          ความยาว ${ridgeRaw} ม. × 3.3 = <strong>${totalRidge > 0 ? totalRidge.toLocaleString() + ' แผ่น' : '0 แผ่น (ไม่ได้ระบุความยาว)'}</strong></div>
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">4. ความยาวแป (Batten Length)</div>
+          <div class="boq-val">ประเมินจากระยะห่างแปเฉลี่ย 0.32-0.34 เมตร (ใช้ประมาณ 3.2 ม./ตร.ม.)<br>
+          พื้นที่ ${areaM2.toFixed(2)} ตร.ม. × 3.2 ม. = <strong>${totalBattenM.toLocaleString()} เมตรเชิงเส้น</strong></div>
+        </div>
+        <div class="boq-item" style="margin-top:12px;">
+          <div class="boq-title">5. น้ำหนักกระเบื้อง (Total Weight)</div>
+          <div class="boq-val">อ้างอิงน้ำหนักเฉลี่ย ${WEIGHT_PER_SHEET} กก./แผ่น<br>
+          ${totalSheets.toLocaleString()} แผ่น × ${WEIGHT_PER_SHEET} กก. = <strong>${totalWeightKg.toLocaleString()} กิโลกรัม</strong></div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById('cResBreakdown').innerHTML = breakdownHtml;
+
+  calculateFrame('cpac', wRaw, lRaw, BATTEN_SPACING);
+
+  showResult('cResultCard');
+}
+
+/* ═══════════════════════════════════════════
+   MASONRY CALCULATOR
+═══════════════════════════════════════════ */
+function addWallInput() {
+  const container = document.getElementById('wallInputsContainer');
+  if (container.querySelectorAll('.wall-input-row').length >= 10) {
+    alert('สามารถเพิ่มผนังได้สูงสุด 10 ด้านครับ');
+    return;
+  }
+  const row = document.createElement('div');
+  row.className = 'input-grid wall-input-row';
+  row.style.marginTop = '12px';
+  row.innerHTML = `
+    <div class="field" style="margin-bottom:0;">
+      <label style="display:flex; justify-content:space-between; align-items:center;">
+        ความกว้างผนัง 
+        <span onclick="this.closest('.wall-input-row').remove()" style="color:var(--red); cursor:pointer; font-size:0.8rem;">❌ ลบผนังนี้</span>
+      </label>
+      <div class="input-wrap">
+        <input class="wall-w" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" enterkeyhint="done"/>
+        <span class="unit-badge orange-badge">ม.</span>
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:0;">
+      <label>ความสูงผนัง</label>
+      <div class="input-wrap">
+        <input class="wall-h" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" enterkeyhint="done"/>
+        <span class="unit-badge orange-badge">ม.</span>
+      </div>
+    </div>
+  `;
+  container.appendChild(row);
+}
+
+function addOpeningInput() {
+  const container = document.getElementById('openingInputsContainer');
+  if (container.querySelectorAll('.opening-input-row').length >= 10) {
+    alert('สามารถเพิ่มช่องเปิดได้สูงสุด 10 แบบครับ');
+    return;
+  }
+  const row = document.createElement('div');
+  row.className = 'input-grid-3 opening-input-row';
+  row.style.cssText = 'gap:8px; margin-bottom:10px; position:relative;';
+  row.innerHTML = `
+    <div class="field" style="margin:0;"><input class="op-w" type="number" min="0" step="0.01" placeholder="กว้าง (ม.)" inputmode="decimal"/></div>
+    <div class="field" style="margin:0;"><input class="op-h" type="number" min="0" step="0.01" placeholder="สูง (ม.)" inputmode="decimal"/></div>
+    <div class="field" style="margin:0; position:relative;">
+      <input class="op-c" type="number" min="0" step="1" placeholder="จำนวนบาน" inputmode="numeric" style="padding-right:30px;"/>
+      <span onclick="this.closest('.opening-input-row').remove()" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer; color:var(--red); font-size:0.85rem;">❌</span>
+    </div>
+  `;
+  container.appendChild(row);
+}
+
+function calculateMasonry() {
+  let totalArea = 0;
+  let validWallCount = 0;
+  
+  document.querySelectorAll('.wall-input-row').forEach(row => {
+    const w = parseFloat(row.querySelector('.wall-w').value) || 0;
+    const h = parseFloat(row.querySelector('.wall-h').value) || 0;
+    if (w > 0 && h > 0) {
+      totalArea += (w * h);
+      validWallCount++;
+    }
+  });
+
+  if (validWallCount === 0) {
+    alert('กรุณากรอกความกว้างและความสูงผนังอย่างน้อย 1 ด้านให้ครบถ้วน');
+    return;
+  }
+  let opArea = 0;
+
+  if (document.getElementById('hasOpenings').checked) {
+    document.querySelectorAll('.opening-input-row').forEach(row => {
+      const ow = parseFloat(row.querySelector('.op-w').value) || 0;
+      const oh = parseFloat(row.querySelector('.op-h').value) || 0;
+      const oc = parseInt(row.querySelector('.op-c').value) || 0;
+      if (ow > 0 && oh > 0 && oc > 0) {
+        opArea += (ow * oh * oc);
+      }
+    });
+  }
+
+  let netArea = totalArea - opArea;
+  if (netArea < 0) netArea = 0;
+
+  document.getElementById('masResTotalArea').textContent = totalArea.toFixed(2);
+  document.getElementById('masResOpArea').textContent = opArea.toFixed(2);
+  document.getElementById('masResNetArea').textContent = netArea.toFixed(2);
+
+  // Hide all result cards first
+  document.getElementById('resCardMon').style.display = 'none';
+  document.getElementById('resCardBlk').style.display = 'none';
+  document.getElementById('resCardAac').style.display = 'none';
+
+  const brickType = document.querySelector('input[name="masBrickType"]:checked').value;
+
+  // Common Constants per sq.m.
+  const P_CM  = 20;   // Cement for plaster (kg/side)
+  const P_SD  = 0.03; // Sand for plaster (m3/side)
+  const BAG   = 50;   // 1 bag = 50 kg
+
+  // Masonry Constants
+  const B_MON_H = 138; const M_MON_H = 16.01; const S_MON_H = 0.05;
+  const B_MON_F = 276; const M_MON_F = 32.02; const S_MON_F = 0.10;
+  const B_BLK = 13; const M_BLK = 6.75; const S_BLK = 0.03;
+  const B_AAC = 8.33; const M_AAC = 1.5; const P_AAC = 18;
+
+  if (brickType === 'mon') {
+    // ครึ่งแผ่น
+    document.getElementById('resMonBrickH').textContent = Math.ceil(netArea * B_MON_H).toLocaleString();
+    document.getElementById('resMonMortarH').textContent = ((netArea * M_MON_H) / BAG).toFixed(2);
+    document.getElementById('resMonSandH').textContent = (netArea * S_MON_H).toFixed(2);
+    
+    document.getElementById('resMonPlast1H').textContent = ((netArea * P_CM) / BAG).toFixed(2);
+    document.getElementById('resMonPlastSand1H').textContent = (netArea * P_SD).toFixed(2);
+    document.getElementById('resMonPlast2H').textContent = (((netArea * P_CM) / BAG) * 2).toFixed(2);
+    document.getElementById('resMonPlastSand2H').textContent = (netArea * P_SD * 2).toFixed(2);
+
+    // เต็มแผ่น
+    document.getElementById('resMonBrickF').textContent = Math.ceil(netArea * B_MON_F).toLocaleString();
+    document.getElementById('resMonMortarF').textContent = ((netArea * M_MON_F) / BAG).toFixed(2);
+    document.getElementById('resMonSandF').textContent = (netArea * S_MON_F).toFixed(2);
+    
+    document.getElementById('resMonPlast1F').textContent = ((netArea * P_CM) / BAG).toFixed(2);
+    document.getElementById('resMonPlastSand1F').textContent = (netArea * P_SD).toFixed(2);
+    document.getElementById('resMonPlast2F').textContent = (((netArea * P_CM) / BAG) * 2).toFixed(2);
+    document.getElementById('resMonPlastSand2F').textContent = (netArea * P_SD * 2).toFixed(2);
+
+    document.getElementById('resCardMon').style.display = 'block';
+
+  } else if (brickType === 'block') {
+    document.getElementById('resBlkBrick').textContent = Math.ceil(netArea * B_BLK).toLocaleString();
+    document.getElementById('resBlkMortar').textContent = ((netArea * M_BLK) / BAG).toFixed(2);
+    document.getElementById('resBlkSand').textContent = (netArea * S_BLK).toFixed(2);
+    
+    document.getElementById('resBlkPlast1').textContent = ((netArea * P_CM) / BAG).toFixed(2);
+    document.getElementById('resBlkPlastSand1').textContent = (netArea * P_SD).toFixed(2);
+    document.getElementById('resBlkPlast2').textContent = (((netArea * P_CM) / BAG) * 2).toFixed(2);
+    document.getElementById('resBlkPlastSand2').textContent = (netArea * P_SD * 2).toFixed(2);
+
+    document.getElementById('resCardBlk').style.display = 'block';
+
+  } else if (brickType === 'aac') {
+    document.getElementById('resAacBrick').textContent = Math.ceil(netArea * B_AAC).toLocaleString();
+    document.getElementById('resAacMortar').textContent = ((netArea * M_AAC) / BAG).toFixed(2);
+    document.getElementById('resAacPlast1').textContent = ((netArea * P_AAC) / BAG).toFixed(2);
+    document.getElementById('resAacPlast2').textContent = (((netArea * P_AAC) / BAG) * 2).toFixed(2);
+
+    document.getElementById('resCardAac').style.display = 'block';
+  }
+
+  // Generate Breakdown HTML
+  let breakdownHtml = `
+    <div style="font-family:'Sarabun', sans-serif; font-size:0.9rem; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background: var(--surface2);">
+      <h4 style="color:var(--text); margin-top:0; border-bottom: 2px solid var(--border); padding-bottom: 8px; display:flex; justify-content:space-between; align-items:center;">
+        <span>📜 รายการคำนวณและอ้างอิงมาตรฐาน</span>
+      </h4>
+      <div class="boq-list" style="margin-top: 14px;">
+        <div class="boq-item">
+          <div class="boq-title">1. พื้นที่สุทธิ (Net Area)</div>
+          <div class="boq-val">พื้นที่รวม ${totalArea.toFixed(2)} ตร.ม. - หักช่องเปิด ${opArea.toFixed(2)} ตร.ม. = <strong>${netArea.toFixed(2)} ตร.ม.</strong></div>
+        </div>
+  `;
+
+  if (brickType === 'mon') {
+    breakdownHtml += `
+        <div class="boq-item" style="background:rgba(0,0,0,0.1); padding:8px; border-radius:6px; margin:10px 0;">
+          <strong>อ้างอิง:</strong> หลักเกณฑ์การคำนวณราคากลางงานก่อสร้างอาคาร กรมบัญชีกลาง (ตารางค่าวัสดุมวลรวม) งานก่ออิฐมอญครึ่งแผ่นและเต็มแผ่น
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">2. อิฐมอญ (เผื่อความเสียหายแล้ว)</div>
+          <div class="boq-val">
+            ครึ่งแผ่น: ใช้ ${B_MON_H} ก้อน/ตร.ม. × ${netArea.toFixed(2)} = <strong>${Math.ceil(netArea * B_MON_H).toLocaleString()} ก้อน</strong><br>
+            เต็มแผ่น: ใช้ ${B_MON_F} ก้อน/ตร.ม. × ${netArea.toFixed(2)} = <strong>${Math.ceil(netArea * B_MON_F).toLocaleString()} ก้อน</strong>
+          </div>
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">3. ปูนซีเมนต์ผสม (ปูนก่อ)</div>
+          <div class="boq-val">
+            ครึ่งแผ่น: อัตรา ${M_MON_H} กก./ตร.ม. ➡️ ${((netArea * M_MON_H) / BAG).toFixed(2)} ถุง<br>
+            เต็มแผ่น: อัตรา ${M_MON_F} กก./ตร.ม. ➡️ ${((netArea * M_MON_F) / BAG).toFixed(2)} ถุง<br>
+            <span style="font-size:0.8rem; color:var(--text2);">(เผื่อเปอร์เซ็นต์ความเสียหาย 19% ตามเกณฑ์กรมบัญชีกลางแล้ว)</span>
+          </div>
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">4. ทรายหยาบ (ทรายก่อ)</div>
+          <div class="boq-val">
+            ครึ่งแผ่น: อัตรา ${S_MON_H} ลบ.ม./ตร.ม. ➡️ ${(netArea * S_MON_H).toFixed(2)} ลบ.ม.<br>
+            เต็มแผ่น: อัตรา ${S_MON_F} ลบ.ม./ตร.ม. ➡️ ${(netArea * S_MON_F).toFixed(2)} ลบ.ม.<br>
+            <span style="font-size:0.8rem; color:var(--text2);">(เผื่อเปอร์เซ็นต์ความเสียหาย 10% ตามเกณฑ์กรมบัญชีกลางแล้ว)</span>
+          </div>
+        </div>
+    `;
+  } else if (brickType === 'block') {
+    breakdownHtml += `
+        <div class="boq-item" style="background:rgba(0,0,0,0.1); padding:8px; border-radius:6px; margin:10px 0;">
+          <strong>อ้างอิง:</strong> หลักเกณฑ์การคำนวณราคากลางงานก่อสร้างอาคาร กรมบัญชีกลาง (ตารางค่าวัสดุมวลรวม) งานก่อซีเมนต์บล็อก
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">2. ซีเมนต์บล็อก (เผื่อความเสียหาย 4% แล้ว)</div>
+          <div class="boq-val">อัตรา ${B_BLK} ก้อน/ตร.ม. × ${netArea.toFixed(2)} = <strong>${Math.ceil(netArea * B_BLK).toLocaleString()} ก้อน</strong></div>
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">3. ปูนซีเมนต์ผสม (ปูนก่อ)</div>
+          <div class="boq-val">อัตรา ${M_BLK} กก./ตร.ม. × ${netArea.toFixed(2)} = ${(netArea * M_BLK).toFixed(2)} กก. ➡️ <strong>${((netArea * M_BLK) / BAG).toFixed(2)} ถุง</strong><br>
+          <span style="font-size:0.8rem; color:var(--text2);">(เผื่อเปอร์เซ็นต์ความเสียหาย 19% แล้ว ตามหลักเกณฑ์ฯ)</span></div>
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">4. ทรายหยาบ (ทรายก่อ)</div>
+          <div class="boq-val">อัตรา ${S_BLK} ลบ.ม./ตร.ม. × ${netArea.toFixed(2)} = <strong>${(netArea * S_BLK).toFixed(2)} ลบ.ม. (คิว)</strong><br>
+          <span style="font-size:0.8rem; color:var(--text2);">(เผื่อเปอร์เซ็นต์ความเสียหาย 10% แล้ว ตามหลักเกณฑ์ฯ)</span></div>
+        </div>
+    `;
+  } else if (brickType === 'aac') {
+    breakdownHtml += `
+        <div class="boq-item" style="background:rgba(0,0,0,0.1); padding:8px; border-radius:6px; margin:10px 0;">
+          <strong>อ้างอิง:</strong> คู่มือมาตรฐานการก่อสร้างและติดตั้งอิฐมวลเบา (เทียบเคียงอัตราส่วนกรมบัญชีกลาง)
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">2. คอนกรีตมวลเบา (เผื่อความเสียหาย 4% แล้ว)</div>
+          <div class="boq-val">อัตรา ${B_AAC} ก้อน/ตร.ม. × ${netArea.toFixed(2)} = <strong>${Math.ceil(netArea * B_AAC).toLocaleString()} ก้อน</strong></div>
+        </div>
+        <div class="boq-item">
+          <div class="boq-title">3. ปูนก่อสำเร็จรูป (Thin-bed Mortar)</div>
+          <div class="boq-val">ปูนกาวเฉพาะมวลเบา ก่อหนา 2-3 มม. อัตรา ${M_AAC} กก./ตร.ม. ➡️ <strong>${((netArea * M_AAC) / BAG).toFixed(2)} ถุง</strong></div>
+        </div>
+    `;
+  }
+
+  // Plastering Breakdown (Common)
+  breakdownHtml += `
+        <div class="boq-item" style="border-top:1px dashed var(--border); padding-top:12px; margin-top:12px;">
+          <div class="boq-title">5. งานฉาบปูน (อ้างอิงความหนา 1.5 ซม. ของกรมบัญชีกลาง)</div>
+          <div class="boq-val">
+  `;
+  if (brickType === 'aac') {
+    breakdownHtml += `
+            <strong>ปูนฉาบสำเร็จรูปสำหรับอิฐมวลเบา:</strong> อัตรา ${P_AAC} กก./ตร.ม./ด้าน<br>
+            - ฉาบ 1 ด้าน: <strong>${((netArea * P_AAC) / BAG).toFixed(2)} ถุง</strong><br>
+            - ฉาบ 2 ด้าน: <strong>${(((netArea * P_AAC) / BAG) * 2).toFixed(2)} ถุง</strong><br>
+            <span style="font-size:0.8rem; color:var(--text2);">(อิฐมวลเบาใช้ปูนฉาบสำเร็จรูปแบบไม่ต้องผสมทราย)</span>
+    `;
+  } else {
+    breakdownHtml += `
+            <strong>ปูนซีเมนต์ผสม (ปูนฉาบ):</strong> อัตรา ${P_CM} กก./ตร.ม./ด้าน <em>(เผื่อความเสียหาย 19% แล้ว)</em><br>
+            - ฉาบ 1 ด้าน: <strong>${((netArea * P_CM) / BAG).toFixed(2)} ถุง</strong><br>
+            - ฉาบ 2 ด้าน: <strong>${(((netArea * P_CM) / BAG) * 2).toFixed(2)} ถุง</strong><br>
+            <br>
+            <strong>ทรายละเอียด (ทรายฉาบ):</strong> อัตรา ${P_SD} ลบ.ม./ตร.ม./ด้าน <em>(เผื่อความเสียหาย 10% แล้ว)</em><br>
+            - ฉาบ 1 ด้าน: <strong>${(netArea * P_SD).toFixed(2)} คิว</strong><br>
+            - ฉาบ 2 ด้าน: <strong>${(netArea * P_SD * 2).toFixed(2)} คิว</strong>
+    `;
+  }
+
+  breakdownHtml += `
+          </div>
+        </div>
+        <div style="margin-top: 12px; font-size: 0.8rem; color: var(--text2); text-align: right; line-height: 1.5;">
+          * ปริมาณทั้งหมดในรายงานนี้ <strong>"รวมค่าเผื่อความเสียหาย (Waste)"</strong> ตามตารางมวลรวมของกรมบัญชีกลางเรียบร้อยแล้ว<br>
+          * ปูนซีเมนต์คำนวณอ้างอิงที่ขนาดบรรจุมาตรฐาน 1 ถุง = 50 กิโลกรัม
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('masResBreakdown').innerHTML = breakdownHtml;
+  document.getElementById('masResBreakdown').style.display = 'block';
+
+  // Show Card
+  document.getElementById('masResultCard').style.display = 'block';
+  document.getElementById('masResultCard').classList.add('show');
+  
+  setTimeout(() => {
+    document.getElementById('masResultCard').scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }, 100);
+}
 </script>
 
 </body>
