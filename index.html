@@ -131,6 +131,11 @@
       background: linear-gradient(135deg, #d35400, #e67e22);
       box-shadow: 0 4px 18px rgba(211,84,0,0.4);
     }
+    .tab-btn.tab-ceiling.active {
+      background: linear-gradient(135deg, #0969da, #58a6ff);
+      box-shadow: 0 4px 18px rgba(88,166,255,0.4);
+      color: #fff;
+    }
 
     .tab-badge {
       background: rgba(255,255,255,0.2);
@@ -482,6 +487,10 @@
       background: linear-gradient(135deg, #2ea043, #3fb950);
       box-shadow: 0 4px 20px rgba(63,185,80,0.35);
     }
+    .calc-btn.blue-btn {
+      background: linear-gradient(135deg, #0969da, #58a6ff);
+      box-shadow: 0 4px 20px rgba(88,166,255,0.35);
+    }
     .calc-btn::after {
       content: '';
       position: absolute;
@@ -787,7 +796,8 @@
 
 <!-- ─── Tab Navigation ─── -->
 <div class="tabs-wrapper">
-  <nav class="tabs-nav" role="tablist" aria-label="ประเภทหลังคา">
+  <!-- แถวที่ 1: งานหลังคา -->
+  <nav class="tabs-nav" role="tablist" aria-label="ประเภทหลังคา" style="margin-bottom: 10px;">
     <button id="tab-btn-zinc" class="tab-btn active" role="tab" aria-selected="true"
             aria-controls="tab-zinc" onclick="switchTab('zinc')">
       <span class="tab-icon"><img src="assets/zinc_transparent.png" class="img-icon" alt="Zinc"></span> สังกะสี
@@ -804,9 +814,17 @@
             aria-controls="tab-cpac" onclick="switchTab('cpac')">
       <span class="tab-icon"><img src="assets/60392108_transparent.png" class="img-icon" alt="CPAC"></span> กระเบื้องคอนกรีต
     </button>
+  </nav>
+
+  <!-- แถวที่ 2: งานสถาปัตยกรรม -->
+  <nav class="tabs-nav" role="tablist" aria-label="งานสถาปัตยกรรม">
     <button id="tab-btn-masonry" class="tab-btn tab-masonry" role="tab" aria-selected="false"
             aria-controls="tab-masonry" onclick="switchTab('masonry')">
       <span class="tab-icon"><img src="assets/mm_transparent.png" class="img-icon" alt="Masonry"></span> ก่ออิฐ
+    </button>
+    <button id="tab-btn-ceiling" class="tab-btn tab-ceiling" role="tab" aria-selected="false"
+            aria-controls="tab-ceiling" onclick="switchTab('ceiling')">
+      <span class="tab-icon"><img src="assets/60288863_transparent.png" class="img-icon" alt="Ceiling"></span> ฝ้าเพดาน
     </button>
   </nav>
 </div>
@@ -1806,6 +1824,162 @@
 
 </div><!-- /tab-masonry -->
 
+<!-- ════════════════════════════════════════
+     TAB 6 — ฝ้าเพดาน
+════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-ceiling" role="tabpanel" aria-labelledby="tab-btn-ceiling">
+
+  <!-- Input Card -->
+  <div class="card" style="border-color: rgba(88,166,255,0.4); box-shadow: 0 4px 20px rgba(88,166,255,0.05);">
+    <h2 style="color:var(--blue);"><img src="assets/60288863_transparent.png" style="height:1.2em; object-fit:contain; margin-right:8px;"> คำนวณวัสดุงานฝ้าเพดาน</h2>
+
+    <form onsubmit="event.preventDefault(); document.activeElement.blur(); calculateCeiling(); return false;">
+      <div class="input-grid">
+        <div class="field">
+          <label for="ceilInputW">ความกว้างห้อง</label>
+          <div class="input-wrap">
+            <input id="ceilInputW" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" enterkeyhint="done"/>
+            <span class="unit-badge" style="background:rgba(88,166,255,0.15); color:var(--blue);">ม.</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="ceilInputL">ความยาวห้อง</label>
+          <div class="input-wrap">
+            <input id="ceilInputL" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" enterkeyhint="done"/>
+            <span class="unit-badge" style="background:rgba(88,166,255,0.15); color:var(--blue);">ม.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="field" style="margin-bottom: 20px;">
+        <label>ชนิดฝ้าเพดาน</label>
+        <div class="brick-selector">
+          <label class="brick-option">
+            <input type="radio" name="ceilType" value="gypsum" checked>
+            <div class="brick-card">
+              <img src="assets/60370438_transparent.png" alt="ฝ้าฉาบเรียบ">
+              <div class="brick-info">
+                <div class="brick-name">ฝ้าฉาบเรียบ</div>
+                <div class="brick-size">ยิปซัม 1.2x2.4 ม. (C-Line)</div>
+              </div>
+            </div>
+          </label>
+          <label class="brick-option">
+            <input type="radio" name="ceilType" value="tbar">
+            <div class="brick-card">
+              <img src="assets/60288863_transparent.png" alt="ฝ้าทีบาร์">
+              <div class="brick-info">
+                <div class="brick-name">ฝ้าทีบาร์</div>
+                <div class="brick-size">แผ่น 0.60x0.60 ม.</div>
+              </div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="info-box" style="background: rgba(88,166,255,0.08); border-color: rgba(88,166,255,0.2); color: var(--blue);">
+        💡 โปรแกรมจะคำนวณ <strong>พื้นที่รวม (กว้าง x ยาว)</strong> และ <strong>ความยาวรอบรูป</strong> เพื่อหาฉากริมผนังให้อัตโนมัติ อ้างอิงตามหลักเกณฑ์ราคากลางกรมบัญชีกลาง
+      </div>
+
+      <button id="ceilCalcBtn" class="calc-btn blue-btn" type="submit">⚡ คำนวณปริมาณวัสดุ</button>
+    </form>
+  </div>
+
+  <!-- Result Card -->
+  <div class="card result-card" id="ceilResultCard">
+    <h2><span>📊</span> สรุปปริมาณวัสดุฝ้าเพดาน</h2>
+
+    <div class="summary-row-3" style="margin-bottom:14px;">
+      <div class="summary-box">
+        <div class="s-val" id="ceilResArea">—</div>
+        <div class="s-label">พื้นที่ฝ้า (ตร.ม.)</div>
+      </div>
+      <div class="summary-box">
+        <div class="s-val" style="color:var(--blue);" id="ceilResPeri">—</div>
+        <div class="s-label">เส้นรอบรูป (ม.)</div>
+      </div>
+    </div>
+
+    <!-- Result Container -->
+    <div id="ceilResContainer">
+      <!-- Gypsum Result -->
+      <div id="resCardGypsum" style="display:none; margin-top:20px;">
+        <h3 style="font-size:1.05rem; color:var(--text); margin-bottom:12px; display:flex; align-items:center; gap:6px;">
+          <span style="font-size:1.2em;">⬜</span> วัสดุฝ้าฉาบเรียบ (ยิปซัม 9มม. โครง C-Line)
+        </h3>
+        <div class="result-item" style="padding:16px; flex-direction:column; align-items:flex-start; gap:12px;">
+          <div style="width:100%;">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:12px;">
+              <div style="background:var(--surface2); padding:10px; border-radius:8px;">
+                <span style="color:var(--text2);font-size:0.85rem;">แผ่นยิปซัม 1.2x2.4 ม.:</span><br>
+                <strong class="val-blue" id="resGypBoard" style="font-size:1.2rem;">—</strong> <span style="font-size:0.75rem;color:var(--text2);">แผ่น</span>
+              </div>
+              <div style="background:var(--surface2); padding:10px; border-radius:8px;">
+                <span style="color:var(--text2);font-size:0.85rem;">โครง C-Line (4 ม./เส้น):</span><br>
+                <strong class="val-orange" id="resGypCline" style="font-size:1.2rem;">—</strong> <span style="font-size:0.75rem;color:var(--text2);">เส้น</span>
+              </div>
+            </div>
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom:12px;">
+              <div><span style="color:var(--text2);font-size:0.8rem;">ฉากริมผนัง (3 ม.):</span><br><strong class="val-green" id="resGypEdge" style="font-size:1rem;">—</strong> <span style="font-size:0.7rem;color:var(--text2);">เส้น</span></div>
+              <div><span style="color:var(--text2);font-size:0.8rem;">ชุดลวดแขวน:</span><br><strong class="val-purple" id="resGypHanger" style="font-size:1rem;">—</strong> <span style="font-size:0.7rem;color:var(--text2);">ชุด</span></div>
+              <div><span style="color:var(--text2);font-size:0.8rem;">สกรูยิงฝ้า:</span><br><strong class="val-gold" id="resGypScrew" style="font-size:1rem;">—</strong> <span style="font-size:0.7rem;color:var(--text2);">ตัว</span></div>
+            </div>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+              <div style="background:rgba(0,0,0,0.03); padding:8px; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:0.8rem; color:var(--text2);">ปูนฉาบรอยต่อ (20กก.):</span>
+                <div><strong class="val-teal" id="resGypPlaster" style="font-size:1rem;">—</strong> <span style="font-size:0.7rem;color:var(--text2);">ถุง</span></div>
+              </div>
+              <div style="background:rgba(0,0,0,0.03); padding:8px; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:0.8rem; color:var(--text2);">ผ้าเทปปิดรอยต่อ:</span>
+                <div><strong class="val-teal" id="resGypTape" style="font-size:1rem;">—</strong> <span style="font-size:0.7rem;color:var(--text2);">ม้วน</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T-Bar Result -->
+      <div id="resCardTbar" style="display:none; margin-top:20px;">
+        <h3 style="font-size:1.05rem; color:var(--text); margin-bottom:12px; display:flex; align-items:center; gap:6px;">
+          <span style="font-size:1.2em;">🔳</span> วัสดุฝ้าทีบาร์ (0.60x0.60 ม.)
+        </h3>
+        <div class="result-item" style="padding:16px; flex-direction:column; align-items:flex-start; gap:12px;">
+          <div style="width:100%;">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:12px;">
+              <div style="background:var(--surface2); padding:10px; border-radius:8px;">
+                <span style="color:var(--text2);font-size:0.85rem;">แผ่นทีบาร์ 0.6x0.6 ม.:</span><br>
+                <strong class="val-blue" id="resTbarBoard" style="font-size:1.2rem;">—</strong> <span style="font-size:0.75rem;color:var(--text2);">แผ่น</span>
+              </div>
+              <div style="background:var(--surface2); padding:10px; border-radius:8px;">
+                <span style="color:var(--text2);font-size:0.85rem;">ฉากริมผนัง (3 ม.):</span><br>
+                <strong class="val-green" id="resTbarEdge" style="font-size:1.2rem;">—</strong> <span style="font-size:0.75rem;color:var(--text2);">เส้น</span>
+              </div>
+            </div>
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom:12px;">
+              <div><span style="color:var(--text2);font-size:0.8rem;">โครงเมน (3.6 ม.):</span><br><strong class="val-orange" id="resTbarMain" style="font-size:1rem;">—</strong> <span style="font-size:0.7rem;color:var(--text2);">เส้น</span></div>
+              <div><span style="color:var(--text2);font-size:0.8rem;">โครงซอย (1.2 ม.):</span><br><strong class="val-orange" id="resTbarCross12" style="font-size:1rem;">—</strong> <span style="font-size:0.7rem;color:var(--text2);">เส้น</span></div>
+              <div><span style="color:var(--text2);font-size:0.8rem;">โครงซอย (0.6 ม.):</span><br><strong class="val-orange" id="resTbarCross06" style="font-size:1rem;">—</strong> <span style="font-size:0.7rem;color:var(--text2);">เส้น</span></div>
+            </div>
+
+            <div style="display:grid; grid-template-columns: 1fr; gap:8px;">
+              <div style="background:rgba(0,0,0,0.03); padding:8px; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:0.8rem; color:var(--text2);">ชุดลวดแขวน:</span>
+                <div><strong class="val-purple" id="resTbarHanger" style="font-size:1rem;">—</strong> <span style="font-size:0.7rem;color:var(--text2);">ชุด</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+    <div id="ceilResBreakdown" style="margin-top:20px; display:none;"></div>
+  </div>
+
+</div><!-- /tab-ceiling -->
 
 <footer>ข้อมูลอ้างอิงมาตรฐานวัสดุก่อสร้างไทย — เพื่อประมาณการเท่านั้น ควรตรวจสอบกับผู้รับเหมาอีกครั้ง</footer>
 
@@ -2964,6 +3138,129 @@ function calculateMasonry() {
   
   setTimeout(() => {
     document.getElementById('masResultCard').scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }, 100);
+}
+
+/* ═══════════════════════════════════════════
+   CEILING CALCULATOR
+═══════════════════════════════════════════ */
+function calculateCeiling() {
+  const w = parseFloat(document.getElementById('ceilInputW').value) || 0;
+  const l = parseFloat(document.getElementById('ceilInputL').value) || 0;
+  const cTypeElem = document.querySelector('input[name="ceilType"]:checked');
+  const cType = cTypeElem ? cTypeElem.value : 'gypsum';
+
+  if (w <= 0 || l <= 0) {
+    alert('กรุณากรอกความกว้างและความยาวห้องให้ถูกต้องครับ');
+    return;
+  }
+
+  const area = w * l;
+  const peri = (w + l) * 2;
+
+  document.getElementById('ceilResArea').textContent = area.toFixed(2);
+  document.getElementById('ceilResPeri').textContent = peri.toFixed(2);
+
+  // Hide both result cards initially
+  document.getElementById('resCardGypsum').style.display = 'none';
+  document.getElementById('resCardTbar').style.display = 'none';
+
+  let breakdownHtml = '';
+
+  if (cType === 'gypsum') {
+    // Gypsum calculations per sq.m
+    const GYP_BOARD = 0.36; // 0.35 + waste
+    const GYP_CLINE = 1.0; // 1 line (4m) per sq.m
+    const GYP_HANGER = 1.5;
+    const GYP_SCREW = 20;
+    
+    const qtyBoard = Math.ceil(area * GYP_BOARD);
+    const qtyCline = Math.ceil(area * GYP_CLINE);
+    const qtyEdge = Math.ceil(peri / 3); // 3m per edge line
+    const qtyHanger = Math.ceil(area * GYP_HANGER);
+    const qtyScrew = Math.ceil(area * GYP_SCREW);
+    const qtyPlaster = Math.max(1, Math.ceil(area / 20)); // 1 bag per 20 sqm
+    const qtyTape = Math.max(1, Math.ceil(area / 50)); // 1 roll per 50 sqm
+
+    document.getElementById('resGypBoard').textContent = qtyBoard.toLocaleString();
+    document.getElementById('resGypCline').textContent = qtyCline.toLocaleString();
+    document.getElementById('resGypEdge').textContent = qtyEdge.toLocaleString();
+    document.getElementById('resGypHanger').textContent = qtyHanger.toLocaleString();
+    document.getElementById('resGypScrew').textContent = qtyScrew.toLocaleString();
+    document.getElementById('resGypPlaster').textContent = qtyPlaster.toLocaleString();
+    document.getElementById('resGypTape').textContent = qtyTape.toLocaleString();
+
+    document.getElementById('resCardGypsum').style.display = 'block';
+
+    breakdownHtml = `
+      <div style="font-family:'Sarabun', sans-serif; font-size:0.9rem; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background: var(--surface2);">
+        <h4 style="color:var(--text); margin-top:0; border-bottom: 2px solid var(--border); padding-bottom: 8px;">
+          📜 รายการคำนวณ: ฝ้าฉาบเรียบ (ยิปซัม)
+        </h4>
+        <div class="boq-list" style="margin-top: 14px;">
+          <div class="boq-item"><div class="boq-title">1. พื้นที่และเส้นรอบรูป</div><div class="boq-val">พื้นที่ = ${area.toFixed(2)} ตร.ม. | รอบรูป = ${peri.toFixed(2)} ม.</div></div>
+          <div class="boq-item"><div class="boq-title">2. แผ่นยิปซัม 1.2x2.4ม.</div><div class="boq-val">${area.toFixed(2)} × 0.36 = ${qtyBoard} แผ่น (เผื่อ 5%)</div></div>
+          <div class="boq-item"><div class="boq-title">3. โครง C-Line เมน+ซอย (4ม.)</div><div class="boq-val">${area.toFixed(2)} × 1.0 = ${qtyCline} เส้น</div></div>
+          <div class="boq-item"><div class="boq-title">4. ฉากริมผนัง (3ม.)</div><div class="boq-val">${peri.toFixed(2)} ÷ 3 = ${qtyEdge} เส้น</div></div>
+          <div class="boq-item"><div class="boq-title">5. วัสดุสิ้นเปลือง</div><div class="boq-val">ลวดแขวน ${qtyHanger} ชุด | สกรู ${qtyScrew} ตัว</div></div>
+        </div>
+      </div>
+    `;
+
+  } else if (cType === 'tbar') {
+    // T-Bar calculations per sq.m
+    const TBAR_BOARD = 2.92; // 2.78 + waste
+    const TBAR_MAIN = 0.25; // lines (3.6m) per sq.m
+    const TBAR_CROSS12 = 1.4; // lines (1.2m) per sq.m
+    const TBAR_CROSS06 = 1.4; // lines (0.6m) per sq.m
+    const TBAR_HANGER = 1.0;
+
+    const qtyBoard = Math.ceil(area * TBAR_BOARD);
+    const qtyMain = Math.ceil(area * TBAR_MAIN);
+    const qtyCross12 = Math.ceil(area * TBAR_CROSS12);
+    const qtyCross06 = Math.ceil(area * TBAR_CROSS06);
+    const qtyEdge = Math.ceil(peri / 3);
+    const qtyHanger = Math.ceil(area * TBAR_HANGER);
+
+    document.getElementById('resTbarBoard').textContent = qtyBoard.toLocaleString();
+    document.getElementById('resTbarMain').textContent = qtyMain.toLocaleString();
+    document.getElementById('resTbarCross12').textContent = qtyCross12.toLocaleString();
+    document.getElementById('resTbarCross06').textContent = qtyCross06.toLocaleString();
+    document.getElementById('resTbarEdge').textContent = qtyEdge.toLocaleString();
+    document.getElementById('resTbarHanger').textContent = qtyHanger.toLocaleString();
+
+    document.getElementById('resCardTbar').style.display = 'block';
+
+    breakdownHtml = `
+      <div style="font-family:'Sarabun', sans-serif; font-size:0.9rem; border: 1px solid var(--border); padding: 16px; border-radius: 8px; background: var(--surface2);">
+        <h4 style="color:var(--text); margin-top:0; border-bottom: 2px solid var(--border); padding-bottom: 8px;">
+          📜 รายการคำนวณ: ฝ้าทีบาร์ (0.6x0.6 ม.)
+        </h4>
+        <div class="boq-list" style="margin-top: 14px;">
+          <div class="boq-item"><div class="boq-title">1. พื้นที่และเส้นรอบรูป</div><div class="boq-val">พื้นที่ = ${area.toFixed(2)} ตร.ม. | รอบรูป = ${peri.toFixed(2)} ม.</div></div>
+          <div class="boq-item"><div class="boq-title">2. แผ่นฝ้าทีบาร์ 0.6x0.6ม.</div><div class="boq-val">${area.toFixed(2)} × 2.92 = ${qtyBoard} แผ่น (เผื่อ 5%)</div></div>
+          <div class="boq-item"><div class="boq-title">3. โครงเมน (3.6 ม.)</div><div class="boq-val">${area.toFixed(2)} × 0.25 = ${qtyMain} เส้น</div></div>
+          <div class="boq-item"><div class="boq-title">4. โครงซอย (1.2 ม. และ 0.6 ม.)</div><div class="boq-val">ยาว 1.2ม. = ${qtyCross12} เส้น | ยาว 0.6ม. = ${qtyCross06} เส้น</div></div>
+          <div class="boq-item"><div class="boq-title">5. ฉากริมผนัง (3ม.)</div><div class="boq-val">${peri.toFixed(2)} ÷ 3 = ${qtyEdge} เส้น</div></div>
+          <div class="boq-item"><div class="boq-title">6. ชุดลวดแขวน</div><div class="boq-val">${area.toFixed(2)} × 1.0 = ${qtyHanger} ชุด</div></div>
+        </div>
+      </div>
+    `;
+  }
+
+  document.getElementById('ceilResBreakdown').innerHTML = breakdownHtml;
+  document.getElementById('ceilResBreakdown').style.display = 'block';
+
+  // Show Card
+  const resultCard = document.getElementById('ceilResultCard');
+  resultCard.style.display = 'block';
+  // Trigger reflow
+  void resultCard.offsetWidth;
+  resultCard.style.opacity = '1';
+  resultCard.style.transform = 'translateY(0)';
+  
+  setTimeout(() => {
+    resultCard.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }, 100);
 }
 </script>
